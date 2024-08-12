@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAREC | {%block title%}AUTHENTICATE-BASE{%endblock%}</title>
+</head>
+<body>
+    <header>
+        <h1>BAREC</h1>
+        {%if user.is_authenticated%}
+        <nav>
+            <ul>
+                <a href="{%url 'home'%}"><li>HOME</li></a>
+
+            </ul>
+        </nav>
+        {%endif%}
+    </header>
+    <main>
+        {% if user.is_authenticated%}
+        <h2>You Are Logged in as {{user.first_name}} {{user.last_name}}!</h2>
+        <p>Please proceed to the Home Page</p>
+        {%else%}
+        {%block content%}
+
+        {%endblock%}
+        {%endif%}
+    </main>
+    <footer>
+        <h2>&copy 2024 BAREC PVT LTD</h2>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{%extends 'layouts/authenticate-base.html'%}
+{%block title%}LOGIN{%endblock%}
+{%block content%}
+<h1>LOGIN</h1>
+<p>Login here</p>
+<form method="post">
+    {%csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Login</button>
+</form>
+<p>Don't have an account? <a href="{%url 'signup'%}">Signup Here.</a></p>
+{%endblock%}

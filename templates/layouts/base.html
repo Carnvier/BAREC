@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAREC | {%block title%}BASE{%endblock%}</title>
+</head>
+<body>
+    <header>
+        <h1>BAREC</h1>
+        {%if user.is_authenticated%}
+        <nav>
+            <ul>
+                <a href="{%url 'home'%}"><li>HOME</li></a>
+                <a href="{%url 'company-dashboard'%}"><li>COMPANY</li></a>
+                <a href="{%url 'home'%}"><li>SALES</li></a>
+                <a href="{%url 'home'%}"><li>MESSAGE BOARD</li></a>
+                <a href="{%url 'logout'%}"><li>LOGOUT</li></a>
+                <a href="{%url 'home'%}"><li>PROFILE</li></a>
+            </ul>
+        </nav>
+        {% endif %}
+    </header>
+    <section class="side-navigation">
+    <nav>
+        <ul>
+            {%block side-navigation%}
+           
+            {%endblock%}
+        </ul>
+    </nav>
+    </section>
+    
+    <main>
+    {%if user.is_authenticated%}
+    {%block content%}
+
+    {%endblock%}
+    {%else%}
+        <marquee behavior="" direction="right">You are logged out!</marquee>
+        <h1>LOGIN</h1>
+        <p>Please login using the link below.<a href="{%url 'login'%}">Login Here.</a></p>
+        <h1>SIGNUP</h1>
+        <p>Don't have an account? <a href="{%url 'signup'%}">Signup Here.</a></p>
+        {%endif %}
+    </main>
+    <footer>
+        <h2>&copy 2024 BAREC PVT LTD</h2>
+    </footer>
+</body>
+</html>
