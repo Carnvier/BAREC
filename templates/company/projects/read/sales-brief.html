@@ -1,0 +1,42 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1>Sales Brief</h1>
+<a href="{%url 'create-asset' projects.id%}"><button>New Sale</button></a>
+<div>
+    <p>No of Sales:</p><p>{{projects.no_sales}}</p>
+    <p>Sales Income:</p><p>{{projects.project_sales_income}}</p>
+    <p>Project Stock:</p><p>{{projects.project_stock}}</p>
+    <p>Project Debts:</p><p>{{projects.project_debts}}</p>
+</div>
+<div>
+    <h2>Sale History</h2>
+<table>
+    <thead>
+        <th>Date</th>
+        <th>Sales REP</th>
+        <th>Product</th>
+        <th>Details</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </thead>
+    <tbody>
+        {% for sale in projects.sale%}
+        <tr>
+            <td>{{sale.date}}</td>
+            <td>sale.rep</td>
+            <td>{{sale.customer_name}}</td>
+            <td>{{sale.sale_details}}</td>
+            <td>{{sale.quantity}}</td>
+            <td>{{sale.total_sale}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+</div>
+{%endblock%}

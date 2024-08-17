@@ -1,0 +1,11 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} 
+{%block content%}
+<form method="post">
+<h1>Notice!!!</h1>
+{%csrf_token%}
+<p>Are you sure you want to delete message with reference: {{messagesboard.ref}}</p>
+<button type="submit">Confirm</button>
+</form>
+<a href="{%url 'messages-overview'%}"><button>Cancel</button></a>
+{%endblock%}    

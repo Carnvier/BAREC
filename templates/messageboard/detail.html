@@ -1,0 +1,17 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} 
+{%block content%}
+<form method="post">
+<h1>REF: {{messages.ref}}</h1>
+<div>
+    <p>{{messages.date}}</p>
+    <p>{{messages.message_id}}</p>
+    <p>{{messages.author}}</p>
+    <p>{{messages.urgency}}</p>    
+</div>
+<div>
+    <p>{{messages.text}}</p>
+</div>
+<a href="{%url 'update-message' messages.id%}"><button>Edit</button></a>
+<a href="{%url 'delete-message' messages.id %}"><button>Delete</button></a>
+{%endblock%}

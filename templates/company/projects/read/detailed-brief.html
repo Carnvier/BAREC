@@ -1,0 +1,32 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}   
+<h1>Project Details</h1>
+<div>
+    <p>Date Started: {{projects.date_started}}</p>
+    <p>Project ID: {{projects.project_id}}</p>
+    <p>Project: {{projects.project_name}}</p>
+    <P>Project Supervisor: {{projects.project_supervisor}}</P>
+    <p>Branch Name: {{projects.branch_name}}</p>
+    <p>Address: {{projects.project_location}}</p>
+    <p>Staff: {{projects.no_staff}}</p>
+</div>
+<a href="{%url 'update-project' projects.id%}"><button>Update Project</button></a>
+<a href="{%url 'delete-project' projects.pk%}"><button>Delete Project</button></a>
+
+
+<h2>Net Worth</h2>
+<div>
+<p>Capital:</p><p>{{projects.total_capital}}</p>
+<p>Assets:</p><p>{{projects.total_assets}}</p>
+<p>Liabilities:</p><p>{{projects.total_liabilities}}</p>
+<p>Expenditure:</p><p>{{projects.total_expenditire}}</p>
+<p>Sales:</p><p>{{projects.total_sales}}</p>
+<p>Net Worth:</p>{{projects.net_worth}}</p>
+</div>
+{%endblock%}

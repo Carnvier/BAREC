@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'main.apps.MainConfig',
     'company.apps.CompanyConfig',
+    'transactions.apps.TransactionsConfig',
+    'messageboard.apps.MessageboardConfig',
 
     
     'django.contrib.admin',
@@ -138,3 +140,5 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

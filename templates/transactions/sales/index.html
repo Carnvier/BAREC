@@ -1,0 +1,24 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
+<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
+<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
+<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
+{%endblock%}
+{%block content%}
+<h1>Sales Overview</h1>
+<p>Welcome to the sales menu. Manage your sales and transactions here.</p>
+<a href="{%url 'sales-form'%}">
+    <div>
+        <h2>EPOS</h2>
+        <p>Record a new sale!!!</p>
+    </div>
+</a>
+<a href="{%url 'sales-history'%}">
+    <div>
+        <h2>Sales History</h2>
+        <p>View previous transactions!!!</p>
+    </div>
+</a>
+
+{%endblock%}

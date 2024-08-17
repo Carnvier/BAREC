@@ -1,0 +1,49 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>staff</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1>Staff Overview</h1>
+<a href="{%url 'create-staff'%}"><button>New Staff</button></a>
+<div>
+    <p>No of Staff: {{staff.no_staff}}</p>
+    <p>No of Departments: {{staff.no_departments}}</p>
+    <p>Staff Monthly Salary: {{staff.total_salary}}</p>
+</div>
+<div>
+    <h2>Staff Details</h2>
+<table>
+    <thead>
+        <th>Staff ID</th>
+        <th>Name</th>
+        <th>D.O.B</th>
+        <th>ID No</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+        <th>Department</th>
+        <th>Occupation</th>
+        <th>Salary</th>
+    </thead>
+    <tbody>
+        {%for staff in staff%}
+            <tr>
+            <td>{{staff.staff_id}}</td>
+            <td><a href="{%url 'staff-detail' staff.id%}">
+                {{staff.staff_name}}</a></td>
+            <td>{{staff.dob}}</td>
+            <td>{{staff.id_number}}</td>
+            <td>{{staff.phone_number}}</td>
+            <td>{{staff.address}}</td>
+            <td>{{staff.department}}</td>
+            <td>{{staff.occupation}}</td>
+            <td>{{staff.monthly_salary}}</td>
+            </tr>
+        
+        {%endfor%}
+    </tbody>
+</table>
+</div>
+{%endblock%}

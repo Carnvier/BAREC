@@ -1,0 +1,15 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<form method="post">
+<h1>New Project</h1>
+{%csrf_token%}
+{{form.as_p}}
+<button type="submit">Submit</button>
+</form>
+{%endblock%}

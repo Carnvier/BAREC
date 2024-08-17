@@ -1,0 +1,66 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1>Liabilties Brief</h1>
+<a href="{%url 'create-liability' projects.id%}"><button>New Liability</button></a>
+<div>
+    <h2>Long Term</h2>
+    <table>
+        <thead>
+            <th>Date Acquired</th>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Acquisition Price</th>
+            <th>Interest</th>
+            <th>Total Credit</th>
+        </thead>
+        <tbody>
+            {%for project in projects.liabilites %}
+                {%if project.type_of_liability == 'Long-term' %}
+                <tr>
+                    <td>{{project.liability_acquisition_date}}</td>
+                    <td>{{project.liability_name}}</td>
+                    <td>{{project.liability_source}}</td>
+                    <td>{{project.liability_amount}}</td>
+                    <td>{{project.interest}}</td>
+                    <td>{{project.liability_total_credit}}</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+        </tbody>
+    </table>    
+</div>
+<div>
+    <h2>Short Term</h2>
+    <table>
+        <thead>
+            <th>Date Acquired</th>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Acquisition Price</th>
+            <th>Depreciation</th>
+            <th>Net Worth</th>
+        </thead>
+        <tbody>
+            {%for project in projects.liabilities %}
+                {%if project.type_of_liability == 'Short-term' %}
+                <tr>
+                    <td>{{project.liability_acquisition_date}}</td>
+                    <td>{{project.liability_name}}</td>
+                    <td>{{project.liability_source}}</td>
+                    <td>{{project.liability_amount}}</td>
+                    <td>{{project.interest}}</td>
+                    <td>{{project.liability_total_credit}}</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+{%endblock%}

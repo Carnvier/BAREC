@@ -1,0 +1,59 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
+<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
+<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
+<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
+{%endblock%}
+{%block content%}
+<a href="{%url 'update-sales-form' sales.id%}"><button>Update {{sales.sale_id}}</button></a>
+<h1>Sale ID: {{sales.sale_id}}</h1>
+<h1>Date: {{sales.date_of_sale}}</h1>
+<section>
+    <div>
+        <h2>Company Details</h2>
+        <p>Company Name: {{sales.company_name}}</p>
+        <p>Branch Name: {{sales.branch_name}}</p>
+        <p>Branch Address: {{sales.branch_address}}</p>
+        <p>REP Name: {{sales.sale_rep}}</p>
+        <p>Company Email: {{sales.company_email}}</p>
+        <p>Company Number: {{sales.company_cell}}</p>
+    </div>
+    <div>
+        <h2>Customer Details</h2>
+        <p>Name:</p>
+        <p>Type:</p>
+        <p>Address:</p>
+        <p>Phone Number:</p>
+        <p>Email:</p>
+    </div>
+</section>
+<section>
+    <table>
+        <thead>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Details</th>
+            <th>Quantity</th>
+            <th>Discount</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {%for sale in sales%}
+            <tr>
+                <td>{{sale.product.product_id}}</td>
+                <td>{{sale.product.product_name}}</td>
+                <td>{{sale.sale_details}}</td>
+                <td>{{sale.quantity}}</td>
+                <td>{{sale.discount}}</td>
+                <td>{{sale.total_amount}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</section>
+<div>
+    <p>Total Amount:</p><p>{{sales.sale_total_amount}}</p>
+</div>
+
+{%endblock%}

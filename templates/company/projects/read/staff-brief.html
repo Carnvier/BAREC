@@ -1,0 +1,42 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1>Staff Overview</h1>
+<div>
+    <p>No of Staff: {{projects.no_staff}}</p>
+    <p>No of Departments: {{projects.staff_departments}}</p>
+    <p>Staff Salary: {{projects.staff_salary}}</p>
+</div>
+<div>
+    <h2>Staff Details</h2>
+<table>
+    <thead>
+        <th>Staff ID</th>
+        <th>Staff Name</th>
+        <th>Address</th>
+        <th>Department</th>
+        <th>Occupation</th>
+        <th>Salary</th>
+    </thead>
+    <tbody>
+        {%for project in projects.staff%}
+            {%if project.staff.staff_branch == project.branch_name %}
+            <tr>
+            <td>{{project.staff.id}}</td>
+            <td>{{project.staff.staff_name}}</td>
+            <td>{{project.staff.address}}</td>
+            <td>{{project.staff.department}}</td>
+            <td>{{project.staff.occupation}}</td>
+            <td>{{project.staff.monthly_salary}}</td>
+            </tr>
+            {%endif%}
+        {%endfor%}
+    </tbody>
+</table>
+</div>
+{%endblock%}

@@ -23,4 +23,6 @@ urlpatterns = [
     path('accounts/', include('users.urls')),
     path('', include('main.urls')),
     path('company/', include('company.urls')),
+    path('transactions/', include('transactions.urls')),
+    path('messageboard/', include('messageboard.urls')),
 ]

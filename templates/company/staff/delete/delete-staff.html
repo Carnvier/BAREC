@@ -1,0 +1,16 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1>NOTICE!!!</h1>
+<form action="" method="post">
+    {%csrf_token%}
+<P>Are you sure you want to permanantely delete {{staff.staff_name}}?</P>
+<button type="submit">Confirm</button>
+</form>
+<a href="{%url 'staff-index'%}"><button>Cancel</button></a>
+{%endblock%}

@@ -1,0 +1,65 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
+<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
+<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
+<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
+{%endblock%}
+{%block content%}
+<h1>Stock List</h1>
+<p>Detailed Branch Stock Details</p>
+<div>
+<p>Branch Name: {{stock.project.branch_name}}</p>
+<p>Project Name: {{stock.project.project_name}}</p>
+<p>Location: {{stock.project.project_location}}</p>
+<p>Supervisor: {{stock.project.project_supervisor}}</p>
+</div>
+<a href="{%url 'create-stock' %}"><button>New Stock</button></a>
+<table>
+    <thead>
+        <th>Product ID</th>
+        <th>Name</th>
+        <th>Product Description</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Stock Net Worth</th>
+    </thead>
+    <tbody>
+        {% for stock in stock %}
+        <tr>
+            <td>{{stock.product_id}}</td>
+            <td>{{stock.product_name}}</td>
+            <td>{{stock.product_description}}</td>
+            <td>{{stock.quantity}}</td>
+            <td>{{stock.price}}</td>
+            <td>{{stock.branch_total_net_worth}}</td>
+            <td><a href="{%url 'update-stock' stock.id%}">Edit</a></td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+<!-- <h1>Stock List</h1>
+<p>View all the branches stock net worth and the stock they have in detail</p>
+<a href="{%url 'create-stock' %}"><button>New Stock</button></a>
+<table>
+    <thead>
+        <th>Branch</th>
+        <th>Project</th>
+        <th>Supervisor</th>
+        <th>Location</th>
+        <th>Stock Net Worth</th>
+    </thead>
+    <tbody>
+        {% for stock in stock %}
+        <tr>
+            <td>{{stock.branch.branch_name}}</td>
+            <td>{{stock.project.project_name}}</td>
+            <td>{{stock.project.project_supervisor}}</td>
+            <td>{{stock.project.project_location}}</td>
+            <td>{{stock.branch_total_net_worth}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table> -->
+
+{%endblock%}

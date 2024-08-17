@@ -1,0 +1,10 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%}
+{%block content%}
+<form method="post">
+<h1>Update Message</h1>
+{%csrf_token%}
+{{form.as_p}}
+<button type="submit">Update</button>
+</form>
+{%endblock%}

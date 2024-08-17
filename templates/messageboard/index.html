@@ -1,0 +1,28 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%}
+{%block content%}
+<h1>Message Board</h1>
+<p>Welcome to the message board where all notifications and communications within the company will take place.</p>
+<a href="{%url 'create-message'%}"><button>New Message</button></a>
+<table>
+    <thead>
+        <th>Date</th>
+        <th>Message ID</th>
+        <th>REF</th>
+        <th>Author</th>
+        <th>Urgency Status</th>
+    </thead>
+    <tbody>
+        {%for message in messages%}
+        <tr>
+            <td>{{message.date}}</td>
+            <td>{{message.message_id}}</td>
+            <td>{{message.ref}}</td>
+            <td>{{message.author}}</td>
+            <td>{{message.urgency}}</td>
+            <td><a href="{%url 'messages-detail' message.id%}">More</a></td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{%endblock%}

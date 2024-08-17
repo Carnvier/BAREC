@@ -2,8 +2,8 @@
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
 <a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
 <a href="{%url 'project-index'%}"><li>Projects</li></a>
-<a href="{%url 'company-dashboard'%}"><li>Accounts</li></a>
-<a href="{%url 'company-dashboard'%}"><li>Staff</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
 {%endblock%}
 {%block content%}
 <h1>{{projects.project_name}}</h1>
@@ -17,7 +17,7 @@
     <p>Net Worth: {{projects.net_worth}}</p>
 </div>
 </a>
-<a href="">
+<a href="{%url 'project-staff-overview' projects.id %}">
 <div>
     <h2>Staff</h2>
     <p>No of Staff: {{projects.no_staff}}</p>
@@ -25,21 +25,21 @@
     <p>Staff Salary: {{projects.staff_salary}}</p>
 </div>
 </a>
-<a href="">
+<a href="{% url 'project-assets-overview' projects.id %}">
 <div>
     <h2>Assets</h2>
     <p>Fixed Assets:{{projects.fixed_assets}}</p>
     <p>Non-Fixed Assets: {{projects.non_fixed_assets}}</p>
 </div>
 </a>
-<a href="">
+<a href="{%url 'project-liabilities-overview' projects.id%}">
 <div>
     <h2>Liabilities</h2>
     <p>Short-Term Liabilities: {{projects.short_liabilities}}</p>
     <p>Long-Term Liabilities: {{projects.long_liabilities}}</p>
 </div>
 </a>
-<a href="">
+<a href="{%url 'project-sales-overview' projects.id%}">
 <div>
     <h2>Sales</h2>
     <p>No of Sales: {{projects.no_sales}}</p>

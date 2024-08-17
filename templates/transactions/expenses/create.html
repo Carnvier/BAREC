@@ -1,0 +1,15 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
+<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
+<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
+<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
+{%endblock%}
+{%block content%}
+<form method="post">
+<h1>New Expense</h1>
+{%csrf_token%}
+{{form.as_p}}
+<button type="submit">Submit</button>
+</form>
+{%endblock%}

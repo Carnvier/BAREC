@@ -23,27 +23,35 @@ class Projects(models.Model):
         return net_worth
 
 class Assets(models.Model):
-    asset_accusation_date = models.DateField(default = '2024-08-10')
+    asset_type = (
+        ('Current Asset', 'Current Asset'),
+        ('Fixed Asset', 'Fixed Asset'),
+    )
+    asset_acquisition_date = models.DateField(default = '2024-08-10')
     asset_name = models.CharField(max_length = 255)
-    type_of_asset = models.CharField(max_length = 255)
+    type_of_asset = models.CharField(max_length = 255, choices= asset_type)
     asset_price = models.IntegerField(default = 0)
     asset_source = models.CharField(max_length = 255)
     depreciation_rate = models.IntegerField(default = 0)
 
 class Liabilities(models.Model):
-    liablity_accusation_date = models.DateField(default = '2024-08-10')
-    liability_name = models.CharField(max_length = 255)
-    type_of_liability = models.CharField(max_length = 255)
+    liability_type = (
+        ('Long-term', 'Long-term'),
+        ('Short-term', 'Short-term'),
+    )
+    liablity_acquisition_date = models.DateField(default = '2024-08-10')
+    Creditor_name = models.CharField(max_length = 255)
+    type_of_liability = models.CharField(max_length = 255, choices=liability_type)
     liability_source = models.CharField(max_length = 255)
     liability_amount = models.IntegerField(default = 0)
     interest_rate = models.IntegerField(default = 0)
 
 class Debitors(models.Model):
-    debit_accusation_date = models.DateField(default = '2024-08-10')
+    debt_acquisition_date = models.DateField(default = '2024-08-10')
     debitor_name = models.CharField(max_length = 255)
-    type_of_debit = models.CharField(max_length = 255)
-    debit_source = models.CharField(max_length = 255)
-    debited_amount = models.IntegerField(default = 0)
+    type_of_debt = models.CharField(max_length = 255)
+    debt_source = models.CharField(max_length = 255)
+    debt_amount = models.IntegerField(default = 0)
     interest_rate = models.IntegerField(default = 0)
 
 class Staff(models.Model):
@@ -68,11 +76,28 @@ class Staff(models.Model):
     )
     staff_id = models.CharField(max_length = 255)
     staff_name = models.CharField(max_length = 255)
-    staff_salary = models.IntegerField(default =0)
+    monthly_salary = models.IntegerField(default =0)
     staff_branch = models.CharField(max_length = 255)
     department = models.CharField(max_length = 255, choices = departments, null = False, blank = False)
-    address = models.CharField(max_length = 255, null = False, blank = False)
     occupation = models.CharField(max_length = 255, choices = occupations, null = False, blank = False)
     # curriculum_vitae = models.FileField()
 
+    def dob(self):
+        dob = '19.03.2015'
+        return dob
     
+    def id_number(self):
+        id_number = 'FN520491'
+        return id_number
+    
+    def phone_number(self):
+        phone_number = '+263 78 329 2829'
+        return phone_number
+    
+    def project(self):
+        project = 'Broiler Production'
+        return project
+    
+    def address(self):
+        address = '154 Gorosure, Harare, Zimbabwe'
+        return address

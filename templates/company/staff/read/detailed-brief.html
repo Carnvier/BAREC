@@ -1,0 +1,30 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1>Staff Name: {{staff.staff_name}}</h1>
+<a href="{%url 'update-staff' staff.id%}"><button>Update Staff</button></a>
+<a href="{%url 'delete-staff' staff.id%}"><button>Delete Staff</button></a>
+<div>
+    <h2>Personal Details</h2>
+    <p>Date of Birth: {{staff.dob}}</p>
+    <p>{{staff.id_number}}</p>
+    {{staff.phone_number}}
+    <p>Staff Address:{{staff.address}}</p>
+</div>
+<div>
+    <h2>Work Details</h2>
+    <p>Staff ID: {{staff.staff_id}}</p>
+    <p>Staff Branch: {{staff.staff_branch}}</p>
+    <p>Department: {{staff.department}}</p>
+    <p>Occupation: {{staff.occupation}}</p>
+    <p>Project: {{staff.project}}</p>
+    <p>Salary: {{staff.monthly_salary}}</p>
+</div>
+{%endblock%}    
+
+           

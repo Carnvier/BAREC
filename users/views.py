@@ -20,5 +20,9 @@ def custom_logout(request):
     logout.session.flush()
     logout(request)
     success_url = reverse_lazy('login')
+
+class ProfileOverviewPageView(TemplateView):
+    template_name = 'profile/index.html'
+    model = CustomUser
     
 

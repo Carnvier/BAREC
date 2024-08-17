@@ -1,0 +1,40 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
+<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
+<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
+<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
+{%endblock%}
+{%block content%}
+<h1>Sale History</h1>
+<a href="{%url 'sales-form'%}"><button>New Sale</button></a>
+
+<table>
+    <thead>
+        <th>Date</th>
+        <th>Sale ID</th>
+        <th>Rep</th>
+        <th>Customer</th>
+        <th>Details</th>
+        <th>Branch</th>
+        <th>Quantity</th>
+        <th>Discount</th>
+        <th>Total</th>
+    </thead>
+    <tbody>
+        {%for sale in sales%}
+        <tr>
+            <td>{{sale.date_of_sale}}</td>
+            <td><a href="{%url 'sales-detailed-view' sale.id%}">{{sale.sale_id}}</a></td>
+            <td>{{sale.sale_rep}}</td>
+            <td>{{sale.customer}}</td>
+            <td>{{sale.sale_details}}</td>
+            <td>{{sale.branch}}</td>
+            <td>{{sale.quantity}}</td>
+            <td>{{sale.discount}}</td>
+            <td>{{sale.total_amount}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{%endblock%}
