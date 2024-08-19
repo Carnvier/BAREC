@@ -4,7 +4,7 @@ from .models import Company, Projects, Assets, Liabilities,Staff
 from django.urls import reverse_lazy
 
 # Dashboard Views
-class CompanyDashboardView(ListView):
+class CompanyDashboardView(DetailView):
     template_name = 'company/dashboard/dashboard.html'
     model = Company
     context_object_name = 'company'

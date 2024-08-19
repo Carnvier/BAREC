@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, UpdateView, DetailView, CreateView, ListView, DeleteView
 from .models import Sales, Stock, Customer, Expenses
 from django.urls import reverse_lazy
@@ -10,8 +12,14 @@ class SalesOverviewView(TemplateView):
 class SalesFormView(CreateView):
     template_name = 'transactions/sales/create.html'
     model = Sales
-    fields = "__all__"
-    success_url = reverse_lazy('sales-history')
+    fields = ("sale_id", "product", "sale_details", "quantity", "discount", "branch",)
+
+    def form_valid(self, form):
+        form.instance.sales_rep = self.request.user
+        return super().form_valid(form)
+    def form_valid(self, form):
+        form.instance.sales_rep = self.request.user
+        return super().form_valid(form)
 
 class SalesHistoryView(ListView):
     template_name = 'transactions/sales/history.html'
@@ -27,6 +35,13 @@ class UpdateSalesForm(UpdateView):
     model = Sales
     fields = '__all__'
     success_url = reverse_lazy('sales-history')
+
+    def dispatch(self, request, *args, **kwargs): # new
+        obj = self.get_object()
+        if obj.author != self.request.user:
+            raise PermissionDenied
+            return super().dispatch(request, *args, **kwargs)
+
 
 # Stock Views
 class StockOverviewView(ListView):

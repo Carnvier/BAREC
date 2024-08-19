@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import SalesOverviewView, SalesFormView, StockOverviewView, SalesHistoryView, SalesDetailedView, UpdateSalesForm, StockOverviewView, StockDetailedView, CreateStockView, UpdateStockView, CustomerOverviewView, CreateCustomerView, CustomerDetailedView, UpdateCustomerView, DeleteCustomerView, ExpensesOverviewView, CreateExpensesView, ExpensesDetailedView
+
 urlpatterns  =[
+    # Sales
     path('sales/', SalesOverviewView.as_view(), name='sales-overview'),
     path('history/', SalesHistoryView.as_view(), name='sales-history'),
     path('form/', SalesFormView.as_view(), name='sales-form'),

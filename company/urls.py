@@ -4,7 +4,7 @@ from .views import CompanyDashboardView, ProjectsIndexView, CreateProjectView, P
 
 urlpatterns = [
     # Dashboard Urls
-    path('dashboard/', CompanyDashboardView.as_view(), name = 'company-dashboard'),
+    path('dashboard/<int:pk>/', CompanyDashboardView.as_view(), name = 'company-dashboard'),
 
     # Projects Urls
     path('projects/', ProjectsIndexView.as_view(), name = 'project-index'),

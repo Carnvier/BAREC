@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+from django.urls import reverse_lazy
+from users.models import CustomUser
 
 # Create your models here.
 class Stock(models.Model):
@@ -9,6 +12,9 @@ class Stock(models.Model):
     stock_brought_in = models.IntegerField(default= 0)
     price = models.FloatField(default=0.0)
     project = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.product_name  
 
     def branch_net_worth(self):
         net_worth = 100
@@ -24,7 +30,9 @@ class Customer(models.Model):
     type_of_customer = models.CharField(max_length=255, choices=customer_type)
     address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)    
+    email = models.EmailField(max_length=255) 
+
+ 
 
 class Sales(models.Model):
     date_of_sale  = models.DateTimeField(auto_now_add=True)
@@ -33,21 +41,18 @@ class Sales(models.Model):
     sale_details = models.CharField( max_length= 255)
     quantity = models.IntegerField( default= 0)
     discount = models.IntegerField( default= 0.0)
-    sales_rep = models.CharField( max_length= 255)
+    sales_rep = models.ForeignKey( get_user_model(), on_delete= models.CASCADE)
     branch = models.CharField( max_length= 255)
-    customer = models.ForeignKey(Customer, on_delete= models.CASCADE)
 
-    def sale_rep(self):
-        sale_rep = 'Denzel Grison'
-        return sale_rep
-
-    def customer(self):
-        customer = 'Makaita Machanyangwa'
-        return customer
+    def get_absolute_url(self):
+        return reverse_lazy('sales-history')
     
     def total_amount(self):
         total_amount = self.product.price * self.quantity
         return total_amount
+    
+    def customer_name(self):
+         customer_name = self.customer.name
     
     def sale_total_amount(self):
         sale_total_amount = 0

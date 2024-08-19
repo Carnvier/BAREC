@@ -1,7 +1,7 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%}
 {%block side-navigation%}
-<a href="{%url 'company-dashboard'%}"><li>Dashboard</li></a>
+<a href="{%url 'company-dashboard' user.company_name.id %}"><li>Dashboard</li></a>
 <a href="{%url 'project-index'%}"><li>Projects</li></a>
 <a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
 <a href="{%url 'staff-index'%}"><li>Staff</li></a>
@@ -13,11 +13,11 @@
 <div>
 <h2>Company Info</h2>
 <p>The company insights are shown below:</p>
-<p>Branches: {{company.no_branches}}</p>
+<p>Branches: {{company.branches}}</p>
 <p>Departments: {{company.no_departments}}</p>
-<p>Staff: {{company.no_staff}}</p>
-<p>Projects: {{company.no_projects}}</p>
-<p>Capital: {{company.total_capital}}</p>
+<p>Staff: {{company.employees}}</p>
+<p>Projects: {{company.projects}}</p>
+<p>Capital: {{company.capital}}</p>
 <p>Net Worth: {{company.net_worth}}</p>
 </div>
 <div>

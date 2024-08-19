@@ -8,6 +8,9 @@ class Company(models.Model):
     employees = models.IntegerField(default=0)
     projects = models.IntegerField(default = 0)
 
+    def __str__(self):
+        return self.company_name
+
 class Projects(models.Model):
     date_started = models.DateField(default = '2024-08-10' )
     branch_name = models.CharField(max_length = 255)

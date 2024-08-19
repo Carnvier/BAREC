@@ -12,7 +12,7 @@
         <nav>
             <ul>
                 <a href="{%url 'home'%}"><li>HOME</li></a>
-                <a href="{%url 'company-dashboard'%}"><li>COMPANY</li></a>
+                <a href="{%url 'company-dashboard' user.company_name.id %}"><li>COMPANY</li></a>
                 <a href="{%url 'sales-overview'%}"><li>SALES</li></a>
                 <a href="{%url 'messages-overview'%}"><li>MESSAGE BOARD</li></a>
                 <a href="{%url 'logout'%}"><li>LOGOUT</li></a>
