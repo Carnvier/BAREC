@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
-from .models import Company, Projects, Assets, Liabilities,Staff
+from .models import Company, Projects, Assets, Liabilities,Staff, Organisation
 from django.urls import reverse_lazy
 
 # Dashboard Views
 class CompanyDashboardView(DetailView):
     template_name = 'company/dashboard/dashboard.html'
+    model = Organisation
+    context_object_name = 'org'
+
+class CompanyOverviewView(DetailView):
+    template_name = 'company/dashboard/company-view.html'
     model = Company
     context_object_name = 'company'
 

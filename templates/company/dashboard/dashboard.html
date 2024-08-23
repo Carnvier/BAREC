@@ -1,68 +1,45 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%}
 {%block side-navigation%}
-<a href="{%url 'company-dashboard' user.company_name.id %}"><li>Dashboard</li></a>
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
 <a href="{%url 'project-index'%}"><li>Projects</li></a>
 <a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
 <a href="{%url 'staff-index'%}"><li>Staff</li></a>
 {%endblock%}
 {%block content%}
-<!-- {#%if user.company_name == company.company_name%} -->
-<h1>{{company.company_name}}</h1>
-<p>Welcome to your company's dashboard view. Get the brief perfomance and updates about your company here.</p>
+<h1>Welcome to {{org.name}}</h1>
+<p>est {{org.est|date:'Y'}}</p>
+<section>
 <div>
-<h2>Company Info</h2>
-<p>The company insights are shown below:</p>
-<p>Branches: {{company.branches}}</p>
-<p>Departments: {{company.no_departments}}</p>
-<p>Staff: {{company.employees}}</p>
-<p>Projects: {{company.projects}}</p>
-<p>Capital: {{company.capital}}</p>
-<p>Net Worth: {{company.net_worth}}</p>
+    <h2>Details</h2>
+    <p>HeadQuaters: {{org.headquaters}}</p>
+    <p>Founder: {{org.founder}}</p>
 </div>
 <div>
-    <h2>Cashflow</h2>    
-    <p>The current cashflow within the company:</p>
-    <p>Assets: {{company.profit_percentage}}</p>
-    <p>Stock Acquistion: {{company.profit}}</p>
-    <p>Sales: {{company.sales}}</p>
-    <p>Staff Salaries: {{company.staff_salary}}</p>
-    <p>Expenses: {{company.total_expenses}}</p>
-    <p>Profit: {{company.total_profit}}</p>
-    <p>Profit Percentage: {{company.profit_percentage}}</p>
-</div>  
-<div>
-    <h2>Branches</h2>  
-    <table>
-        <thead>
-            <th>Branch Name</th>
-            <th>Branch Location</th>
-            <th>Branch Expenses</th>
-            <th>Branch Income</th>
-            <th>Profit</th>
-        </thead>
-        <tbody>
-            {% for branch in company.branches %}
-            <tr>
-                <td>{{branch.branch_name}}</td>
-                <td>{{branch.branch_location}}</td>
-                <td>{{branch.branch_expenses}}</td>
-                <td>{{branch.branch_income}}</td>
-                <td>{{branch.branch_profit}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-<!-- {#%else%}
-<h1>Notice!!!</h1>
-<p>You don't belong to any organisation. Please contact your administrator to sort out this issue.</p>
-<h2>Contact us:</h2>
-<p>Having system related issues, please contact us:
-    <ul>
-        <li>Phone Number: +230 5724 2344</li>
-        <li>Email: barec@gmail.com</li>
-        <li>Location: 1027 Goromonzi Mashonaland East Zimbabwe</li>
-    </ul>
-</p> -->
-<!-- {#%endif%} -->
+    <h2>Progress</h2>
+    <p>Expenses: {{org.total_expenses}}</p>
+    <p>Income: {{org.total_income}}</p>
+    <p>Profit: {{org.profit}}</p>
+</div>
+</section>
+<p>Your organisation has {{org.no_companies}}. Select the Company you want to manage.</p>
+
+<table>
+    <thead>
+        <th>Company Name</th>
+        <th>Starting Capital</th>
+        <th>No. Employees</th>
+        <th>Net Worth</th>
+    </thead>
+    <tbody>
+        {%for company in org.companies.all%}
+        <tr>
+            <td><a href="{%url 'company-overview' company.id%}">{{company.company_name}}</a></td>
+            <td>{{company.starting_capital}}</td>
+            <td>{{company.no_employees}}</td>
+            <td>{{company.net_worth}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
 {%endblock%}

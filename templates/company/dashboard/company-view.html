@@ -1,0 +1,70 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%}
+{%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<!-- {#%if user.company_name == company.company_name%} -->
+<h1>{{company.company_name}}</h1>
+<p>Welcome to your company's dashboard view. Get the brief perfomance and updates about your company here.</p>
+<div>
+<h2>Company Info</h2>
+<p>The company insights are shown below:</p>
+<p>Branches: {{company.no_branches}}</p>
+<p>Departments: {{company.no_departments}}</p>
+<p>Staff: {{company.no_employees}}</p>
+<p>Projects: {{company.no_projects}}</p>
+<p>Capital: {{company.starting_capital}}</p>
+<p>Net Worth: {{company.net_worth}}</p>
+</div>
+<div>
+    <h2>Cashflow</h2>    
+    <p>The current cashflow within the company:</p>
+    <p>Assets: {{company.profit_percentage}}</p>
+    <p>Stock Acquistion: {{company.profit}}</p>
+    <p>Sales: {{company.sales}}</p>
+    <p>Staff Salaries: {{company.staff_salary}}</p>
+    <p>Expenses: {{company.total_expenses}}</p>
+    <p>Profit: {{company.total_profit}}</p>
+    <p>Profit Percentage: {{company.profit_percentage}}</p>
+</div>  
+<div>
+    <h2>Branches</h2>  
+    <table>
+        <thead>
+            <th>Branch Name</th>
+            <th>Supervisor</th>
+            <th>Location</th>
+            <th>Expenses</th>
+            <th>Income</th>
+            <th>Profit</th>
+        </thead>
+        <tbody>
+            {% for branch in company.branches.all %}
+            <tr>
+                <td>{{branch.branch_name}}</td>
+                <td>{{branch.branch_supervisor}}</td>
+                <td>{{branch.location}}</td>
+                <td>{{branch.branch_expenses}}</td>
+                <td>{{branch.branch_income}}</td>
+                <td>{{branch.branch_profit}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<!-- {#%else%}
+<h1>Notice!!!</h1>
+<p>You don't belong to any organisation. Please contact your administrator to sort out this issue.</p>
+<h2>Contact us:</h2>
+<p>Having system related issues, please contact us:
+    <ul>
+        <li>Phone Number: +230 5724 2344</li>
+        <li>Email: barec@gmail.com</li>
+        <li>Location: 1027 Goromonzi Mashonaland East Zimbabwe</li>
+    </ul>
+</p> -->
+<!-- {#%endif%} -->
+{%endblock%}

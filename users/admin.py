@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     fieldsets = UserAdmin.fieldsets + (
         ('Custom Fields', {
-            'fields': (  'ID_Number', 'D_O_B', 'address', 'phone_number', 'company_name',)
+            'fields': (  'ID_Number', 'D_O_B', 'address', 'phone_number', 'organisation', )
         }),
     )
 

@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, AccountsBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView
+from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, AccountsBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView
 
 
 urlpatterns = [
     # Dashboard Urls
-    path('dashboard/<int:pk>/', CompanyDashboardView.as_view(), name = 'company-dashboard'),
+    path('dashboard/<str:pk>/', CompanyDashboardView.as_view(), name = 'company-dashboard'),
+    path('dashboard/<str:pk>/overview', CompanyOverviewView.as_view(), name = 'company-overview'),
 
     # Projects Urls
     path('projects/', ProjectsIndexView.as_view(), name = 'project-index'),
