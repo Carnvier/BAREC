@@ -1,8 +1,11 @@
 from django.urls import path
-from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, AccountsBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView
+from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, AccountsBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm
 
 
 urlpatterns = [
+    #Organization Registration
+    path('organization/registration/create/', OrganizationRegistrationForm.as_view(), name = 'register-organisation'),
+    path('organization/registration/success/', OrganizationRegistrationConfirm.as_view(), name = 'organisation-creation-success'), 
     # Dashboard Urls
     path('dashboard/<str:pk>/', CompanyDashboardView.as_view(), name = 'company-dashboard'),
     path('dashboard/<str:pk>/overview', CompanyOverviewView.as_view(), name = 'company-overview'),

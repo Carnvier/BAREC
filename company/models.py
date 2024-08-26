@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 
 # Create your models here.
@@ -7,6 +8,9 @@ class Organisation(models.Model):
     est = models.DateField(default='')
     headquaters = models.CharField(max_length= 255, default= '')
     founder = models.ForeignKey('users.CustomUser',related_name= 'organisations', on_delete= models.CASCADE, null= True, blank= True)
+    organisation_email = models.EmailField(max_length= 255, blank= True, null=True)
+    organisation_phone_number = models.CharField(max_length= 255, blank= True)
+
 
     def __str__(self):
         return self.name
@@ -20,7 +24,7 @@ class Organisation(models.Model):
     def total_expenses(self):
         expense = 0 
         for item in self.companies.all():
-            expense += item.staff_salary()
+            expense += item.staff_salary() + item.purchases()
         return expense
     
     def total_income(self):
@@ -193,7 +197,7 @@ class Staff(models.Model):
         ('Other', 'Other'),
     )
     company = models.ForeignKey('company.Company', on_delete= models.CASCADE, null= True, related_name= 'staff',  blank= True)
-    staff_name = models.ForeignKey('users.CustomUser', on_delete= models.CASCADE, null= True, blank= True)
+    staff_name = models.ForeignKey('users.CustomUser', on_delete= models.CASCADE, null= True, blank= True, related_name= 'staff')
 
     staff_id = models.CharField(max_length = 255, default= '')
     monthly_salary = models.IntegerField(default = 0)
@@ -211,11 +215,22 @@ class Staff(models.Model):
             salary += self.monthly_salary
         return salary
 
-    
+class CompanyRegistration(models.Model):
+    first_name = models.CharField(max_length=255, default= '')
+    last_name = models.CharField(max_length=255, default= '')
+    ID_Number = models.CharField(max_length = 20, null = True, blank = True)
+    address = models.CharField(max_length = 255, default='')
+    preffered_username = models.CharField(max_length=255,  default= '')
+    phone_number = models.CharField(max_length=255, default= '')
+    email = models.EmailField(max_length=255, default= '')
+    organisation_name = models.CharField(max_length=255,  default= '')
+    est = models.DateField(default = now)
+    headquaters = models.CharField(max_length= 255, default= '')
+    company_description = models.TextField(default= '')
+    motive = models.TextField(max_length= 255, default = '')
+
    
-    
-    
-   
-    
+class Purchases(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
     
   

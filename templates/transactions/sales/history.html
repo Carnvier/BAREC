@@ -22,18 +22,53 @@
         <th>Total</th>
     </thead>
     <tbody>
-        {%for sale in sales%}
+        
         <tr>
             <td>{{sale.date_of_sale}}</td>
-            <td><a href="{%url 'sales-detailed-view' sale.id%}">{{sale.sale_id}}</a></td>
-            <td>{{sale.sales_rep}}</td>
+            <td>    </td>
             <td>{{sale.sale_details}}</td>
             <td>{{sale.branch}}</td>
             <td>{{sale.quantity}}</td>
             <td>{{sale.discount}}</td>
             <td>{{sale.total_amount}}</td>
         </tr>
-        {%endfor%}
+        
     </tbody>
 </table>
+<div class="card card-bordered card-preview">
+    <table class="table table-tranx">
+        <thead>
+            <tr class="tb-tnx-head">
+                <th class="tb-tnx-id"><span class="">#</span></th>
+                <th class="tb-tnx-id"><span class="">Sale ID</span></th>
+                <th class="tb-tnx-id"><span class="">Date</span></th>
+                <th class="tb-tnx-id"><span class="">Rep</span></th>
+                <th class="tb-tnx-id"><span class="">Customer</span></th>
+                <th class="tb-tnx-id"><span class="">Details</span></th>
+                <th class="tb-tnx-id"><span class="">Branch</span></th>
+                <th class="tb-tnx-id"><span class="">Total</span>
+                    <span class="tb-tnx-status d-none d-md-inline-block">Status</span>
+                </th>
+        </tr></thead>
+        <tbody>
+            {%for sale in sales%}
+            <tr class="tb-tnx-item">
+                <td class="tb-tnx-id"><span>{{sale.id}}</span></td>
+                <td class="tb-tnx-id"><a href="{%url 'sales-detailed-view' sale.id%}"><span>{{sale.sale_id}}</span></a></td>
+                <td class="tb-tnx-id"><span>{{sale.date_of_sale}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.sales_rep}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.customer}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.sale_details}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.branch}}</span></td>
+                <td class="tb-tnx-amount">
+                    <div class="tb-tnx-total">
+                        <span class="amount">{{sale.total_amount}}</span>
+                    </div>
+                    <div class="tb-tnx-status"><span class="badge badge-dot bg-danger">Cancel</span></div>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
 {%endblock%}

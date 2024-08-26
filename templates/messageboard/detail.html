@@ -1,17 +1,28 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} 
 {%block content%}
-<form method="post">
-<h1>REF: {{messages.ref}}</h1>
-<div>
-    <p>{{messages.date}}</p>
-    <p>{{messages.message_id}}</p>
-    <p>{{messages.author}}</p>
-    <p>{{messages.urgency}}</p>    
-</div>
-<div>
-    <p>{{messages.text}}</p>
-</div>
-<a href="{%url 'update-message' messages.id%}"><button>Edit</button></a>
-<a href="{%url 'delete-message' messages.id %}"><button>Delete</button></a>
+<div class="card card-bordered card-layout-container message-container">
+    <div class="card-inner card-inner-lg">
+      <div class="nk-block-head">
+        <div class="nk-block-head-content">
+          <h3 class="nk-block-title">REF: {{messages.ref}}</h3>
+          <div class="nk-block-des">
+            <p>{{messages.urgency}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="text-justify">
+        <p>{{messages.date}}</p>
+        <p>{{messages.message_id}}</p>  
+    </div>
+    <div class="text-justify content-block">
+        <p>{{messages.text}}</p>
+    </div>
+    <p class="text-right">~ {{messages.author}}</p>
+      <div class="text-center pt-4">
+        <a href="{%url 'update-message' messages.id%}"><button class="btn-primary button-container">Edit</button></a>
+<a href="{%url 'delete-message' messages.id %}"><button class="button-container btn-danger">Delete</button></a>
+      </div>
+    </div>
+  </div>
 {%endblock%}

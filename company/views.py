@@ -1,7 +1,21 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
-from .models import Company, Projects, Assets, Liabilities,Staff, Organisation
+from .models import Company, Projects, Assets, Liabilities,Staff, Organisation, CompanyRegistration
 from django.urls import reverse_lazy
+
+
+# Company registration
+class OrganizationRegistrationForm(CreateView):
+    template_name = 'company/organisation/create.html'
+    model = CompanyRegistration
+    fields = '__all__'
+    success_url  = reverse_lazy('organisation-creation-success')
+
+class OrganizationRegistrationConfirm(TemplateView):
+    template_name = 'company/organisation/confirm.html'
+    model = CompanyRegistration
+    context_object_name = 'reg'
+
 
 # Dashboard Views
 class CompanyDashboardView(DetailView):

@@ -1,12 +1,29 @@
-{%extends 'layouts/authenticate-base.html'%}
-{%block title%}LOGIN{%endblock%}
+{%extends 'layouts/authenticate-base.html'%} {%block title%}LOGIN{%endblock%}
 {%block content%}
-<h1>LOGIN</h1>
-<p>Login here</p>
-<form method="post">
-    {%csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Login</button>
-</form>
-<p>Don't have an account? <a href="{%url 'signup'%}">Signup Here.</a></p>
+
+<div class="card card-bordered auth-form">
+  <div class="card-inner card-inner-lg">
+    <div class="nk-block-head">
+      <div class="nk-block-head-content">
+        <h3 class="nk-block-title">LOGIN</h3>
+        <div class="nk-block-des">
+          <p>Access the BAREC WebApp using your username.</p>
+        </div>
+      </div>
+    </div>
+    <form method="post" class="mt-1">
+      <div class="form-group form-layout">{%csrf_token %} {{form.as_p}}</div>
+      <button class="btn btn-primary btn-block mt-2">Sign in</button>
+    </form>
+    <div class="form-note-s2 text-center pt-4">
+      Don't have an account? Contact your administrator.
+    </div>
+    <div class="text-center pt-4">
+      <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
+    </div>
+    <p class="text-center pb-3">
+      <a href="{%url 'register-organisation'%}">Register your organisation</a>
+    </p>
+  </div>
+</div>
 {%endblock%}

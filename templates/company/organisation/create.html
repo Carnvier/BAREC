@@ -1,0 +1,32 @@
+{%extends 'layouts/home-base.html'%} {%block title%}LOGIN{%endblock%}
+{%block content%}
+
+<div class="card card-bordered auth-form form-grid-container">
+  <div class="card-inner card-inner-lg">
+    <div class="nk-block-head">
+      <div class="nk-block-head-content">
+        <h3 class="nk-block-title">Register Organisation</h3>
+        <div class="nk-block-des">
+          <p>Register your organisation here!</p>
+        </div>
+      </div>
+    </div>
+    <form method="post" class="mt-1">
+      <div class="form-group form-layout form-grid">
+        {%csrf_token %} 
+        {{form.as_p}}
+    </div>
+      <button class="btn btn-primary btn-block mt-2">Register</button>
+    </form>
+    <div class="form-note-s2 text-center pt-4">
+      Already have an organisation? <a href="{%url 'login'%}">Login</a>.
+    </div>
+    <div class="text-center pt-4">
+      <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
+    </div>
+    <p class="text-center pb-3">
+      Having challenges with the system?<a href="{%url 'login'%}">Contact Us.</a>
+    </p>
+  </div>
+</div>
+{%endblock%}

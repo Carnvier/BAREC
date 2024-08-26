@@ -1,28 +1,45 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%}
 {%block content%}
-<h1>Message Board</h1>
-<p>Welcome to the message board where all notifications and communications within the company will take place.</p>
-<a href="{%url 'create-message'%}"><button>New Message</button></a>
-<table>
-    <thead>
-        <th>Date</th>
-        <th>Message ID</th>
-        <th>REF</th>
-        <th>Author</th>
-        <th>Urgency Status</th>
-    </thead>
-    <tbody>
-        {%for message in messages%}
+<h1 class="nk-block-title text-center">Message Board</h1>
+<p class="nk-block-des text-center-container mb-2">Welcome to the message board where all notifications and communications within the company will take place.</p>
+<a href="{%url 'create-message'%}" ><button class="button-container btn-primary mt-4 mb-2" >Compose</button></a>
+<div class="card card-bordered card-preview mt-1">
+    <table class="table table-orders">
+      <thead class="tb-odr-head">
+        <tr class="tb-odr-item">
+          <th class="tb-odr-info">
+            <span class="tb-odr-id">Message ID</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Date</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">REF</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Author</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Urgency</span>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="tb-odr-body">
+        {%for message in messages%}  
         <tr>
-            <td>{{message.date}}</td>
-            <td>{{message.message_id}}</td>
-            <td>{{message.ref}}</td>
-            <td>{{message.author}}</td>
-            <td>{{message.urgency}}</td>
-            <td><a href="{%url 'messages-detail' message.id%}">More</a></td>
+        <td>{{message.message_id}}</td>
+        <td>{{message.date|time:"g:i A"}}<br>
+            {{message.date|date:"j F, Y"}}
+        </td>
+        <td>{{message.ref}}</td>
+        <td>{{message.author}}</td>
+        <td>{{message.urgency}}</td>
+          <td><a href="{%url 'messages-detail' message.id%}"  class="btn btn-sm btn-primary">View</td>
         </tr>
         {%endfor%}
-    </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
 {%endblock%}

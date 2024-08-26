@@ -57,6 +57,7 @@ class Sales(models.Model):
     date_of_sale  = models.DateTimeField(auto_now_add=True)
     sale_id = models.CharField(max_length=255, default = '')
     sale_details = models.CharField( max_length= 255)
+    customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE, related_name = 'sales')
     quantity = models.IntegerField( default= 0)
     discount = models.IntegerField( default= 0.0)
     sales_rep = models.ForeignKey( 'company.Staff', related_name= 'sales', on_delete= models.CASCADE, null= True, blank= True)

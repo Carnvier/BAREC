@@ -12,15 +12,11 @@ class SalesOverviewView(TemplateView):
 class SalesFormView(CreateView):
     template_name = 'transactions/sales/create.html'
     model = Sales
-    fields = ("sale_id", "product", "sale_details", "quantity", "discount", "branch",)
+    fields = ("sale_id",  "product", "sale_details", "quantity", "discount", "branch",)
 
-    def form_valid(self, form):
-        form.instance.sales_rep = self.request.user
-        return super().form_valid(form)
-    def form_valid(self, form):
-        form.instance.sales_rep = self.request.user
-        return super().form_valid(form)
 
+ 
+  
 class SalesHistoryView(ListView):
     template_name = 'transactions/sales/history.html'
     model = Sales

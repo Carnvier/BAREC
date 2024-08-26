@@ -6,10 +6,12 @@
 <a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
 {%endblock%}
 {%block content%}
-<form method="post">
+<form method="post" class="form-container">
 <h1>New Sale</h1>
+<div class="input-form">
 {%csrf_token%}
 {{form.as_p}}
+</div>
 <button type="submit">Submit</button>
 </form>
 {%endblock%}

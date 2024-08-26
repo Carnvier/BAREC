@@ -1,42 +1,52 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="gen">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BAREC | {%block title%}HOME-BASE{%endblock%}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.0.2-dist/css/bootstrap.css'%}">
+    <link rel="stylesheet" href="{% static 'assets/css/dashlite.css?ver=3.1.1' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'assets/css/theme.css?ver=3.1.1' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'scss/libs/fontawesome-icons.scss' %}">
+    <link rel="stylesheet" href="{% static 'css/eevic.css'%}">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&family=Livvic:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>BAREC</h1>
-        {%if user.is_authenticated%}
+        <h1 class="webapp_name">BAREC</h1>
+        
         <nav>
             <ul>
                 <a href="{%url 'home'%}"><li>HOME</li></a>
+                {%if user.is_authenticated%}
                 <a href="{%url 'company-dashboard' user.organisation.id%}"><li>COMPANY</li></a>
                 <a href="{%url 'sales-overview'%}"><li>SALES</li></a>
-                <a href="{%url 'messages-overview'%}"><li>INBOX</li></a>
+                <a href="{%url 'messages-overview'%}"><li>MESSAGE BOARD</li></a>
+                <a href="{%url 'contact-company'%}"><li>CONTACT US</li></a>
                 <a href="{%url 'logout'%}"><li>LOGOUT</li></a>
                 <a href="{%url 'profile-overview'%}"><li>PROFILE</li></a>
+                {%else%}
+                <a href="{%url 'contact-company'%}"><li>CONTACT US</li></a>
+                <a href="{%url 'login'%}"><li>LOGIN</li></a>
+                {% endif %}
             </ul>
         </nav>
-        {% endif %}
+        
     </header>
     
     <main>
-    {%if user.is_authenticated%}
     {%block content%}
 
     {%endblock%}
-    {%else%}
-        <marquee behavior="" direction="right">You are logged out!</marquee>
-        <h1>LOGIN</h1>
-        <p>Please login using the link below.<a href="{%url 'login'%}">Login Here.</a></p>
-        <h1>SIGNUP</h1>
-        <p>Don't have an account? <a href="{%url 'signup'%}">Signup Here.</a></p>
-        {%endif %}
     </main>
     <footer>
-        <h2>&copy 2024 BAREC PVT LTD</h2>
+        <h5>&copy 2024 BAREC PVT LTD</h5>
     </footer>
+    <script src="{% static 'assets/js/bundle.js?ver=3.1.1' %}"></script>
+<script src="{% static 'assets/js/scripts.js?ver=3.1.1' %}"></script>
 </body>
 </html>

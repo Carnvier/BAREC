@@ -8,11 +8,17 @@
 {%endblock%}
 {%block content%}
 <!-- {#%if user.company_name == company.company_name%} -->
-<h1>{{company.company_name}}</h1>
-<p>Welcome to your company's dashboard view. Get the brief perfomance and updates about your company here.</p>
-<div>
-<h2>Company Info</h2>
-<p>The company insights are shown below:</p>
+ <div class="text-center mb-4">
+    <h1 class="nk-block-title">{{company.company_name}}</h1>
+    <p class="nk-block-des">Welcome to your company's dashboard view. Get the brief perfomance and updates about your company here.</p>
+ </div>
+ <section class="grid-display mt-4">
+<div class="content-block bg-blue-metalic">
+<div class="text-center">
+<h3>Company Info</h3>
+<p >The company insights are shown below:</p>
+</div>
+<div class="grid-display">
 <p>Branches: {{company.no_branches}}</p>
 <p>Departments: {{company.no_departments}}</p>
 <p>Staff: {{company.no_employees}}</p>
@@ -20,10 +26,14 @@
 <p>Capital: {{company.starting_capital}}</p>
 <p>Net Worth: {{company.net_worth}}</p>
 </div>
-<div>
-    <h2>Cashflow</h2>    
+</div>
+<div class="content-block {%if company.total_profit >= 0 %}bg-green-metalic {%else%} bg-red-metalic{%endif%}">
+  <div class="text-center">
+    <h3>Cashflow</h3>    
     <p>The current cashflow within the company:</p>
-    <p>Assets: {{company.profit_percentage}}</p>
+  </div>
+    <div class="grid-display">
+    <p>Assets: {{company.assets_net_worth}}</p>
     <p>Stock Acquistion: {{company.profit}}</p>
     <p>Sales: {{company.sales}}</p>
     <p>Staff Salaries: {{company.staff_salary}}</p>
@@ -31,30 +41,55 @@
     <p>Profit: {{company.total_profit}}</p>
     <p>Profit Percentage: {{company.profit_percentage}}</p>
 </div>  
-<div>
+</div>
+</section>
+<div class="mt-4">
     <h2>Branches</h2>  
-    <table>
-        <thead>
-            <th>Branch Name</th>
-            <th>Supervisor</th>
-            <th>Location</th>
-            <th>Expenses</th>
-            <th>Income</th>
-            <th>Profit</th>
-        </thead>
-        <tbody>
+    <div class="card card-bordered card-preview mt-2">
+        <table class="table table-orders">
+          <thead class="tb-odr-head">
+            <tr class="tb-odr-item">
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Branch ID</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Name</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Supervisor</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Location</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Expenses</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Income</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Profit</span>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="tb-odr-body">
             {% for branch in company.branches.all %}
             <tr>
+                <td>{{branch.id}}</td>
                 <td>{{branch.branch_name}}</td>
                 <td>{{branch.branch_supervisor}}</td>
                 <td>{{branch.location}}</td>
                 <td>{{branch.branch_expenses}}</td>
                 <td>{{branch.branch_income}}</td>
                 <td>{{branch.branch_profit}}</td>
+                <td><a href="{%url 'company-overview' company.id%}"  class="btn btn-sm btn-primary">View</td> 
             </tr>
             {% endfor %}
-        </tbody>
-    </table>
+           
+          </tbody>
+        </table>
+      </div>
 <!-- {#%else%}
 <h1>Notice!!!</h1>
 <p>You don't belong to any organisation. Please contact your administrator to sort out this issue.</p>

@@ -1,0 +1,19 @@
+{%extends 'layouts/authenticate-base.html'%} {%block title%}LOGIN{%endblock%}
+{%block content%}
+
+<div class="card card-bordered card-layout-container">
+  <div class="card-inner card-inner-lg">
+    <div class="nk-block-head">
+      <div class="nk-block-head-content">
+        <h3 class="nk-block-title">SUCCESSFUL REGISTRATION</h3>
+        <div class="nk-block-des">
+          <p>Your Organisation details are being reviewed. Please be on the lookout for an email from barec@gmail.com with further information on your registration process.</p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center pt-4">
+      Proceed to the <a href="{%url 'home'%}">Home</a> page.
+    </div>
+  </div>
+</div>
+{%endblock%}

@@ -1,45 +1,66 @@
-{%extends 'layouts/base.html'%}
-{%block title%}COMPANY DASHBOARD {%endblock%}
+{%extends 'layouts/base.html'%} {%block title%}COMPANY DASHBOARD {%endblock%}
 {%block side-navigation%}
-<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'company-dashboard' user.organisation.id%}"
+  ><li>Dashboard</li></a
+>
 <a href="{%url 'project-index'%}"><li>Projects</li></a>
 <a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
 <a href="{%url 'staff-index'%}"><li>Staff</li></a>
-{%endblock%}
-{%block content%}
-<h1>Welcome to {{org.name}}</h1>
-<p>est {{org.est|date:'Y'}}</p>
-<section>
-<div>
-    <h2>Details</h2>
-    <p>HeadQuaters: {{org.headquaters}}</p>
+{%endblock%} {%block content%}
+<h2 class="nk-block-title text-center">Welcome to {{org.name}}</h2>
+<p class="nk-block-des text-center mb-4">est {{org.est|date:'Y'}}</p>
+<section class="grid-display mt-4">
+  <div class="content-block bg-blue-metalic">
+    <h3 class="text-center">Details</h3>
+    <p>Head Quaters: {{org.headquaters}}</p>
     <p>Founder: {{org.founder}}</p>
-</div>
-<div>
-    <h2>Progress</h2>
+    <p>Companies: {{org.no_companies}}</p>
+  </div>
+  <div class="content-block {%if org.profit >= 0 %}bg-green-metalic {%else%} bg-red-metalic{%endif%}">
+    <h3 class="text-center">Profit</h3>
     <p>Expenses: {{org.total_expenses}}</p>
     <p>Income: {{org.total_income}}</p>
     <p>Profit: {{org.profit}}</p>
-</div>
+  </div>
 </section>
-<p>Your organisation has {{org.no_companies}}. Select the Company you want to manage.</p>
-
-<table>
-    <thead>
-        <th>Company Name</th>
-        <th>Starting Capital</th>
-        <th>No. Employees</th>
-        <th>Net Worth</th>
+<p class="text-center mt-4 mb-4">Select the Company you want to manage.</p>
+<div class="card card-bordered card-preview">
+  <table class="table table-orders">
+    <thead class="tb-odr-head">
+      <tr class="tb-odr-item">
+        <th class="tb-odr-info">
+          <span class="tb-odr-id">Company ID</span>
+        </th>
+        <th class="tb-odr-amount">
+          <span class="tb-odr-total">Name</span>
+        </th>
+        <th class="tb-odr-amount">
+          <span class="tb-odr-total">Starting Capital</span>
+        </th>
+        <th class="tb-odr-amount">
+          <span class="tb-odr-total">Employees</span>
+        </th>
+        <th class="tb-odr-amount">
+          <span class="tb-odr-total">Net Worth</span>
+        </th>
+        <th></th>
+      </tr>
     </thead>
-    <tbody>
-        {%for company in org.companies.all%}
-        <tr>
-            <td><a href="{%url 'company-overview' company.id%}">{{company.company_name}}</a></td>
-            <td>{{company.starting_capital}}</td>
-            <td>{{company.no_employees}}</td>
-            <td>{{company.net_worth}}</td>
-        </tr>
-        {%endfor%}
+    <tbody class="tb-odr-body">
+      {%for company in org.companies.all%}
+
+      <tr href="">
+        <td>{{company.id}}</td>
+        <td>
+          {{company.company_name}}
+        </td>
+        <td>{{company.starting_capital}}</td>
+        <td>{{company.no_employees}}</td>
+        <td>{{company.net_worth}}</td>
+        <td><a href="{%url 'company-overview' company.id%}"  class="btn btn-sm btn-primary">View</td>
+      </tr>
+      {%endfor%}
     </tbody>
-</table>
+  </table>
+</div>
 {%endblock%}
