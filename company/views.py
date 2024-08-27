@@ -1,3 +1,5 @@
+from django.forms import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
 from .models import Company, Projects, Assets, Liabilities,Staff, Organisation, CompanyRegistration
@@ -19,9 +21,20 @@ class OrganizationRegistrationConfirm(TemplateView):
 
 # Dashboard Views
 class CompanyDashboardView(DetailView):
-    template_name = 'company/dashboard/dashboard.html'
+    template_name = 'organisation/company/read/dashboard.html'
     model = Organisation
     context_object_name = 'org'
+
+class CreateCompanyView(CreateView):
+    template_name = 'organisation/company/create/company.html'
+    model = Company
+    fields = ('company_name', 'starting_capital',)
+    context_object_name = 'company'
+    success_url = reverse_lazy('company-dashboard')
+
+    def form_valid(self, form):
+        form.instance.organisation  = self.request.user.organisation
+        return super().form_valid(form)
 
 class CompanyOverviewView(DetailView):
     template_name = 'company/dashboard/company-view.html'

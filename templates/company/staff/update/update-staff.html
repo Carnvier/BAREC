@@ -1,6 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'company-dashboard' user.company_name.id%}"><li>Dashboard</li></a>
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
 <a href="{%url 'project-index'%}"><li>Projects</li></a>
 <a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
 <a href="{%url 'staff-index'%}"><li>Staff</li></a>
@@ -12,5 +12,4 @@
     {{form.as_p}}
     <button type="submit">Submit</button>
 </form>
-
 {%endblock%}

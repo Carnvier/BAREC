@@ -62,6 +62,7 @@ class Sales(models.Model):
     discount = models.IntegerField( default= 0.0)
     sales_rep = models.ForeignKey( 'company.Staff', related_name= 'sales', on_delete= models.CASCADE, null= True, blank= True)
     branch = models.ForeignKey( 'company.Branch', related_name= 'sales', on_delete= models.CASCADE, null= True, blank= True)
+    project = models.ForeignKey( 'company.Projects', related_name= 'sales', on_delete= models.CASCADE, null= True, blank= True, default='')
 
     def __str__(self):
         return str(self.product)
@@ -70,6 +71,7 @@ class Sales(models.Model):
         return reverse_lazy('sales-history')
     
     def total_amount(self):
+        total_amount = 0
         total_amount = self.product.price * self.quantity
         return total_amount
     

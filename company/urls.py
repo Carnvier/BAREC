@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, AccountsBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm
+from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, AccountsBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm, CreateCompanyView
 
 
 urlpatterns = [
@@ -8,7 +8,8 @@ urlpatterns = [
     path('organization/registration/success/', OrganizationRegistrationConfirm.as_view(), name = 'organisation-creation-success'), 
     # Dashboard Urls
     path('dashboard/<str:pk>/', CompanyDashboardView.as_view(), name = 'company-dashboard'),
-    path('dashboard/<str:pk>/overview', CompanyOverviewView.as_view(), name = 'company-overview'),
+    path('dashboard/<str:pk>/overview/', CompanyOverviewView.as_view(), name = 'company-overview'),
+    path('dashboard/<str:pk>/create/', CreateCompanyView.as_view(), name = 'create-company'),
 
     # Projects Urls
     path('projects/', ProjectsIndexView.as_view(), name = 'project-index'),
