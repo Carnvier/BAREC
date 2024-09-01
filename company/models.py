@@ -201,7 +201,7 @@ class Branch(models.Model):
         sale = 0.0  
         for item in self.sales.all():
             if item.branch.branch_name == self.branch_name:
-                sale += item.total_amount()
+                sale += item.grand_total()
         return sale
     
     def total_branch_staff(self):
@@ -248,7 +248,7 @@ class Projects(models.Model):
         cash = self.cash_in_hand
         for item in self.sales.all():
             if item.project.project_name == self.project_name:
-                cash += item.total_amount()
+                cash += item.grand_total()
         return cash
 
     def project_location(self):
@@ -334,7 +334,7 @@ class Projects(models.Model):
         sale = 0.0
         for item in self.sales.all():
             if item.project.project_name == self.project_name:
-                sale += item.total_amount()
+                sale += item.grand_total()
         return sale
 class Assets(models.Model):
     asset_type = (

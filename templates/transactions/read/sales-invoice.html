@@ -6,8 +6,11 @@
 <a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
 {%endblock%}
 {%block content%}
-<div class="nk-block">
-    <div class="invoice">
+<h2 class="text-center">Sales Invoice</h2>
+<button onclick="downloadInvoice()" class="btn-primary button-container mb-3 mt-4">Print</button>
+<div id="invoice-content">
+<div class="nk-block content-block purchase-quote">
+    <div>
         <div class="invoice-action">
             <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" href="html/invoice-print.html" target="_blank"><em class="icon ni ni-printer-fill"></em></a>
         </div><!-- .invoice-actions -->
@@ -15,23 +18,27 @@
             <div class="invoice-brand text-center">
                 <img src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="">
             </div>
-            
             <div class="invoice-head">
-                <section class="grid-display">
+                <section class="grid-display content-block">
                 <div class="invoice-contact">
-                    <span class="overline-title">Invoice To</span>
                     <div class="invoice-contact-info">
-                        <h4 class="title">{{sales.customer}}</h4>
+                        <h4 class="title">Sale ID: {{sales.sale_id}}</h4>
                         <ul class="list-plain">
-                            <li><em class="icon ni ni-map-pin-fill"></em><span>House #65, 4328 Marion Street<br>Newbury, VT 05051</span></li>
-                            <li><em class="icon ni ni-call-fill"></em><span>+012 8764 556</span></li>
+                            <li><span>Sales Rep</span>: <span>{{sales.sales_rep}}</span></li>
+                            <li><span>Branch</span>: <span>{{sales.branch}}<br><span>Location</span>: {{sales.branch.location}}</span></li>
+                            <li><span>Phone Number</span>: <span>{{sales.branch.branch_phone_number}}</span></li>
+                            <li><span>Project</span>: <span>{{sales.project.project_name}}</span></li>
                         </ul>
                     </div>
                 </div>
                 <div class="invoice-desc">
-                    <h3 class="title">Invoice</h3>
+                    <h4 class="title">Customer</h3>
                     <ul class="list-plain">
-                        <li class="invoice-date"><span>Date</span>: <span>{{sales.date_of_sale}}</span></li>
+                        <li><span>Date</span>: <span>{{sales.date_of_sale|date:"F j, Y"}}</span></li>
+                        <li><span>Time</span>: <span>{{sales.date_of_sale|time:"g:i A"}}</span></li>
+                        <li><span>Name</span>: <span>{{sales.customer}}</span></li>
+                        <li><span>Type of Customer</span>: <span>{{sales.customer.type_of_customer}}</span></li>
+                        <li><span>Details</span>: <span>{{sales.sale_details}}</span></li>
                     </ul>
                 </div>
             </div><!-- .invoice-head -->
@@ -41,22 +48,21 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th class="w-150px">Item ID</th>
-                                <th class="w-60">Description</th>
-                                <th>Price</th>
+                                <th class="w-150px">Product ID</th>
+                                <th class="w-60">Name</th>
                                 <th>Qty</th>
+                                <th>Unit Price</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {%for sale in sales.product.all%}
+                            {%for item in sales.sales_item.all%}
                             <tr>
-                                <td>{{sale.product.product_id}}</td>
-                                <td>{{sale.product.product_name}}</td>
-                                <td>{{sale.sale_details}}</td>
-                                <td>{{sale.quantity}}</td>
-                                <td>{{sale.discount}}</td>
-                                <td>{{sale.total_amount}}</td>
+                                <td>{{item.id}}</td>
+                                <td>{{item.product.product_name}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td>{{item.product.product_price}}</td>
+                                <td>{{item.total_amount}}</td>
                             </tr>
                             {%endfor%}
                         </tbody>
@@ -64,22 +70,22 @@
                             <tr>
                                 <td colspan="2"></td>
                                 <td colspan="2">Subtotal</td>
-                                <td>$435.00</td>
+                                <td>{{sales.sub_total}}</td>
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
                                 <td colspan="2">Processing fee</td>
-                                <td>$10.00</td>
+                                <td>{{sales.processing_fee}}</td>
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
                                 <td colspan="2">TAX</td>
-                                <td>$43.50</td>
+                                <td>{{sales.tax}}</td>
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
                                 <td colspan="2">Grand Total</td>
-                                <td>$478.50</td>
+                                <td>{{sales.grand_total}}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -89,4 +95,21 @@
         </div><!-- .invoice-wrap -->
     </div><!-- .invoice -->
 </div>
+</div>
+<script>
+   function downloadInvoice(){
+    const content = document.getElementById('invoice-content').innerHTML;
+    const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+    .map(link => link.outerHTML)
+    .join('');
+    const printWindow = window.open('','_blank');
+    printWindow.document.write(`<html><head><title>{{sales.sale_id}}</title>${styles}</head><body>${content}</body></html>`);
+    printWindow.document.close();
+    printWindow.onload = function() {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+    };
+   }
+</script>
 {%endblock%}

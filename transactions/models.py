@@ -21,7 +21,7 @@ class Stock(models.Model):
         return str(self.product_name) 
 
     def total_price(self):
-        return self.product_name.asset_price * self.quantity
+        return self.asset.acquistion_price * self.quantity
     
     def sold_stock(self):
         sold_stock = self.salesitem.all().quantity
@@ -87,15 +87,25 @@ class Sales(models.Model):
         sale_id += self.project.project_name[0] + self.branch.branch_name[0] + f'{self.id:0004d}'
         return sale_id
     
-    def total_amount(self):
-        total_amount = 0
-        total_amount = self.product.poduct_price * self.quantity
+    def sub_total(self):
+        total_amount = 0.0
+        for item in self.sales_item.all():
+            if item.sale.id == self.id:
+                total_amount = total_amount + item.total_amount()
         return total_amount
     
-    def sale_total_amount(self):
-        sale_total_amount = 0
-        sale_total_amount += self.total_amount()
-        return sale_total_amount
+    def tax(self):
+        tax = 0.0
+        return tax
+
+    def processing_fee(self):
+        fee = 0.0
+        return fee
+    
+    def grand_total(self):
+        total = 0.0
+        total += self.sub_total() + self.tax() + self.processing_fee()
+        return total
     
 class SaleItem(models.Model):
     sale = models.ForeignKey('transactions.Sales', on_delete= models.CASCADE, null=True, blank = True, related_name='sales_item')
@@ -108,6 +118,11 @@ class SaleItem(models.Model):
     
     def get_absolute_url(self):
         return reverse_lazy('sales-items-detail', args=str(self.product.id))
+    
+    def total_amount(self):
+        total = 0.0
+        total = total + float(self.quantity * self.product.product_price)
+        return total
     
 class Expenses(models.Model):
     expense_type = (

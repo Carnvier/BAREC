@@ -1,12 +1,11 @@
-from django.forms import BaseModelForm
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .forms import SaleItemForm
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, UpdateView, DetailView, CreateView, ListView, DeleteView
 from .models import Sales, Stock, Customer, Expenses, SaleItem
-from .forms import SaleItemForm
 from django.urls import reverse_lazy
 
 # Sales View
@@ -23,16 +22,21 @@ class CreateSalesItemView(View):
     template_name = 'transactions/create/create-sale-item.html'
     form_class = SaleItemForm
 
-    def get(self, request):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+    def get(self, request, pk):
+        product = get_object_or_404(Stock, pk=pk)
+        form = self.form_class(initial={'product_id': product.id})
+        return render(request, self.template_name, {'form': form, 'product': product})
     
-    def post(self, request):
+    def post(self, request, pk):
+        product = get_object_or_404(Stock, pk=pk)
         form = self.form_class(request.POST)
         if form.is_valid():
-            form.save()
-            return render(request, 'transactions/read/sales-items-detail.html', {'form': form})
-        return render(request, self.template_name, {'form': form})
+            sale = form.save(commit=False)
+            product.quantity -= sale.quantity
+            product.save()
+            sale.save()
+            return render(request, 'transactions/read/sales-items-detail.html', {'product': product, 'quantity': sale.quantity})
+        return render(request, self.template_name, {'form': form, 'product': product})
 
 class SalesItemsDetailView(DetailView):
     template_name = 'transactions/read/sales-items-detail.html'
@@ -40,7 +44,7 @@ class SalesItemsDetailView(DetailView):
     context_object_name = 'sales'
 
 class SalesInvoiceView(DetailView):
-    template_name = 'sales/read/sales-invoice.html'
+    template_name = 'transactions/read/sales-invoice.html'
     model = Sales    
 class SalesHistoryView(ListView):
     template_name = 'transactions/read/sale-history.html'
