@@ -8,7 +8,7 @@
 {%block content%}
 <h2 class="text-center">Projects Dashboard</h2>
 <p class="text-center mb-4">Select the desired project to see more and manage it</p>
-<a href="{%url 'create-project'%}" class="mt-4"><button class="button-container btn-primary">New Project</button></a>
+<a href="{%url 'create-project' user.organisation.id%}" class="mt-4"><button class="button-container btn-primary">New Project</button></a>
 <div class="card card-bordered card-preview mt-2">
     <table class="table table-orders">
       <thead class="tb-odr-head">
@@ -46,7 +46,7 @@
             <td>{{project.date_started}}</td>
             <td>{{project.project_id}}</td>
             <td>{{project.project_name}}</td>
-            <td>{{project.branch_name}}</td>
+            <td>{{project.branch}}</td>
             <td>{{project.project_location}}</td>
             <td>{{project.no_staff}}</td>
             <td>{{project.project_supervisor}}</td>

@@ -80,7 +80,7 @@ class Sales(models.Model):
         return str(self.sale_id())
 
     def get_absolute_url(self):
-        return reverse_lazy('sales-history')
+        return reverse_lazy('sales-items-detail', args = [str(self.id)])
     
     def sale_id(self):
         sale_id = ''
@@ -98,14 +98,16 @@ class Sales(models.Model):
         return sale_total_amount
     
 class SaleItem(models.Model):
+    sale = models.ForeignKey('transactions.Sales', on_delete= models.CASCADE, null=True, blank = True, related_name='sales_item')
     product = models.ForeignKey('transactions.Stock', on_delete= models.CASCADE, null= True, blank= True, related_name='salesitem')
     quantity = models.IntegerField( default= 0)
     discount = models.IntegerField( default= 0.0)
 
     def __str__(self):
         return self.product.product_name
-
-
+    
+    def get_absolute_url(self):
+        return reverse_lazy('sales-items-detail', args=str(self.product.id))
     
 class Expenses(models.Model):
     expense_type = (

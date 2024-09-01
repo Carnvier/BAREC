@@ -1,13 +1,19 @@
 from django.urls import path
-from .views import SalesOverviewView, SalesFormView, StockOverviewView, SalesHistoryView, SalesDetailedView, UpdateSalesForm, StockOverviewView, StockDetailedView, CreateStockView, UpdateStockView, CustomerOverviewView, CreateCustomerView, CustomerDetailedView, UpdateCustomerView, DeleteCustomerView, ExpensesOverviewView, CreateExpensesView, ExpensesDetailedView
+from .views import SalesOverviewView, SalesFormView, StockOverviewView, SalesHistoryView, SalesInvoiceView,SalesItemsDetailView, CreateSalesItemView, UpdateSalesForm, StockOverviewView, StockDetailedView, CreateStockView, UpdateStockView, CustomerOverviewView, CreateCustomerView, CustomerDetailedView, UpdateCustomerView, DeleteCustomerView, ExpensesOverviewView, CreateExpensesView, ExpensesDetailedView
 
 urlpatterns  =[
     # Sales
     path('sales/', SalesOverviewView.as_view(), name='sales-overview'),
     path('history/', SalesHistoryView.as_view(), name='sales-history'),
     path('form/', SalesFormView.as_view(), name='sales-form'),
-    path('history/detail-view/<int:pk>', SalesDetailedView.as_view(), name='sales-invoice'),
+    path('sales/<int:pk>/detail-view/', SalesInvoiceView.as_view(), name='sales-invoice'),
     path('history/detail-view/<int:pk>/update', UpdateSalesForm.as_view(), name='update-sales-form'),
+    path('sales/<int:pk>/create-sales/view-items', SalesItemsDetailView.as_view(), name = 'sales-items-detail'),
+    path('sales/<int:pk>/create-sales/view-items/create-item/', CreateSalesItemView.as_view(), name = 'create-sales-item'),
+
+ 
+  
+    
 
     # Stock
     path('stock/', StockOverviewView.as_view(), name='stock-overview'),

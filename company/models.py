@@ -37,10 +37,11 @@ class Organisation(models.Model):
         return count
     
     def total_expenses(self):
-        expense = 0 
+        expense = 0.0
+        expense += self.monthly_staff_salary()
         for item in self.companies.all():
             if item.organisation.name == self.name:
-                expense += item.staff_salary() + item.starting_capital
+                expense +=  item.starting_capital
         return expense
     
     def total_income(self):
@@ -61,6 +62,13 @@ class Organisation(models.Model):
             if item.organisation.name == self.name:        
                 asset += item.assets_value()
         return asset
+    
+    def monthly_staff_salary(self):
+        salary = 0.0
+        for item in self.staff.all():
+            if item.organisation.name == self.name:
+                salary += item.monthly_salary
+        return salary
     
     def net_worth(self):
         net_worth = 0.0
@@ -221,6 +229,7 @@ class Branch(models.Model):
         return profit
 
 class Projects(models.Model):
+    organisation = models.ForeignKey('company.Organisation', related_name='projects', on_delete= models.CASCADE, null= True, blank= True)
     branch = models.ForeignKey('company.Branch', related_name='projects', on_delete= models.CASCADE, null= True, blank= True)
     date_started = models.DateField(default = '2024-08-10' )
     project_name = models.CharField(max_length = 255, unique = True, default= '')
@@ -231,6 +240,9 @@ class Projects(models.Model):
 
     def __str__(self):
         return self.project_name
+    
+    def get_absolute_url(self):
+        return reverse_lazy('project-index', args=str(self.organisation.id))
     
     def total_cash_in_hand(self):
         cash = self.cash_in_hand
@@ -329,8 +341,10 @@ class Assets(models.Model):
         ('Current Asset', 'Current Asset'),
         ('Fixed Asset', 'Fixed Asset'),
     )
+    organisation = models.ForeignKey('company.Organisation', related_name='assets', on_delete= models.CASCADE, null= True, blank= True)
     date_brought_in = models.DateField(default = now)
     projects = models.ForeignKey('company.Projects', on_delete= models.CASCADE, null= True, blank= True, related_name = 'assets')
+    source = models.ForeignKey('company.Purchased_Item', on_delete= models.CASCADE, null=True, blank= True, related_name= 'assets')
     asset_name = models.CharField(max_length = 255, default= '')
     type_of_asset = models.CharField(max_length = 255, choices= asset_type, default = 'Current Asset')
     quantity = models.IntegerField(default= 0)
@@ -344,13 +358,17 @@ class Assets(models.Model):
     def __str__(self):
         return self.asset_name
     
+    def get_absolute_url(self):
+        return reverse_lazy('project-index', args=str(self.organisation.id))
+    
     def asset_id(self):
         id = self.asset_name[0] + self.type_of_asset[0] + f'{self.id:0004d}'
         return id
     
     def asset_networth(self):
+        value = 0.0
         if self.disposed == False:
-            value = self.quantity * (self.asset_value - (self.asset_value * self.depreciation_rate))
+            value = self.quantity * float(self.asset_value - (self.asset_value * self.depreciation_rate))
         return float(value)
     
     def total_assets_value(self):
@@ -369,6 +387,7 @@ class Liabilities(models.Model):
         ('Corporate', 'Corporate'),
         ('Other', 'Other'),
     )
+    organisation = models.ForeignKey('company.Organisation', related_name='liabilities', on_delete= models.CASCADE, null= True, blank= True)
     projects = models.ForeignKey('company.Projects', on_delete= models.CASCADE, null= True, blank= True, related_name='liabilities')
     sources = models.CharField(max_length = 50, default = 'Other', choices=liability_sources)
     liablity_acquisition_date = models.DateField(default = '2024-08-10')
@@ -380,6 +399,9 @@ class Liabilities(models.Model):
 
     def __str__(self):
         return str(self.supplier)
+    
+    def get_absolute_url(self):
+        return reverse_lazy('project-index', args=str(self.organisation.id))
     
     def liability_id(self):
         id = '' 
@@ -450,6 +472,7 @@ class Staff(models.Model):
         ('Software Developer', 'Software Developer'),
         ('Other', 'Other'),
     )
+    organisation = models.ForeignKey('company.Organisation', on_delete= models.CASCADE, null= True, related_name= 'staff',  blank= True)
     company = models.ForeignKey('company.Company', on_delete= models.CASCADE, null= True, related_name= 'staff',  blank= True)
     staff_name = models.ForeignKey('users.CustomUser', on_delete= models.CASCADE, null= True, blank= True, related_name= 'staff')
     staff_id = models.CharField(max_length = 255, default= '')
@@ -464,7 +487,7 @@ class Staff(models.Model):
         return str(self.staff_name)
     
     def get_absolute_url(self):
-        return reverse_lazy('staff-index')
+        return reverse_lazy('staff-index', args=str(self.staff_name.organisation.id))
     
     def monthly_total_salary(self):
         salary = 0
@@ -473,8 +496,7 @@ class Staff(models.Model):
         return salary
 
     def staff_id_no(self):
-        staff_id = self.staff_id
-        staff_id = self.staff_name.first_name[0] + self.company.company_name[0] + self.staff_branch.branch_name[0] + f'{self.id:0004d}'
+        staff_id = self.id
         return staff_id
     
 class CompanyRegistration(models.Model):
@@ -514,7 +536,7 @@ class Purchases(models.Model):
     def purchase_id(self):
         return self.branch.branch_name[0] + f'{self.id:0004d}'
     
-    def sub_total(self):
+    def sub_total(self):    
         total_price = 0.0
         for item in self.item_purchased.all():
             if item.purchase.purchase_id() == self.purchase_id():

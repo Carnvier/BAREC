@@ -102,7 +102,6 @@ class CreateAssetsView(CreateView):
     template_name = 'organisation/create/create-asset.html'
     model = Assets
     fields = '__all__'
-    success_url = reverse_lazy('project-index')
 
 class LiabilitiesBriefView(DetailView):
     template_name = 'organisation/read/liabilities-brief.html'
@@ -112,7 +111,6 @@ class CreateLiabilitiesView(CreateView):
     template_name = 'organisation/create/create-liability.html'
     model = Liabilities
     fields = '__all__'
-    success_url = reverse_lazy('project-index')
 
 class SalesBriefView(DetailView):
     template_name = 'organisation/read/sales-brief.html'

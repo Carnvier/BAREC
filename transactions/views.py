@@ -1,10 +1,12 @@
 from django.forms import BaseModelForm
 from django.shortcuts import render
+from django.views import View
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, UpdateView, DetailView, CreateView, ListView, DeleteView
-from .models import Sales, Stock, Customer, Expenses
+from .models import Sales, Stock, Customer, Expenses, SaleItem
+from .forms import SaleItemForm
 from django.urls import reverse_lazy
 
 # Sales View
@@ -14,21 +16,36 @@ class SalesOverviewView(TemplateView):
 class SalesFormView(CreateView):
     template_name = 'transactions/create/create-sale.html'
     model = Sales
-    fields = ("product", "sale_details", "quantity", "discount", "branch", "project", )
+    fields = ( "customer", "sale_details", "branch", "project", )
 
-    def form_valid(self, form, *args, **kwarg ):
-        if form.instance.quantity > 5:
-            form.add_error('quantity', 'stock is lacking')
-            return self.form_invalid(form)
-        return super().form_valid(form, *args, **kwarg)        
+
+class CreateSalesItemView(View):
+    template_name = 'transactions/create/create-sale-item.html'
+    form_class = SaleItemForm
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'transactions/read/sales-items-detail.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
+
+class SalesItemsDetailView(DetailView):
+    template_name = 'transactions/read/sales-items-detail.html'
+    model = Sales
+    context_object_name = 'sales'
+
+class SalesInvoiceView(DetailView):
+    template_name = 'sales/read/sales-invoice.html'
+    model = Sales    
 class SalesHistoryView(ListView):
     template_name = 'transactions/read/sale-history.html'
     model = Sales
     context_object_name = 'sales'
-
-class SalesDetailedView(DetailView):
-    template_name = 'transactions/sales/sales-invoice.html'
-    model = Sales
 
 class UpdateSalesForm(UpdateView):
     template_name = 'transactions/sales/update.html'
@@ -75,7 +92,7 @@ class StockOverviewView(ListView):
 class CreateStockView(CreateView):
     template_name = 'transactions/create/create-stock.html'
     model = Stock
-    fields = ('company','branch','branch', 'project', 'product_name', 'product_description', 'quantity', 'product_price', )
+    fields = ('asset','company','branch','branch', 'project', 'product_name',  'quantity', 'product_price', 'product_description',)
     success_url = reverse_lazy('stock-overview')
 
 class StockDetailedView(DetailView):

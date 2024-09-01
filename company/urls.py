@@ -16,7 +16,7 @@ urlpatterns = [
     path('dashboard/<str:pk>/branch/<str:branch>/update', UpdateBranchView.as_view(), name = 'update-branch'),
     # Projects Urls
     path('projects/<str:pk>/', ProjectsIndexView.as_view(), name = 'project-index'),
-    path('projects/create/', CreateProjectView.as_view(), name = 'create-project'),
+    path('projects/<str:pk>/create/', CreateProjectView.as_view(), name = 'create-project'),
     path('dashboard/overview/branch/projects/<int:pk>/', ProjectsDetailedView.as_view(), name = 'project-detailed-view'),
     path('dashboard/overview/branch/projects/<int:pk>/brief/', ProjectsBriefView.as_view(), name = 'project-detailed-brief'),
     path('dashboard/overview/branch/projects/<int:pk>/update/', UpdateProjectView.as_view(), name = 'update-project'),
