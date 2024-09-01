@@ -1,0 +1,30 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%}
+{%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
+<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<div class="card card-bordered auth-form form-grid-container">
+    <div class="card-inner card-inner-lg">
+      <div class="nk-block-head">
+        <div class="nk-block-head-content">
+          <h3 class="nk-block-title">New Purchase Item</h3>
+          {{item.purchase.purchase_id}}
+          <div class="nk-block-des">
+            <p>Add your new item here!</p>
+          </div>
+        </div>
+      </div>
+      <form method="post" class="mt-1">
+        <div class="form-group form-layout form-grid">
+          {%csrf_token %} 
+          {{form.as_p}}
+      </div>
+        <button class="btn btn-success btn-block mt-2">Create</button>
+      </form>
+    </div>
+  </div>
+  {%endblock%}

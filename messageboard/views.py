@@ -34,7 +34,7 @@ class UpdateMessageView(LoginRequiredMixin, UpdateView):
     fields = ('ref', 'receipient', 'text', 'urgency', )
     success_url = reverse_lazy('messages-overview')
     
-    def dispatch(self, request, *args, **kwargs): # new
+    def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
         if obj.author != self.request.user:
             raise PermissionDenied

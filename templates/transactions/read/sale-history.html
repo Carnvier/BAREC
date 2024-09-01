@@ -1,0 +1,46 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
+<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
+<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
+<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
+{%endblock%}
+{%block content%}
+<h1 class="text-center">Sale History</h1>
+<a href="{%url 'sales-form'%}"><button class="btn-primary button-container mt-4">New Sale</button></a>
+<div class="card card-bordered card-preview mt-3">
+    <table class="table table-tranx">
+        <thead>
+            <tr class="tb-tnx-head">
+                <th class="tb-tnx-id"><span class="">#</span></th>
+                <th class="tb-tnx-id"><span class="">Sale ID</span></th>
+                <th class="tb-tnx-id"><span class="">Date</span></th>
+                <th class="tb-tnx-id"><span class="">Rep</span></th>
+                <th class="tb-tnx-id"><span class="">Customer</span></th>
+                <th class="tb-tnx-id"><span class="">Details</span></th>
+                <th class="tb-tnx-id"><span class="">Branch</span></th>
+                <th class="tb-tnx-id"><span class="">Total</span></th>
+                <th></th>
+        </tr></thead>
+        <tbody>
+            {%for sale in sales%}
+            <tr class="tb-tnx-item">
+                <td class="tb-tnx-id"><span>{{sale.id}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.sale_id}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.date_of_sale}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.sales_rep}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.customer}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.sale_details}}</span></td>
+                <td class="tb-tnx-id"><span>{{sale.branch}}</span></td>
+                <td class="tb-tnx-amount">
+                    <div class="tb-tnx-total">
+                        <span class="amount">{{sale.total_amount}}</span>
+                    </div>
+                </td>
+                <td><a href="{%url 'sales-invoice' sale.id%}"  class="btn btn-sm btn-primary">View</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+{%endblock%}

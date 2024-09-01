@@ -1,4 +1,6 @@
+from django.forms import BaseModelForm
 from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, UpdateView, DetailView, CreateView, ListView, DeleteView
@@ -7,23 +9,25 @@ from django.urls import reverse_lazy
 
 # Sales View
 class SalesOverviewView(TemplateView):
-    template_name = 'transactions/sales/index.html'
+    template_name = 'transactions/read/sales-index.html'
 
 class SalesFormView(CreateView):
-    template_name = 'transactions/sales/create.html'
+    template_name = 'transactions/create/create-sale.html'
     model = Sales
-    fields = ("sale_id",  "product", "sale_details", "quantity", "discount", "branch",)
+    fields = ("product", "sale_details", "quantity", "discount", "branch", "project", )
 
-
- 
-  
+    def form_valid(self, form, *args, **kwarg ):
+        if form.instance.quantity > 5:
+            form.add_error('quantity', 'stock is lacking')
+            return self.form_invalid(form)
+        return super().form_valid(form, *args, **kwarg)        
 class SalesHistoryView(ListView):
-    template_name = 'transactions/sales/history.html'
+    template_name = 'transactions/read/sale-history.html'
     model = Sales
     context_object_name = 'sales'
 
 class SalesDetailedView(DetailView):
-    template_name = 'transactions/sales/detail.html'
+    template_name = 'transactions/sales/sales-invoice.html'
     model = Sales
 
 class UpdateSalesForm(UpdateView):
@@ -41,14 +45,37 @@ class UpdateSalesForm(UpdateView):
 
 # Stock Views
 class StockOverviewView(ListView):
-    template_name = 'transactions/stock/index.html'
+    template_name = 'transactions/read/search-stock.html'
     model = Stock
     context_object_name = 'stock'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q')
+        if query:
+            context['results'] = Stock.objects.filter(product_name__icontains=query)
+            context['query'] = query
+
+        else:
+            context['results'] = []
+            context['query'] = ''
+        return context
+    
+    def is_ajax(self, request):
+        return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+    
+    def get(self, request, *args, **kwargs):
+        if self.is_ajax(request):
+            query = request.GET.get('q')
+            results = Stock.objects.filter(product_id__icontains=query)
+            results_list = list(results.values('product_id'))
+            return JsonResponse({'results': results_list})
+        return super().get(request, *args, **kwargs)
+
 class CreateStockView(CreateView):
-    template_name = 'transactions/stock/create.html'
+    template_name = 'transactions/create/create-stock.html'
     model = Stock
-    fields = "__all__"
+    fields = ('company','branch','branch', 'project', 'product_name', 'product_description', 'quantity', 'product_price', )
     success_url = reverse_lazy('stock-overview')
 
 class StockDetailedView(DetailView):
@@ -63,16 +90,19 @@ class UpdateStockView(UpdateView):
 
 # Customer View
 class CustomerOverviewView(ListView):
-    template_name = 'transactions/customer/index.html'
+    template_name = 'transactions/read/customer-index.html'
     model = Customer
     context_object_name = 'customer'
 
 class CreateCustomerView(CreateView):
-    template_name = 'transactions/customer/create.html'
+    template_name = 'transactions/create/create-customer.html'
     model = Customer
-    fields = '__all__'
+    fields = ('name', 'type_of_customer', 'address', 'phone_number', 'email',)
     success_url = reverse_lazy('customer-overview')
 
+    def form_valid(self, form):
+        form.instance.organisation = self.request.user.organisation
+        return super().form_valid(form)
 
 class CustomerDetailedView(DetailView):
     template_name = 'transactions/customer/detail.html'

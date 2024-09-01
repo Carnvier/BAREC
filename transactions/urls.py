@@ -6,7 +6,7 @@ urlpatterns  =[
     path('sales/', SalesOverviewView.as_view(), name='sales-overview'),
     path('history/', SalesHistoryView.as_view(), name='sales-history'),
     path('form/', SalesFormView.as_view(), name='sales-form'),
-    path('history/detail-view/<int:pk>', SalesDetailedView.as_view(), name='sales-detailed-view'),
+    path('history/detail-view/<int:pk>', SalesDetailedView.as_view(), name='sales-invoice'),
     path('history/detail-view/<int:pk>/update', UpdateSalesForm.as_view(), name='update-sales-form'),
 
     # Stock
@@ -17,7 +17,7 @@ urlpatterns  =[
 
     # Customer
     path('customer/', CustomerOverviewView.as_view(), name='customer-overview'),
-    path('customer/create/', CreateCustomerView.as_view(), name='create-customer'),
+    path('customer/create/<int:pk>/', CreateCustomerView.as_view(), name='create-customer'),
     path('customer/detail-view/<int:pk>/', CustomerDetailedView.as_view(), name='customer-detail-view'),
     path('customer/detail-view/<int:pk>/update/', UpdateCustomerView.as_view(), name='update-customer'),
     path('customer/detail-view/<int:pk>/delete/', DeleteCustomerView.as_view(), name='delete-customer'),

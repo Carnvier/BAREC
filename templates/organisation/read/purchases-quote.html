@@ -1,0 +1,113 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
+<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h2 class="text-center">Purchases Quote</h2>
+<button onclick="downloadQuote()" class="btn-primary button-container mb-3 mt-4">Print</button>
+<div id="quote-content">
+<div class="nk-block content-block purchase-quote">
+    <div>
+        <div class="invoice-action">
+            <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" href="html/invoice-print.html" target="_blank"><em class="icon ni ni-printer-fill"></em></a>
+        </div><!-- .invoice-actions -->
+        <div class="invoice-wrap">
+            <div class="invoice-brand text-center">
+                <img src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="">
+            </div>
+            <div class="invoice-head">
+                <section class="grid-display content-block">
+                <div class="invoice-contact">
+                    <div class="invoice-contact-info">
+                        <h4 class="title">Purchases No: {{purchases.purchase_id}}</h4>
+                        <ul class="list-plain">
+                            <li><span>Purchaser</span>: <span>{{purchases.purchaser}}</span></li>
+                            <li><span>Branch</span>: <span>{{purchases.branch}}<br><span>Location</span>: {{purchases.branch.location}}</span></li>
+                            <li><span>Phone Number</span>: <span>{{purchases.branch.branch_phone_number}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="invoice-desc">
+                    <h4 class="title">Source</h3>
+                    <ul class="list-plain">
+                        <li><span>Date</span>: <span>{{purchases.date|date:"F j, Y"}}</span></li>
+                        <li><span>Time</span>: <span>{{purchases.date|time:"g:i A"}}</span></li>
+                        <li><span>From</span>: <span>{{purchases.source}}</span></li>
+                        <li><span>Details</span>: <span>{{purchases.details}}</span></li>
+                    </ul>
+                </div>
+            </div><!-- .invoice-head -->
+            </section>
+            <div class="invoice-bills">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="w-150px">Product ID</th>
+                                <th class="w-60">Name</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for item in purchases.item_purchased.all%}
+                            <tr>
+                                <td>{{item.id}}</td>
+                                <td>{{item.product_name}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td>{{item.unit_price}}</td>
+                                <td>{{item.total_price}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="2">Subtotal</td>
+                                <td>{{purchases.sub_total}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="2">Processing fee</td>
+                                <td>{{purchases.processing_fee}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="2">TAX</td>
+                                <td>{{purchases.tax}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="2">Grand Total</td>
+                                <td>{{purchases.grand_total}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="nk-notes ff-italic fs-12px text-soft text-center mt-2"> Quote was created on a computer and is valid without the signature and seal. </div>
+                </div>
+            </div><!-- .invoice-bills -->
+        </div><!-- .invoice-wrap -->
+    </div><!-- .invoice -->
+</div>
+</div>
+<script>
+   function downloadQuote(){
+    const content = document.getElementById('quote-content').innerHTML;
+    const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+    .map(link => link.outerHTML)
+    .join('');
+    const printWindow = window.open('','_blank');
+    printWindow.document.write(`<html><head><title>{{purchases.purchase_id}}</title>${styles}</head><body>${content}</body></html>`);
+    printWindow.document.close();
+    printWindow.onload = function() {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+    };
+   }
+</script>
+{%endblock%}

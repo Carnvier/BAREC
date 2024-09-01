@@ -1,0 +1,43 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
+<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1 class="nk-block-head text-center">{{projects.project_name}}</h1>
+<p class="nk-block-des text-center">Welcome to the detailed view of the {{projects.project_name}}</p>
+<section class="grid-display text-center">
+<a href="{%url 'project-detailed-brief' projects.id %}" class="link-block">
+<div class="content-block bg-blue-metalic">
+    <h2>Project Brief</h2>
+    <p>Project Supervisor: {{projects.project_supervisor}}</p>
+    <p>Branch Name: {{projects.branch.branch_name}}</p>
+    <p>No of Staff: {{projects.project_staff}}</p>
+    <p>Project Expenses: {{projects.project_expenses}}</p>
+</div>
+</a>
+<a href="{%url 'project-sales-overview' projects.id%}" class="link-block">
+    <div class="content-block bg-blue-metalic">
+        <h2>Sales</h2>
+        <p>No of Sales: {{projects.no_sales}}</p>
+        <p>Sales Income: {{projects.project_sales_income}}</p>
+    </div>
+    </a>
+<a href="{% url 'project-assets-overview' projects.id %}" class="link-block">
+<div class="content-block bg-blue-metalic">
+    <h2>Assets</h2>
+    <p>Fixed Assets:{{projects.fixed_assets}}</p>
+    <p>Non-Fixed Assets: {{projects.current_assets}}</p>
+</div>
+</a>
+<a href="{%url 'project-liabilities-overview' projects.id%}" class="link-block">
+<div class="content-block bg-blue-metalic">
+    <h2>Liabilities</h2>
+    <p>Short-Term Liabilities: {{projects.short_liabilities}}</p>
+    <p>Long-Term Liabilities: {{projects.long_liabilities}}</p>
+</div>
+</a>
+</section>
+{%endblock%}

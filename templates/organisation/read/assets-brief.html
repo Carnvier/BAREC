@@ -1,0 +1,117 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
+<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1 class="nk-block-title text-center">Assets Brief</h1>
+<p class="nk-block-des text-center">View and manage your project's current and fixed asset here!</p>
+    <h2 class="mt-4 text-center">Fixed Assets</h2>
+    <a href="{%url 'create-asset' projects.id%}" ><button class="button-container btn-primary mb-2" >New Asset</button></a>
+    <div class="card card-bordered card-preview mt-1">
+        <table class="table table-orders">
+            <thead class="tb-odr-head">
+                <tr class="tb-odr-item">
+                    <th class="tb-odr-info">
+                        <span class="tb-odr-id">Asset ID</span>
+                      </th>
+                  <th class="tb-odr-info">
+                    <span class="tb-odr-id">Date Acquired</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Name</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Source</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Quantity</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Value</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Depreciation</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Net Worth</span>
+                  </th>
+                  <th></th>
+                </tr>
+              </thead>  
+          <tbody class="tb-odr-body">
+            {%for project in projects.assets.all %}
+                {%if project.type_of_asset == 'Fixed Asset' %}
+                <tr>
+                    <td>{{project.asset_id}}</td>
+                    <td>{{project.date_brought_in}}</td>
+                    <td>{{project.asset_name}}</td>
+                    <td>{{project.asset_source}}</td>
+                    <td>{{project.quantity}}</td>
+                    <td>{{project.asset_value}}</td>
+                    <td>{{project.depreciation_rate}}</td>
+                    <td>{{project.asset_networth}}</td>
+                    <td><a href=""  class="btn btn-sm btn-primary">View</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+</div>
+<h2 class="nk-block-title mt-4 text-center">Current Assets</h2>
+<a href="{%url 'create-asset' projects.id%}" ><button class="button-container btn-primary mb-2" >New Asset</button></a>
+
+<div class="card card-bordered card-preview mt-1">
+    <table class="table table-orders">
+        <thead class="tb-odr-head">
+            <tr class="tb-odr-item">
+                <th class="tb-odr-info">
+                    <span class="tb-odr-id">Asset ID</span>
+                  </th>
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Date Acquired</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Name</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Source</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Quantity</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Value</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Depreciation</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Net Worth</span>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+      <tbody class="tb-odr-body">
+        {%for project in projects.assets.all %}
+                {%if project.type_of_asset == 'Current Asset' %}
+                <tr>
+                    <td>{{project.asset_id}}</td>
+                    <td>{{project.date_brought_in}}</td>
+                    <td>{{project.asset_name}}</td>
+                    <td>{{project.asset_source}}</td>
+                    <td>{{project.quantity}}</td>
+                    <td>{{project.asset_value}}</td>
+                    <td>{{project.depreciation_rate}}</td>
+                    <td>{{project.asset_networth}}</td>
+                    <td><a href=""  class="btn btn-sm btn-primary">View</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+      </tbody>
+    </table>
+  </div>
+{%endblock%}

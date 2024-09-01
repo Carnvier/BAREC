@@ -1,0 +1,28 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index'%}"><li>Projects</li></a>
+<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<div class="card card-bordered auth-form form-grid-container">
+    <div class="card-inner card-inner-lg">
+      <div class="nk-block-head">
+        <div class="nk-block-head-content">
+          <h3 class="nk-block-title">Update Project</h3>
+          <div class="nk-block-des">
+            <p>Update your project here!</p>
+          </div>
+        </div>
+      </div>
+      <form method="post" class="mt-1">
+        <div class="form-group form-layout form-grid">
+          {%csrf_token %} 
+          {{form.as_p}}
+      </div>
+        <button class="btn btn-success btn-block mt-2">Update</button>
+      </form>
+    </div>
+  </div>
+{%endblock%}

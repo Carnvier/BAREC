@@ -1,0 +1,51 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%}
+{%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
+<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1>Purchase ID: {{purchases.purchase_id}}</h1>
+<p>View the items bought here.</p>
+<a href="{%url 'create-purchased-item' purchases.id %}"><button class="button-container btn-primary">Add Item</button></a>
+<div class="card card-bordered card-preview mt-1">
+    <table class="table table-orders">
+        <thead class="tb-odr-head">
+            <tr class="tb-odr-item">
+                <th class="tb-odr-info">
+                    <span class="tb-odr-id">Product_Name</span>
+                  </th>
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Quantity</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Unit_Price</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Total</span>
+              </th>
+              <th></th>
+            </tr>
+          </thead>  
+      <tbody class="tb-odr-body">
+        {%for item in purchases.item_purchased.all%}
+            <tr>
+            <td>{{item.product_name}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.unit_price}}</td>
+            <td>{{item.total_price}}</td>
+            <td><a href=""  class="btn btn-sm btn-primary">View</td>
+            </tr>
+        {%endfor%}
+        <tr>
+        <td><a href="{%url 'purchases-quote' purchases.id %}"><button class="button-container btn-primary mt-3">Done</button></a></td>
+    </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+{%endblock%}

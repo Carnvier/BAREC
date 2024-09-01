@@ -1,0 +1,64 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
+<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1 class="text-center mb-4">Staff Overview</h1>
+<a href="{%url 'create-staff'%}" class="mt-4"><button class="btn-primary button-container">New Staff</button></a>
+
+    <div class="card card-bordered card-preview mt-2">
+        <table class="table table-orders">
+          <thead class="tb-odr-head">
+            <tr class="tb-odr-item">
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Staff Id</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Name</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">D.O.B</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">ID No</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Phone Number</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Address</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Department</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Occupation</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Salary</span>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="tb-odr-body">
+            {%for staff in staff%}
+            <tr>
+            <td>{{staff.staff_id_no}}</td>
+            <td>{{staff.staff_name}}</td>
+            <td>{{staff.staff_name.D_O_B}}</td>
+            <td>{{staff.staff_name.ID_Number}}</td>
+            <td>{{staff.staff_name.phone_number}}</td>
+            <td>{{staff.staff_name.address}}</td>
+            <td>{{staff.department}}</td>
+            <td>{{staff.occupation}}</td>
+            <td>{{staff.monthly_salary}}</td>
+            <td><a href="{%url 'staff-detail' staff.id%}"  class="btn btn-sm btn-primary">View</td> 
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+{%endblock%}

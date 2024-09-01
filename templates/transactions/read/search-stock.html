@@ -1,0 +1,134 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
+<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
+<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
+<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
+{%endblock%}
+{%block content%}
+<form action="." method="GET">
+    <input type="text" name="q" placeholder="Search...">
+    <button type="submit" class="btn-success">Search</button>
+</form>
+<div class="mt-3">
+<h2 class="text-center">Search Results for '{{query}}'</h2>
+<div class="card card-bordered card-preview mt-1">
+    <table class="table table-orders">
+        <thead class="tb-odr-head">
+            <tr class="tb-odr-item">
+                <th class="tb-odr-info">
+                    <span class="tb-odr-id">Product ID</span>
+                  </th>
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Date Joined</span>    
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Name</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Quantity</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Price</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Branch</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Project</span>
+              </th>
+              <th></th>
+            </tr>
+          </thead>  
+      <tbody class="tb-odr-body">
+
+        {%for result in results%}
+        <tr>
+        <td>{{result.product_id}}</td>
+        <td>{{result.date}}</td>
+        <td>{{result.product_name}}</td>
+        <td>{{result.quantity}}</td>
+        <td>{{result.price}}</td>
+        <td>{{result.branch}}</td>
+        <td>{{result.project}}</td>
+        {%empty%}
+        <td class="text-center">No results Found</td>
+        {%endfor%}
+     </tr>
+      </tbody>
+    </table>
+  </div> 
+</div>  
+<div>
+<h2 class="mt-4 text-center">Stock Listing</h2>
+<a href="{%url 'create-stock' %}"><button class="btn-primary button-container">New Stock</button></a>
+<div class="card card-bordered card-preview mt-1">
+    <table class="table table-orders">
+        <thead class="tb-odr-head">
+            <tr class="tb-odr-item">
+                <th class="tb-odr-info">
+                    <span class="tb-odr-id">Product ID</span>
+                  </th>
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Date Joined</span>    
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Name</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Quantity</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Price</span>
+              </th>
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Branch</span>    
+              </th>
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Project</span>    
+              </th>
+              <th></th>
+            </tr>
+          </thead>  
+      <tbody class="tb-odr-body">
+        {%for stock in stock%}
+        <tr>
+        <td>{{stock.product_id}}</td>
+        <td>{{stock.date}}</td>
+        <td>{{stock.product_name}}</td>
+        <td>{{stock.quantity}}</td>
+        <td>{{stock.price}}</td>
+        <td>{{stock.branch}}</td>
+        <td>{{stock.project}}</td>
+        {%endfor%}
+     </tr>
+      </tbody>
+    </table>
+  </div> 
+</div>  
+<ul>
+<!-- <h1>Stock List</h1>
+<p>View all the branches stock net worth and the stock they have in detail</p>
+<a href="{%url 'create-stock' %}"><button>New Stock</button></a>
+<table>
+    <thead>
+        <th>Branch</th>
+        <th>Project</th>
+        <th>Supervisor</th>
+        <th>Location</th>
+        <th>Stock Net Worth</th>
+    </thead>
+    <tbody>
+        {% for stock in stock %}
+        <tr>
+            <td>{{stock.branch.branch_name}}</td>
+            <td>{{stock.project.project_name}}</td>
+            <td>{{stock.project.project_supervisor}}</td>
+            <td>{{stock.project.project_location}}</td>
+            <td>{{stock.branch_total_net_worth}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table> -->
+
+{%endblock%}

@@ -1,0 +1,110 @@
+{%extends 'layouts/base.html'%}
+{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
+<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
+<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
+<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
+<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%endblock%}
+{%block content%}
+<h1 class="nk-block-title text-center">Liabilties Brief</h1>
+<p class="nk-block-des text-center">View and manage your project's long and short-term liabilities here!</p>
+    <h2 class="mt-4 text-center">Long Term Liability</h2>
+    <a href="{%url 'create-liability' projects.id%}" ><button class="button-container btn-primary mb-2" >New Liability</button></a>
+    <div class="card card-bordered card-preview mt-1">
+        <table class="table table-orders">
+            <thead class="tb-odr-head">
+                <tr class="tb-odr-item">
+                    <th class="tb-odr-info">
+                        <span class="tb-odr-id">Liability ID</span>
+                      </th>
+                  <th class="tb-odr-info">
+                    <span class="tb-odr-id">Date Acquired</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Name</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Details</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Amount</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Interest</span>
+                  </th>
+                  <th class="tb-odr-amount">
+                    <span class="tb-odr-total">Total</span>
+                  </th>
+                  <th></th>
+                </tr>
+              </thead>  
+          <tbody class="tb-odr-body">
+            {%for project in projects.liabilities.all %}
+                {%if project.type_of_liability == 'Long-term' %}
+                <tr>
+                    <td>{{project.liability_id}}</td>
+                    <td>{{project.liability_acquisition_date}}</td>
+                    <td>{{project.supplier}}</td>
+                    <td>{{project.details}}</td>
+                    <td>{{project.liability_amount}}</td>
+                    <td>{{project.interest_rate}}</td>
+                    <td>{{project.total_liability_amount}}</td>
+                    <td><a href=""  class="btn btn-sm btn-primary">View</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+</div>
+<h2 class="nk-block-title mt-4 text-center">Short Term Liabilties</h2>
+<a href="{%url 'create-liability' projects.id%}"><button class="button-container btn-primary mb-2" >New Liability</button></a>
+
+<div class="card card-bordered card-preview mt-1">
+    <table class="table table-orders">
+        <thead class="tb-odr-head">
+            <tr class="tb-odr-item">
+                <th class="tb-odr-info">
+                    <span class="tb-odr-id">Liability ID</span>
+                  </th>
+              <th class="tb-odr-info">
+                <span class="tb-odr-id">Date Acquired</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Name</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Details</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Amount</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Interest</span>
+              </th>
+              <th class="tb-odr-amount">
+                <span class="tb-odr-total">Total</span>
+              </th>
+              <th></th>
+            </tr>
+          </thead>  
+      <tbody class="tb-odr-body">
+        {%for project in projects.liabilities.all %}
+            {%if project.type_of_liability == 'Short-term' %}
+            <tr>
+                <td>{{project.liability_id}}</td>
+                <td>{{project.liability_acquisition_date}}</td>
+                <td>{{project.supplier}}</td>
+                <td>{{project.details}}</td>
+                <td>{{project.liability_amount}}</td>
+                <td>{{project.interest_rate}}</td>
+                <td>{{project.total_liability_amount}}</td>
+                <td><a href=""  class="btn btn-sm btn-primary">View</td>
+            </tr>
+            {%endif%}
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+</div>
+{%endblock%}
