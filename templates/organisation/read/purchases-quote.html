@@ -26,7 +26,7 @@
                         <ul class="list-plain">
                             <li><span>Purchaser</span>: <span>{{purchases.purchaser}}</span></li>
                             <li><span>Branch</span>: <span>{{purchases.branch}}<br><span>Location</span>: {{purchases.branch.location}}</span></li>
-                            <li><span>Phone Number</span>: <span>{{purchases.branch.branch_phone_number}}</span></li>
+                            <li><span>Phone Number</span>: <span>{{purchases.branch.phone_number}}</span></li>
                         </ul>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                                 <td>{{item.product_name}}</td>
                                 <td>{{item.quantity}}</td>
                                 <td>{{item.unit_price}}</td>
-                                <td>{{item.total_price}}</td>
+                                <td>{{item.total_amount}}</td>
                             </tr>
                             {%endfor%}
                         </tbody>
@@ -72,13 +72,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
-                                <td colspan="2">Processing fee</td>
-                                <td>{{purchases.processing_fee}}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"></td>
                                 <td colspan="2">TAX</td>
-                                <td>{{purchases.tax}}</td>
+                                <td>{{purchases.tax_amount}}</td>
                             </tr>
                             <tr>
                                 <td colspan="2"></td>

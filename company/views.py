@@ -136,15 +136,12 @@ class PurchasesBriefView(ListView):
 class CreatePurchasesView(CreateView):
     template_name = 'organisation/create/create-purchase.html'
     model = Purchases
-    fields = ('source', 'branch', 'project', 'details',)  
+    fields = ('source', 'branch','project','tax_percentage', 'details',)  
 
     def form_valid(self, form):
         form.instance.purchaser = self.request.user
-        return super().form_valid(form)  
-    
-    def form_valid(self, form):
         form.instance.organisation = self.request.user.organisation
-        return super().form_valid(form)
+        return super().form_valid(form)  
 
 class PurchasedItemsDetailView(DetailView):
     template_name = 'organisation/read/purchased-items-detail.html'

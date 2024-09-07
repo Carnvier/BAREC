@@ -30,10 +30,13 @@ class Company(models.Model):
 
 class Branch(models.Model):
     company = models.ForeignKey('company.Company', related_name= 'branches', null=True, blank=True, on_delete= models.CASCADE)
-    branch_name = models.CharField(max_length = 255, default= '', unique=True)
+    name = models.CharField(max_length = 255, default= '', unique=True)
     location = models.CharField(max_length = 255, default= '')
-    branch_phone_number = models.CharField(max_length = 15, default = '')
+    phone_number = models.CharField(max_length = 15, default = '')
     branch_supervisor = models.ForeignKey('company.Staff', related_name= 'branches', null = True, blank= True, on_delete= models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 class Projects(models.Model):
     organisation = models.ForeignKey('company.Organisation', related_name='projects', on_delete= models.CASCADE, null= True, blank= True)
@@ -54,6 +57,13 @@ class Projects(models.Model):
         project = str(self.organisation.name[0]) + str(self.name[0]) + f'{self.id:0004d}'
         return project
     
+    def total_purchases(self):
+        total = 0.00
+        for item in self.purchases.all():
+            if item.project.name == self.name:
+                total += item.grand_total()
+        return total
+        
 
 class Assets(models.Model):
     asset_type = (
@@ -158,13 +168,15 @@ class Purchases(models.Model):
     organisation = models.ForeignKey('company.Organisation', on_delete= models.CASCADE, null= True, related_name= 'purchases',  blank= True)
     date = models.DateTimeField(auto_now_add=True)
     purchaser = models.ForeignKey('users.CustomUser', on_delete= models.CASCADE, default = '', related_name='purchases', null= True, blank=True)
-    source = models.CharField(max_length=255, default='')
-    details = models.TextField(max_length=255, default = '')
     branch = models.ForeignKey('company.Branch', default='', related_name='purchases', on_delete= models.CASCADE)
     project = models.ForeignKey('company.Projects', default='', related_name='purchases', on_delete= models.CASCADE)
+    source = models.CharField(max_length=255, default='')
+    details = models.TextField(max_length=255, default = '')
+    tax_percentage = models.IntegerField(default= 0.00)
+    
 
     def __str__(self):
-        return self.source
+        return self.purchase_id()
 
     def get_absolute_url(self):
         return reverse_lazy('purchased-items-view', args=[str(self.id)])
@@ -173,10 +185,72 @@ class Purchases(models.Model):
         purchase = self.organisation.name[0] + self.source[0] + f'{self.id:0004d}'
         return purchase
     
+    def stock_purchase(self):
+        total = 0.00
+        for item in self.item_purchased.all():
+            if item.purchase_type == 'Stock':
+                total += item.total_amount()
+        return total
+    
+    def asset_purchase(self):
+        total = 0.00
+        for item in self.item_purchased.all():
+            if item.purchase_type == 'Assets':
+                total += item.total_amount()
+        return total
+    
+    def overheads_purchase(self):
+        total = 0.00
+        for item in self.item_purchased.all():
+            if item.purchase_type == 'Overheads':
+                total += item.total_amount()
+        return total
+    
+    def total_amount(self):
+        total = 0.00
+        for item in self.item_purchased.all():
+            if item.purchase.purchase_id() == self.purchase_id():
+                total += item.total_amount()
+        return total
+
+    def sub_total(self):
+        total = self.total_amount()
+        return total
+    
+    def tax_amount(self):
+        tax = 0.00
+        tax += (self.sub_total() * (self.tax_percentage/100))
+        tax =  round(tax, 2)
+        return tax
+
+    
+    def grand_total(self):
+        total = 0.00
+        total += self.sub_total() + self.tax_amount()
+        return total
+
+    
 class Purchased_Item(models.Model):
+    purchase_types = (
+        ('Stock', 'Stock'),
+        ('Overheads', 'Overheads'),
+        ('Assets', 'Assets'),
+    )
     purchase = models.ForeignKey('company.Purchases', related_name='item_purchased', on_delete=models.CASCADE)
     product_name = models.CharField(max_length=255, default='')
+    purchase_type = models.CharField(max_length=255, default = 'Stock', choices = purchase_types)
     quantity = models.IntegerField(default=0)
-    unit_price = models.IntegerField(default=0.0 )
+    unit_price = models.IntegerField(default=0.00)
 
-  
+    def __str__(self):
+        return self.product_name
+    
+    def get_absolute_url(self):
+        return reverse_lazy('purchased-items-view', args=[str(self.purchase.id)])
+    
+    def total_amount(self):
+        total = 0.00
+        total += (self.quantity * self.unit_price)
+        return total
+    
+        
