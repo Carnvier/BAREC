@@ -68,7 +68,10 @@ class CreateProjectView(CreateView):
     template_name = 'organisation/create/create-project.html'
     model = Projects
     fields = ('branch', 'project_name', 'project_supervisor', 'cash_in_hand',)
-    success_url = reverse_lazy('project-index')
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        form.instance.organisation = self.request.user.organisation
+        return super().form_valid(form)
 
 class ProjectsDetailedView(DetailView):
     template_name = 'organisation/read/project-detail-view.html'
@@ -122,18 +125,26 @@ class PurchasesBriefView(ListView):
     model = Purchases
     context_object_name = 'purchases'
 
-def chart_view(request):
-    data = Purchases.objects.all()
-    labels = json.dumps([point.purchase_id for point in data])
-    values = json.dumps([point.grand_total for point in data])
-    print(labels)
-    print(values)
-    return render(request, 'organisation/read/purchases-index.html', {'labels': labels, 'values': values})
+    def chart_view(request):
+        data = Purchases.objects.all()
+        labels = json.dumps([point.purchase_id for point in data])
+        values = json.dumps([point.grand_total for point in data])
+        print(labels)
+        print(values)
+        return render(request, 'organisation/read/purchases-index.html', {'labels': labels, 'values': values})
 
 class CreatePurchasesView(CreateView):
     template_name = 'organisation/create/create-purchase.html'
     model = Purchases
-    fields = ('purchaser', 'source', 'branch', 'project', 'details',)    
+    fields = ('source', 'branch', 'project', 'details',)  
+
+    def form_valid(self, form):
+        form.instance.purchaser = self.request.user
+        return super().form_valid(form)  
+    
+    def form_valid(self, form):
+        form.instance.organisation = self.request.user.organisation
+        return super().form_valid(form)
 
 class PurchasedItemsDetailView(DetailView):
     template_name = 'organisation/read/purchased-items-detail.html'
@@ -173,3 +184,4 @@ class DeleteStaffView(DeleteView):
     template_name = 'organisation/delete/delete-staff.html'
     model = Staff
     success_url  =reverse_lazy('create-staff')
+

@@ -88,8 +88,8 @@ class StockOverviewView(ListView):
     def get(self, request, *args, **kwargs):
         if self.is_ajax(request):
             query = request.GET.get('q')
-            results = Stock.objects.filter(product_id__icontains=query)
-            results_list = list(results.values('product_id'))
+            results = Stock.objects.filter(product_name__icontains=query)
+            results_list = list(results.values('product_name'))
             return JsonResponse({'results': results_list})
         return super().get(request, *args, **kwargs)
 
