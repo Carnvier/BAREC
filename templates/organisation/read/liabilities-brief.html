@@ -1,11 +1,8 @@
 {%extends 'layouts/base.html'%}
-{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
-<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
-<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
-<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%block side-navigation%}
+{%include 'layouts/company-sidebar.html'%}
 {%endblock%}
-{%block content%}
+{%block content %}
 <h1 class="nk-block-title text-center">Liabilties Brief</h1>
 <p class="nk-block-des text-center">View and manage your project's long and short-term liabilities here!</p>
     <h2 class="mt-4 text-center">Long Term Liability</h2>

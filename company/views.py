@@ -182,3 +182,14 @@ class DeleteStaffView(DeleteView):
     model = Staff
     success_url  =reverse_lazy('create-staff')
 
+#Stats
+class OrganisationStatsView(DetailView):
+    template_name = 'organisation/read/organisation-stats.html'
+    model = Organisation
+
+class OrganisationIncomeStatement(DetailView):
+    template_name = 'organisation/read/organisation-income-statement.html'
+    model = Organisation
+
+
+

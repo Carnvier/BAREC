@@ -1,0 +1,23 @@
+{%extends 'layouts/base.html'%}
+{%block side-navigation%}
+{%include 'layouts/company-sidebar.html'%}
+{%endblock%}
+{%block content %}
+<section class="text-center">
+<a href="" class="link-block inline-content">
+    <div class="card-layout-container content-block">
+        <h2>TRIAL BALANCE</h2>
+    </div>
+</a>
+<a href="{% url 'organisation-income-statement' user.organisation.id %}" class="link-block inline-content">
+<div class="card-layout-container content-block">
+<h2>INCOME STATEMENT</h2>
+</div>
+</a>
+<a href="" class="link-block inline-content">
+    <div class="card-layout-container content-block">
+        <h2>BALANCE SHEET</h2>
+    </div>
+</a>
+</section>
+{%endblock%}

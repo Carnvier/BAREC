@@ -1,12 +1,8 @@
-{%extends 'layouts/base.html'%} {%block title%}COMPANY DASHBOARD {%endblock%}
+{%extends 'layouts/base.html'%}
 {%block side-navigation%}
-<a href="{%url 'company-dashboard' user.organisation.id%}"
-  ><li>Dashboard</li></a
->
-<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
-<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
-<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
-{%endblock%} {%block content%}
+{%include 'layouts/company-sidebar.html'%}
+{%endblock%}
+{%block content %}
 <h2 class="nk-block-title text-center">Welcome to {{org.name}}</h2>
 <p class="nk-block-des text-center mb-4">est {{org.est|date:'Y'}}</p>
 <!-- <div class="text-center-container">

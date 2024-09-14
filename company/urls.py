@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm, CreateCompanyView, BranchOverviewView, UpdateBranchView, CreateBranchView, PurchasesBriefView, PurchasedItemsDetailView, PurchasesQuoteView, CreatePurchasesView, CreatePurchasedItemsView
+from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm, CreateCompanyView, BranchOverviewView, UpdateBranchView, CreateBranchView, PurchasesBriefView, PurchasedItemsDetailView, PurchasesQuoteView, CreatePurchasesView, CreatePurchasedItemsView, OrganisationIncomeStatement, OrganisationStatsView
 
 
 urlpatterns = [
@@ -40,4 +40,8 @@ urlpatterns = [
     path('staff/create', CreateStaffView.as_view(), name = 'create-staff'),
     path('staff/detailedview/<int:pk>/update', UpdateStaffView.as_view(), name = 'update-staff'),
     path('staff/detailedview/<int:pk>/delete', DeleteStaffView.as_view(), name = 'delete-staff'),
+
+# Statistics Urls
+    path('stats/<int:pk>/', OrganisationStatsView.as_view(), name = 'organisation-stats'),
+    path('stats/<int:pk>/income-statement', OrganisationIncomeStatement.as_view(), name = 'organisation-income-statement'),
 ]

@@ -1,11 +1,8 @@
 {%extends 'layouts/base.html'%}
-{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
-<a href="{%url 'project-index' user.organisation.id%}"><li>Projects</li></a>
-<a href="{%url 'purchases-index' user.organisation.id%}"><li>Accounts</li></a>
-<a href="{%url 'staff-index' user.organisation.id%}"><li>Staff</li></a>
+{%block side-navigation%}
+{%include 'layouts/company-sidebar.html'%}
 {%endblock%}
-{%block content%}
+{%block content %}
 <h1 class="nk-block-head text-center">Sales Brief</h1>
 <div class="grid-display content-block mt-4">
     <p>No of Sales: {{projects.no_sales}}</p>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Company, Projects, Debitors, Liabilities, Staff, Assets, Organisation, Branch, Purchases, Purchased_Item
+from .models import Company, Projects, Debitors, Liabilities, Staff, Assets, Organisation, Branch, Purchases, Purchased_Item, Loan
 
 # Register your models here.
 admin.site.register(Organisation)
@@ -12,3 +12,4 @@ admin.site.register(Staff)
 admin.site.register(Assets)
 admin.site.register(Purchases)
 admin.site.register(Purchased_Item)
+admin.site.register(Loan)

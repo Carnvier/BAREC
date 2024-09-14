@@ -1,11 +1,8 @@
 {%extends 'layouts/base.html'%}
-{%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'company-dashboard' user.organisation.id%}"><li>Dashboard</li></a>
-<a href="{%url 'project-index'%}"><li>Projects</li></a>
-<a href="{%url 'accounts-index'%}"><li>Accounts</li></a>
-<a href="{%url 'staff-index'%}"><li>Staff</li></a>
+{%block side-navigation%}
+{%include 'layouts/company-sidebar.html'%}
 {%endblock%}
-{%block content%}
+{%block content %}
 <div class="card card-bordered auth-form form-grid-container">
     <div class="card-inner card-inner-lg">
       <div class="nk-block-head">

@@ -18,6 +18,32 @@ class Organisation(models.Model):
     def __str__(self):
         return self.name
 
+    def total_sales(self):
+        sale = 0.0
+        for item in self.sales.all():
+            if item.organisation.name == self.name:
+                sale += item.grand_total()
+        return sale
+    
+    def sales_returns(self):
+        sale = 0.0
+        for item in self.sales_item.all():
+            if item.organisation.name == self.name:
+                if item.returned == True:
+                    sale += item.returned_total()
+        return sale
+
+    def net_sales(self):
+        sale = 0.0
+        sale += self.total_sales() - self.sales_returns()
+        return sale
+    
+    def total_purchases(self):
+        total = 0.0
+        for item in self.purchases.all():
+            if item.organisation.name == self.name:
+                total += item.grand_total()
+        return total    
   
 class Company(models.Model):
     organisation = models.ForeignKey('company.Organisation', related_name='companies', on_delete= models.CASCADE, null= True, blank= True)
@@ -98,6 +124,9 @@ class Liabilities(models.Model):
     projects = models.ForeignKey('company.Projects', on_delete= models.CASCADE, null= True, blank= True, related_name='liabilities')
     sources = models.CharField(max_length = 50, default = 'Other', choices=liability_sources)
     liablity_acquisition_date = models.DateField(default = '2024-08-10')
+    creditor =  models.CharField(max_length = 50, default= '')
+    phone_number = models.CharField(max_length = 15, default= '')
+    email = models.EmailField(max_length = 50, null = True, blank = True)
     type_of_liability = models.CharField(max_length = 255, choices=liability_type, default = 'Short-term')
     details = models.CharField(max_length = 50, default= '')
     liability_amount = models.IntegerField(default = 0)
@@ -206,15 +235,11 @@ class Purchases(models.Model):
                 total += item.total_amount()
         return total
     
-    def total_amount(self):
+    def sub_total(self):
         total = 0.00
         for item in self.item_purchased.all():
             if item.purchase.purchase_id() == self.purchase_id():
                 total += item.total_amount()
-        return total
-
-    def sub_total(self):
-        total = self.total_amount()
         return total
     
     def tax_amount(self):
@@ -239,8 +264,8 @@ class Purchased_Item(models.Model):
     purchase = models.ForeignKey('company.Purchases', related_name='item_purchased', on_delete=models.CASCADE)
     product_name = models.CharField(max_length=255, default='')
     purchase_type = models.CharField(max_length=255, default = 'Stock', choices = purchase_types)
-    quantity = models.IntegerField(default=0)
-    unit_price = models.IntegerField(default=0.00)
+    quantity = models.FloatField(default=0.00)
+    unit_price = models.FloatField(default=0.00)
 
     def __str__(self):
         return self.product_name
@@ -250,7 +275,16 @@ class Purchased_Item(models.Model):
     
     def total_amount(self):
         total = 0.00
-        total += (self.quantity * self.unit_price)
+        total += round(self.quantity * self.unit_price, 2)
         return total
     
         
+class Loan(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    receiver = models.CharField(max_length=50)
+    amount = models.FloatField(default= 0.00)
+    details = models.TextField(default='')
+    paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.id)

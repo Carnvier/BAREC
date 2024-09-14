@@ -24,7 +24,7 @@ class Stock(models.Model):
         return self.asset.acquistion_price * self.quantity
     
     def sold_stock(self):
-        sold_stock = self.salesitem.all().quantity
+        sold_stock = self.sales_item.all().quantity
         current_stock = self.quantity
         current_stock - sold_stock
         return current_stock
@@ -62,7 +62,7 @@ class Customer(models.Model):
     type_of_customer = models.CharField(max_length=255, choices=customer_type)
     address = models.CharField(max_length=255, default= '')
     phone_number = models.CharField(max_length=255, default='')
-    email = models.EmailField(max_length=255, default='') 
+    email = models.EmailField(max_length=255, default='', blank= True, null=True) 
 
     def __str__(self):
         return self.name
@@ -70,6 +70,7 @@ class Customer(models.Model):
 
 class Sales(models.Model):
     date_of_sale  = models.DateTimeField(auto_now_add=True)
+    organisation = models.ForeignKey('company.Organisation', blank=True, null=True, on_delete=models.CASCADE, related_name = 'sales')
     sale_details = models.CharField( max_length= 255)
     customer = models.ForeignKey('transactions.Customer', blank=True, null=True, on_delete=models.CASCADE, related_name = 'sales')
     sales_rep = models.ForeignKey( 'company.Staff', related_name= 'sales', on_delete= models.CASCADE, null= True, blank= True)
@@ -108,10 +109,13 @@ class Sales(models.Model):
         return total
     
 class SaleItem(models.Model):
+    organisation = models.ForeignKey('company.Organisation', blank=True, null=True, on_delete=models.CASCADE, related_name = 'sales_item')
     sale = models.ForeignKey('transactions.Sales', on_delete= models.CASCADE, null=True, blank = True, related_name='sales_item')
-    product = models.ForeignKey('transactions.Stock', on_delete= models.CASCADE, null= True, blank= True, related_name='salesitem')
+    product = models.ForeignKey('transactions.Stock', on_delete= models.CASCADE, null= True, blank= True, related_name='sales_item')
     quantity = models.IntegerField( default= 0)
     discount = models.IntegerField( default= 0.0)
+    returned = models.BooleanField( default= False)
+    returned_quantity= models.IntegerField( default= 0)
 
     def __str__(self):
         return self.product.product_name
@@ -124,6 +128,11 @@ class SaleItem(models.Model):
         total = total + float(self.quantity * self.product.product_price)
         return total
     
+    def returned_total(self):
+        total = 0.0
+        if self.returned == True:
+            total += (self.returned_quantity * self.product.product_price)
+        return total
 class Expenses(models.Model):
     expense_type = (
         ('Running Expense', 'Running Expense'),

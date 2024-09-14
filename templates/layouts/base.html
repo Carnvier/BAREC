@@ -28,21 +28,15 @@
         </nav>
         {% endif %}
     </header>
-    <section class="side-navigation">
-    <nav>
-        <ul>
-            {%block side-navigation%}
-           
-            {%endblock%}
-        </ul>
-    </nav>
-    </section>
     
+    {%block side-navigation %}
+    {%endblock%}
     <main class="main-container">
     {%block content%}
 
     {%endblock%}
     </main>
+    
     <footer>
         <h5>&copy 2024 BAREC PVT LTD</h5>
     </footer>
@@ -50,6 +44,5 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'assets/js/bundle.js?ver=3.1.1' %}"></script>
 <script src="{% static 'assets/js/scripts.js?ver=3.1.1' %}"></script>
-
 </body>
 </html>
