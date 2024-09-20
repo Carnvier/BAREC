@@ -168,14 +168,39 @@ class Staff(models.Model):
     )
     organisation = models.ForeignKey('company.Organisation', on_delete= models.CASCADE, null= True, related_name= 'staff',  blank= True)
     company = models.ForeignKey('company.Company', on_delete= models.CASCADE, null= True, related_name= 'staff',  blank= True)
+    employment_date = models.DateTimeField(auto_now_add=True, null=True, blank= True)
     staff_name = models.ForeignKey('users.CustomUser', on_delete= models.CASCADE, null= True, blank= True, related_name= 'staff')
-    staff_id = models.CharField(max_length = 255, default= '')
-    monthly_salary = models.IntegerField(default = 0)
     staff_branch = models.ForeignKey('company.Branch', on_delete= models.CASCADE, related_name= 'staffs', null= True, blank= True, default = '')
     staff_project = models.ForeignKey('company.Projects', on_delete= models.CASCADE, related_name = 'staffs', null= True, blank = True)
     department = models.CharField(max_length = 255, choices = departments, null = False, blank = False, default='IT')
     occupation = models.CharField(max_length = 255, choices = occupations, null = False, blank = False, default='Junior')
     # curriculum_vitae = models.FileField()
+
+    def __str__(self):
+        return self.staff_name
+    
+    def staff_id(self):
+        id = self.organisation.name[0] + self.staff_name + f'{self.id:0004d}'
+        return id
+    
+    def total_salary_earned(self):
+        total = 0.00
+        for i in self.salaries.all():
+            if i.staff.staff_name == self.staff_name:
+                if i.paid == True:
+                    total += i.earned_salary
+        return total        
+    
+class Salary(models.Model):
+    staff = models.ForeignKey('company.Staff', related_name='salaries', null = True, blank=True, on_delete= models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default = False)
+    amount_paid = models.FloatField(default = 0.0)
+    earned_salary = models.FloatField(default = 0.0)
+
+    def __str__(self):
+        return self.staff.staff_name
+
     
 class CompanyRegistration(models.Model):
     first_name = models.CharField(max_length=255, default= '')
@@ -192,7 +217,14 @@ class CompanyRegistration(models.Model):
     organisation_phone_number = models.CharField(max_length= 255, blank= True, default='')
     company_description = models.TextField(default= '')
     motive = models.TextField(max_length= 255, default = '')
+
+    def __str__(self):
+        return self.organisation_name
    
+    def registration_id(self):
+        id  = self.organisation_name[0] + self.first_name[0] + self.last_name[0] + f'{self.id:0004d}'
+        return id
+    
 class Purchases(models.Model):
     organisation = models.ForeignKey('company.Organisation', on_delete= models.CASCADE, null= True, related_name= 'purchases',  blank= True)
     date = models.DateTimeField(auto_now_add=True)
@@ -200,6 +232,7 @@ class Purchases(models.Model):
     branch = models.ForeignKey('company.Branch', default='', related_name='purchases', on_delete= models.CASCADE)
     project = models.ForeignKey('company.Projects', default='', related_name='purchases', on_delete= models.CASCADE)
     source = models.CharField(max_length=255, default='')
+    paid = models.BooleanField(default=False)
     details = models.TextField(max_length=255, default = '')
     tax_percentage = models.IntegerField(default= 0.00)
     
@@ -214,32 +247,64 @@ class Purchases(models.Model):
         purchase = self.organisation.name[0] + self.source[0] + f'{self.id:0004d}'
         return purchase
     
+    # function
+    def taxed_amount(self, amount):
+        total = 0.0
+        total += amount + (amount * (self.tax_percentage/100))
+        return total
+    # end of functions
+    
     def stock_purchase(self):
         total = 0.00
         for item in self.item_purchased.all():
-            if item.purchase_type == 'Stock':
-                total += item.total_amount()
+            if item.purchase.purchase_id() == self.purchase_id():
+                if item.purchase_type == 'Stock':
+                    total += item.total_amount()
         return total
     
-    def asset_purchase(self):
+    def taxed_stock_purchases(self):
+        stock = self.stock_purchase()
+        return self.taxed_amount(stock)
+    
+    def fixed_asset_purchase(self):
         total = 0.00
         for item in self.item_purchased.all():
-            if item.purchase_type == 'Assets':
-                total += item.total_amount()
+            if item.purchase.purchase_id() == self.purchase_id():
+                if item.purchase_type == 'Fixed Assets':
+                    total += item.total_amount()
         return total
+    
+    def taxed_fixed_asset_purchases(self):
+        asset = self.fixed_asset_purchase()
+        return self.taxed_amount(asset)
+    
+    def manufacturing_purchase(self):
+        total = 0.00
+        for item in self.item_purchased.all():
+            if item.purchase.purchase_id() == self.purchase_id():
+                if item.purchase_type == 'Manufacturing':
+                    total += item.total_amount()
+        return total
+    
+    def taxed_manufacturing_purchases(self):
+        manufacturing_purchases = self.manufacturing_purchase()
+        return self.taxed_amount(manufacturing_purchases)
     
     def overheads_purchase(self):
         total = 0.00
         for item in self.item_purchased.all():
-            if item.purchase_type == 'Overheads':
-                total += item.total_amount()
+            if item.purchase.purchase_id() == self.purchase_id():
+                if item.purchase_type == 'Overheads':
+                    total += item.total_amount()
         return total
+    
+    def taxed_overhead_purchase(self):
+        overheads = self.overheads_purchase()
+        return self.taxed_amount(overheads)
     
     def sub_total(self):
         total = 0.00
-        for item in self.item_purchased.all():
-            if item.purchase.purchase_id() == self.purchase_id():
-                total += item.total_amount()
+        total += self.fixed_asset_purchase() + self.stock_purchase() + self.overheads_purchase() + self.manufacturing_purchase()
         return total
     
     def tax_amount(self):
@@ -250,17 +315,17 @@ class Purchases(models.Model):
 
     
     def grand_total(self):
-        total = 0.00
-        total += self.sub_total() + self.tax_amount()
-        return total
-
+        total = self.sub_total()
+        return self.taxed_amount(total)
     
 class Purchased_Item(models.Model):
     purchase_types = (
         ('Stock', 'Stock'),
         ('Overheads', 'Overheads'),
-        ('Assets', 'Assets'),
+        ('Fixed Assets', 'Fixed Assets'),
+        ('Manufacturing', 'Manufacturing'),
     )
+    organisation = models.ForeignKey('company.Organisation', related_name = 'item_purchased', on_delete= models.CASCADE, null=True, blank=True, default='')
     purchase = models.ForeignKey('company.Purchases', related_name='item_purchased', on_delete=models.CASCADE)
     product_name = models.CharField(max_length=255, default='')
     purchase_type = models.CharField(max_length=255, default = 'Stock', choices = purchase_types)
@@ -278,13 +343,36 @@ class Purchased_Item(models.Model):
         total += round(self.quantity * self.unit_price, 2)
         return total
     
+    def product_ref(self):
+        id = self.organisation.name[0] + self.product_name[0] + f'{self.id:0004d}'
+        return id
+    
         
 class Loan(models.Model):
+    organisation = models.ForeignKey('company.Organisation', related_name = 'loans', on_delete= models.CASCADE, null=True, blank=True, default='')
+    borrower = models.ForeignKey('transactions.Customer', related_name = 'loans', on_delete= models.CASCADE, null=True, blank=True, default = '')
     date = models.DateTimeField(auto_now_add=True)
     receiver = models.CharField(max_length=50)
     amount = models.FloatField(default= 0.00)
     details = models.TextField(default='')
+    interest_rate = models.FloatField(default=0.00)
     paid = models.BooleanField(default=False)
+    amount_paid = models.FloatField(default=0.00)
 
     def __str__(self):
         return str(self.id)
+    
+    def loan_id(self):
+        loan_id = self.organisation.name[0] + self.borrower.name[0] + f'{self.id:0004d}'
+        return loan_id
+    
+    def interest(self):
+        total = 0.00
+        total += (self.amount * (self.interest_rate/100))
+        return total
+    
+    def grand_total(self):
+        total = 0.00
+        total += self.amount + self.interest()
+        return total
+    
