@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, UpdateView, DetailView, CreateView, ListView, DeleteView
-from .models import Sales, Stock, Customer, Expenses, SaleItem
+from .models import Sales, Stock, Customer, SaleItem
 from django.urls import reverse_lazy
 
 # Sales View
@@ -142,17 +142,17 @@ class DeleteCustomerView(DeleteView):
     success_url = reverse_lazy('customer-overview')
 
 # Expenses view
-class ExpensesOverviewView(ListView):
-    template_name = 'transactions/expenses/index.html'
-    model = Expenses
-    context_object_name = 'expenses'
+# class ExpensesOverviewView(ListView):
+#     template_name = 'transactions/expenses/index.html'
+#     model = Expenses
+#     context_object_name = 'expenses'
 
-class CreateExpensesView(CreateView):
-    template_name = 'transactions/expenses/create.html'
-    model = Expenses
-    fields = '__all__'
-    success_url = reverse_lazy('expenses-overview')
+# class CreateExpensesView(CreateView):
+#     template_name = 'transactions/expenses/create.html'
+#     model = Expenses
+#     fields = '__all__'
+#     success_url = reverse_lazy('expenses-overview')
 
-class ExpensesDetailedView(DetailView):
-    template_name = 'transactions/expenses/detail.html'
-    model = Expenses
+# class ExpensesDetailedView(DetailView):
+#     template_name = 'transactions/expenses/detail.html'
+#     model = Expenses

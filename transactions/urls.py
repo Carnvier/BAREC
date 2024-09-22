@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SalesOverviewView, SalesFormView, StockOverviewView, SalesHistoryView, SalesInvoiceView,SalesItemsDetailView, CreateSalesItemView, UpdateSalesForm, StockOverviewView, StockDetailedView, CreateStockView, UpdateStockView, CustomerOverviewView, CreateCustomerView, CustomerDetailedView, UpdateCustomerView, DeleteCustomerView, ExpensesOverviewView, CreateExpensesView, ExpensesDetailedView
+from .views import SalesOverviewView, SalesFormView, StockOverviewView, SalesHistoryView, SalesInvoiceView,SalesItemsDetailView, CreateSalesItemView, UpdateSalesForm, StockOverviewView, StockDetailedView, CreateStockView, UpdateStockView, CustomerOverviewView, CreateCustomerView, CustomerDetailedView, UpdateCustomerView, DeleteCustomerView
 
 urlpatterns  =[
     # Sales
@@ -28,9 +28,9 @@ urlpatterns  =[
     path('customer/detail-view/<int:pk>/update/', UpdateCustomerView.as_view(), name='update-customer'),
     path('customer/detail-view/<int:pk>/delete/', DeleteCustomerView.as_view(), name='delete-customer'),
 
-    #Expenses
-    path('expenses/', ExpensesOverviewView.as_view(), name='expenses-overview'),
-    path('expenses/create/', CreateExpensesView.as_view(), name = 'create-expenses'),
-    path('expenses/detail-view/<int:pk>', ExpensesDetailedView.as_view(), name = 'expenses-detail'),
+    # #Expenses
+    # path('expenses/', ExpensesOverviewView.as_view(), name='expenses-overview'),
+    # path('expenses/create/', CreateExpensesView.as_view(), name = 'create-expenses'),
+    # path('expenses/detail-view/<int:pk>', ExpensesDetailedView.as_view(), name = 'expenses-detail'),
 
 ]

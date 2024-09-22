@@ -3,7 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 import json
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
-from .models import Company, Projects, Assets, Liabilities,Staff, Organisation, CompanyRegistration, Branch, Purchases, Purchased_Item
+from .models import Company, Projects, Asset, Creditor,Staff, Organisation, CompanyRegistration, Branch, Purchases, Purchased_Item
 from django.urls import reverse_lazy
 
 
@@ -97,22 +97,22 @@ class StaffBriefView(DetailView):
     template_name = 'company/projects/read/staff-brief.html'
     model = Projects
 
-class AssetsBriefView(DetailView):
-    template_name = 'organisation/read/assets-brief.html'
+class AssetBriefView(DetailView):
+    template_name = 'organisation/read/asset-brief.html'
     model = Projects
     
-class CreateAssetsView(CreateView):
+class CreateAssetView(CreateView):
     template_name = 'organisation/create/create-asset.html'
-    model = Assets
+    model = Asset
     fields = '__all__'
 
-class LiabilitiesBriefView(DetailView):
-    template_name = 'organisation/read/liabilities-brief.html'
+class CreditorBriefView(DetailView):
+    template_name = 'organisation/read/Creditor-brief.html'
     model = Projects
 
-class CreateLiabilitiesView(CreateView):
+class CreateCreditorView(CreateView):
     template_name = 'organisation/create/create-liability.html'
-    model = Liabilities
+    model = Creditor
     fields = '__all__'
 
 class SalesBriefView(DetailView):

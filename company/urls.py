@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetsView, AssetsBriefView, CreateLiabilitiesView, LiabilitiesBriefView, SalesBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm, CreateCompanyView, BranchOverviewView, UpdateBranchView, CreateBranchView, PurchasesBriefView, PurchasedItemsDetailView, PurchasesQuoteView, CreatePurchasesView, CreatePurchasedItemsView, OrganisationIncomeStatement, OrganisationStatsView
+from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetView, AssetBriefView, CreateCreditorView, CreditorBriefView, SalesBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm, CreateCompanyView, BranchOverviewView, UpdateBranchView, CreateBranchView, PurchasesBriefView, PurchasedItemsDetailView, PurchasesQuoteView, CreatePurchasesView, CreatePurchasedItemsView, OrganisationIncomeStatement, OrganisationStatsView
 
 
 urlpatterns = [
@@ -22,10 +22,10 @@ urlpatterns = [
     path('dashboard/overview/branch/projects/<int:pk>/update/', UpdateProjectView.as_view(), name = 'update-project'),
     path('projects/<int:pk>/delete/', DeleteProjectView.as_view(), name = 'delete-project'),
     path('projects/<int:pk>/staff-overview/', StaffBriefView.as_view (), name = 'project-staff-overview' ),
-    path('dashboard/overview/branch/projects/<int:pk>/assets-overview/', AssetsBriefView.as_view(), name = 'project-assets-overview' ),
-    path('dashboard/overview/branch/projects/<int:pk>/assets-overview/create/', CreateAssetsView.as_view(), name = 'create-asset'), 
-    path('dashboard/overview/branch/projects/<int:pk>/liabilities-overview/', LiabilitiesBriefView.as_view(), name = 'project-liabilities-overview' ),
-    path('dashboard/overview/branch/projects/<int:pk>/liabilities-overview/create/', CreateLiabilitiesView.as_view(), name = 'create-liability'), 
+    path('dashboard/overview/branch/projects/<int:pk>/asset-overview/', AssetBriefView.as_view(), name = 'project-asset-overview' ),
+    path('dashboard/overview/branch/projects/<int:pk>/asset-overview/create/', CreateAssetView.as_view(), name = 'create-asset'), 
+    path('dashboard/overview/branch/projects/<int:pk>/Creditor-overview/', CreditorBriefView.as_view(), name = 'project-Creditor-overview' ),
+    path('dashboard/overview/branch/projects/<int:pk>/Creditor-overview/create/', CreateCreditorView.as_view(), name = 'create-liability'), 
     path('dashboard/overview/branch/projects/<int:pk>/sales-overview/', SalesBriefView.as_view(), name = 'project-sales-overview' ),
 
 # Accounts Urls
