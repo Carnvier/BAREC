@@ -3,20 +3,20 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 import json
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
-from .models import Company, Projects, Asset, Creditor,Staff, Organisation, CompanyRegistration, Branch, Purchases, Purchased_Item
+from .models import OrganisationRegistration, Organisation, Company, Branch, Projects, Asset, Creditor, Debtor, Staff, Salary, Purchases, Purchased_Item, Expense, Income
 from django.urls import reverse_lazy
 
 
 # Company registration
 class OrganizationRegistrationForm(CreateView):
     template_name = 'company/organisation/create.html'
-    model = CompanyRegistration
+    model = OrganisationRegistration
     fields = '__all__'
     success_url  = reverse_lazy('organisation-creation-success')
 
 class OrganizationRegistrationConfirm(TemplateView):
     template_name = 'company/organisation/confirm.html'
-    model = CompanyRegistration
+    model = OrganisationRegistration
     context_object_name = 'reg'
 
 

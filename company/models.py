@@ -1,10 +1,32 @@
 from django.db import models
 from django.utils.timezone import now
-from transactions.models import Sales, Customer, Stock
 from django.urls import reverse_lazy
 
 
 # Create your models here.
+class OrganisationRegistration(models.Model):
+    first_name = models.CharField(max_length=255, default= '')
+    last_name = models.CharField(max_length=255, default= '')
+    ID_Number = models.CharField(max_length = 20, null = True, blank = True)
+    personal_address = models.CharField(max_length = 255, default='')
+    preffered_username = models.CharField(max_length=255,  default= '')
+    phone_number = models.CharField(max_length=255, default= '')
+    email = models.EmailField(max_length=255, default= '')
+    organisation_name = models.CharField(max_length=255,  default= '')
+    est = models.DateField(default = now)
+    headquaters = models.CharField(max_length= 255, default= '')
+    organisation_email = models.EmailField(max_length= 255, blank= True, null=True, default='')
+    organisation_phone_number = models.CharField(max_length= 255, blank= True, default='')
+    company_description = models.TextField(default= '')
+    motive = models.TextField(max_length= 255, default = '')
+
+    def __str__(self):
+        return self.organisation_name
+   
+    def registration_id(self):
+        id  = self.organisation_name[0] + self.first_name[0] + self.last_name[0] + f'{self.id:0004d}'
+        return id
+    
 class Organisation(models.Model):
     name = models.CharField(max_length= 255, default= '')
     est = models.DateField(default='')
@@ -993,29 +1015,6 @@ class Salary(models.Model):
     
     def salary_id(self):
         id = self.organisation.name[0] + self.staff.staff_name[0] + f'{self.id:0004d}'
-        return id
-    
-class CompanyRegistration(models.Model):
-    first_name = models.CharField(max_length=255, default= '')
-    last_name = models.CharField(max_length=255, default= '')
-    ID_Number = models.CharField(max_length = 20, null = True, blank = True)
-    personal_address = models.CharField(max_length = 255, default='')
-    preffered_username = models.CharField(max_length=255,  default= '')
-    phone_number = models.CharField(max_length=255, default= '')
-    email = models.EmailField(max_length=255, default= '')
-    organisation_name = models.CharField(max_length=255,  default= '')
-    est = models.DateField(default = now)
-    headquaters = models.CharField(max_length= 255, default= '')
-    organisation_email = models.EmailField(max_length= 255, blank= True, null=True, default='')
-    organisation_phone_number = models.CharField(max_length= 255, blank= True, default='')
-    company_description = models.TextField(default= '')
-    motive = models.TextField(max_length= 255, default = '')
-
-    def __str__(self):
-        return self.organisation_name
-   
-    def registration_id(self):
-        id  = self.organisation_name[0] + self.first_name[0] + self.last_name[0] + f'{self.id:0004d}'
         return id
     
 class Purchases(models.Model):
