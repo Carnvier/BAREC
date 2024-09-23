@@ -22,4 +22,5 @@ class CustomUser(AbstractUser):
     
     def user_id(self):
         id = self.organisation.name[0] + self.first_name[0] + self.last_name[0] + f'{self.id:0004d}'
-        return id
+        return 
+    
