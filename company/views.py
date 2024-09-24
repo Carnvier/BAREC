@@ -3,7 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 import json
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
-from .models import OrganisationRegistration, Organisation, Company, Branch, Projects, Asset, Creditor, Debtor, Staff, Salary, Purchases, Purchased_Item, Expense, Income
+from .models import OrganisationRegistration, Organisation, Company, Branch, Projects, Asset, Creditor, Debtor, Staff, Salary, Purchases, PurchasedItem, Expense, Income
 from django.urls import reverse_lazy
 
 
@@ -18,7 +18,6 @@ class OrganizationRegistrationConfirm(TemplateView):
     template_name = 'company/organisation/confirm.html'
     model = OrganisationRegistration
     context_object_name = 'reg'
-
 
 # Dashboard Views
 class CompanyDashboardView(DetailView):
@@ -150,7 +149,7 @@ class PurchasedItemsDetailView(DetailView):
 
 class CreatePurchasedItemsView(CreateView):
     template_name = 'organisation/create/create-purchased-items.html'
-    model = Purchased_Item
+    model = PurchasedItem
     fields = ('purchase','product_name', 'quantity', 'unit_price', )
     context_object_name = 'item'
 

@@ -1109,7 +1109,7 @@ class Purchases(models.Model):
         total = self.sub_total()
         return self.taxed_amount(total)
     
-class Purchased_Item(models.Model):
+class PurchasedItem(models.Model):
     purchase_types = (
         ('Stock', 'Stock'),
         ('Overheads', 'Overheads'),
@@ -1136,37 +1136,7 @@ class Purchased_Item(models.Model):
     
     def product_ref(self):
         id = self.organisation.name[0] + self.product_name[0] + f'{self.id:0004d}'
-        return id
-    
-        
-class Loan(models.Model):
-    organisation = models.ForeignKey('company.Organisation', related_name = 'loans', on_delete= models.CASCADE, null=True, blank=True, default='')
-    borrower = models.ForeignKey('transactions.Customer', related_name = 'loans', on_delete= models.CASCADE, null=True, blank=True, default = '')
-    date = models.DateTimeField(auto_now_add=True)
-    receiver = models.CharField(max_length=50)
-    amount = models.FloatField(default= 0.00)
-    details = models.TextField(default='')
-    interest_rate = models.FloatField(default=0.00)
-    paid = models.BooleanField(default=False)
-    amount_paid = models.FloatField(default=0.00)
-
-    def __str__(self):
-        return str(self.id)
-    
-    def loan_id(self):
-        loan_id = self.organisation.name[0] + self.borrower.name[0] + f'{self.id:0004d}'
-        return loan_id
-    
-    def interest(self):
-        total = 0.00
-        total += (self.amount * (self.interest_rate/100))
-        return total
-    
-    def grand_total(self):
-        total = 0.00
-        total += self.amount + self.interest()
-        return total
-    
+        return id    
 
 class Expense(models.Model):
     type_of_expense = (
