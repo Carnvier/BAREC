@@ -1,0 +1,50 @@
+{%extends 'layouts/home-base.html'%}
+{%block content%}
+<h2 class="text-center mt-4">Organisations Register</h2>
+<a href="{%url 'register-organisation'%}" class="mt-4"><button class="button-container btn-primary">New</button></a>
+<div class="card card-bordered card-preview mt-2">
+    <table class="table table-orders">
+      <thead class="tb-odr-head">
+        <tr class="tb-odr-item">
+          <th class="tb-odr-info">
+            <span class="tb-odr-id">Registration ID</span>
+          </th>
+          <th class="tb-odr-info">
+            <span class="tb-odr-id">Date Registered</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Organisation Name</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Founder</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Headquaters</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Organisation Phone Number</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Organisation Email</span>
+          </th>
+          <th class="tb-odr-amount">
+            <span class="tb-odr-total">Status</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="tb-odr-body">
+        {%for item in reg %}
+        <tr>
+            <td>{{item.registration_id}}</td>
+            <td>{{item.registration_date}}</td>
+            <td>{{item.organisation_name}}</td>
+            <td>{{item.founder_name}}</td>
+            <td>{{item.headquaters}}</td>
+            <td>{{item.organisation_phone_number}}</td>
+            <td>{{item.organisation_email}}</td>
+            <td><a href="{%url 'registered-organisation-detail-view' item.id%}"><span class="btn btn-sm button-container btn-block {%if item.status == 'Pending'%}bg-orange-metallic{%elif item.status == 'Approved'%}btn-success{%elif item.status == 'Declined'%}btn-danger{%endif%}">{{item.status}}</span></a></td>
+        {%endfor%}
+      </tbody>
+    </table> 
+  </div>
+{%endblock%}

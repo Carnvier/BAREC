@@ -1,11 +1,14 @@
 from django.urls import path
-from .views import CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetView, AssetBriefView, CreateCreditorView, CreditorBriefView, SalesBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm, CreateCompanyView, BranchOverviewView, UpdateBranchView, CreateBranchView, PurchasesBriefView, PurchasedItemsDetailView, PurchasesQuoteView, CreatePurchasesView, CreatePurchasedItemsView, OrganisationIncomeStatement, OrganisationStatsView
+from .views import OrganisationRegisterView, RegisteredOrganisationDetailedView, RegisteredOrganisationUpdateStatusView, CompanyOverviewView, CompanyDashboardView, ProjectsIndexView, CreateProjectView, ProjectsDetailedView, ProjectsBriefView, UpdateProjectView, DeleteProjectView, StaffBriefView, CreateAssetView, AssetBriefView, CreateCreditorView, CreditorBriefView, SalesBriefView, StaffOverviewView, CreateStaffView, DeleteStaffView, UpdateStaffView, StaffDetailedBriefView, OrganizationRegistrationForm, OrganizationRegistrationConfirm, CreateCompanyView, BranchOverviewView, UpdateBranchView, CreateBranchView, PurchasesBriefView, PurchasedItemsDetailView, PurchasesQuoteView, CreatePurchasesView, CreatePurchasedItemsView, OrganisationIncomeStatement, OrganisationStatsView
 
 
 urlpatterns = [
     #Organization Registration
     path('organization/registration/create/', OrganizationRegistrationForm.as_view(), name = 'register-organisation'),
     path('organization/registration/success/', OrganizationRegistrationConfirm.as_view(), name = 'organisation-creation-success'), 
+    path('organisation/register/', OrganisationRegisterView.as_view(), name = 'organisation-register'),
+    path('organisation/register/detail/<str:pk>/', RegisteredOrganisationDetailedView.as_view(), name = 'registered-organisation-detail-view'),
+    path('organisation/register/detail/<str:pk>/update', RegisteredOrganisationUpdateStatusView.as_view(), name = 'registered-organisation-update-status'),
     # Dashboard Urls
     path('dashboard/<str:pk>/', CompanyDashboardView.as_view(), name = 'company-dashboard'),
     path('dashboard/<str:pk>/overview/', CompanyOverviewView.as_view(), name = 'company-overview'),

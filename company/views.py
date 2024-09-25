@@ -1,23 +1,77 @@
 from django.forms import BaseModelForm
-from django.http import HttpRequest, HttpResponse
+from django.db import transaction
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 import json
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
 from .models import OrganisationRegistration, Organisation, Company, Branch, Projects, Asset, Creditor, Debtor, Staff, Salary, Purchases, PurchasedItem, Expense, Income
+from users.models import CustomUser
+from .forms import OrganisationRegistrationForm
 from django.urls import reverse_lazy
 
 
 # Company registration
 class OrganizationRegistrationForm(CreateView):
-    template_name = 'company/organisation/create.html'
-    model = OrganisationRegistration
-    fields = '__all__'
+    template_name = 'organisation/create/register-organisation.html'
+    form_class = OrganisationRegistrationForm
     success_url  = reverse_lazy('organisation-creation-success')
 
 class OrganizationRegistrationConfirm(TemplateView):
     template_name = 'company/organisation/confirm.html'
     model = OrganisationRegistration
     context_object_name = 'reg'
+
+class OrganisationRegisterView(ListView):
+    template_name = 'organisation/read/organisation-register.html' 
+    model = OrganisationRegistration
+    context_object_name = 'reg'
+
+class RegisteredOrganisationDetailedView(DetailView):
+    template_name = 'organisation/read/registered-organisation-detail.html'
+    model = OrganisationRegistration
+    context_object_name = 'reg'
+
+class RegisteredOrganisationUpdateStatusView(UpdateView):
+    template_name = 'organisation/update/status-registered-organisation.html'
+    model = OrganisationRegistration
+    fields = ('status',)
+    success_url = reverse_lazy('organisation-register')
+    context_object_name = 'reg'
+
+    def form_valid(self, form):
+        if form.instance.status == 'Approved':
+            registration = form.instance
+            count = 0
+            for i in CustomUser.objects.all():
+                if registration.preffered_username == i.username:
+                    count += 1
+            if count == 0:
+                with transaction.atomic():
+                    CustomUser.objects.create(first_name=registration.first_name, last_name = registration.last_name, email=registration.founder_email, address=registration.personal_address, username=registration.preffered_username, D_O_B = registration.founder_DOB, phone_number=registration.founder_phone_number, ID_Number = registration.ID_Number)
+
+                    try:
+                        founder = CustomUser.objects.get(first_name=registration.first_name)
+                    except CustomUser.DoesNotExist:
+                        return self.form_invalid(form)
+        
+                    organisation = Organisation.objects.create(name = registration.organisation_name,
+                    est = registration.est,
+                    headquarters = registration.headquarters,
+                    founder =  founder,
+                    organisation_email = registration.organisation_email,
+                    organisation_phone_number = registration.organisation_phone_number,
+                    organisation_description = registration.organisation_description,
+                    motive = registration.motive,)
+
+                    try:
+                        founder.organisation = organisation
+                        founder.save()
+                    except CustomUser.DoesNotExist:
+                        return self.form_invalid(form)
+            else:
+                return HttpResponseBadRequest('Username is taken')
+        return super().form_valid(form)
+
 
 # Dashboard Views
 class CompanyDashboardView(DetailView):

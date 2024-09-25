@@ -5,20 +5,29 @@ from django.urls import reverse_lazy
 
 # Create your models here.
 class OrganisationRegistration(models.Model):
+    reg_status = (
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Declined', 'Declined'),
+    )
     first_name = models.CharField(max_length=255, default= '')
     last_name = models.CharField(max_length=255, default= '')
     ID_Number = models.CharField(max_length = 20, null = True, blank = True)
     personal_address = models.CharField(max_length = 255, default='')
     preffered_username = models.CharField(max_length=255,  default= '')
-    phone_number = models.CharField(max_length=255, default= '')
-    email = models.EmailField(max_length=255, default= '')
+    founder_DOB = models.DateField(default= now)
+    founder_phone_number = models.CharField(max_length=255, default= '')
+    founder_email = models.EmailField(max_length=255, default= '')
     organisation_name = models.CharField(max_length=255,  default= '')
     est = models.DateField(default = now)
-    headquaters = models.CharField(max_length= 255, default= '')
     organisation_email = models.EmailField(max_length= 255, blank= True, null=True, default='')
     organisation_phone_number = models.CharField(max_length= 255, blank= True, default='')
-    company_description = models.TextField(default= '')
+    organisation_description = models.TextField(default= '')
     motive = models.TextField(max_length= 255, default = '')
+    headquarters = models.CharField(max_length= 255, default= '')
+
+    status = models.CharField(max_length= 255, default = 'Pending', choices = reg_status)
+    registration_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.organisation_name
@@ -26,11 +35,15 @@ class OrganisationRegistration(models.Model):
     def registration_id(self):
         id  = self.organisation_name[0] + self.first_name[0] + self.last_name[0] + f'{self.id:0004d}'
         return id
+
+    def founder_name(self):
+        name = self.first_name + ' ' + self.last_name
+        return name
     
 class Organisation(models.Model):
     name = models.CharField(max_length= 255, default= '')
     est = models.DateField(default='')
-    headquaters = models.CharField(max_length= 255, default= '')
+    headquarters = models.CharField(max_length= 255, default= '')
     founder = models.ForeignKey('users.CustomUser',related_name= 'organisations', on_delete= models.CASCADE, null= True, blank= True)
     organisation_email = models.EmailField(max_length= 255, blank= True, null=True, default='')
     organisation_phone_number = models.CharField(max_length= 255, blank= True, default='')

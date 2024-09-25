@@ -225,3 +225,13 @@ a.link-block:hover{
     font-weight: bolder; 
     color: rgb(53, 49, 49)
 }
+
+.bg-orange-metallic{
+    background: linear-gradient(30deg, rgb(255, 111, 0), rgb(232, 87, 35), rgb(255, 111, 0));
+    color: white
+}
+
+.bg-orange-metallic:hover{
+    color: white;
+    opacity: 0.95;
+}
