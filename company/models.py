@@ -85,6 +85,20 @@ class Organisation(models.Model):
         id = self.name[0] + self.founder[0] + f'{self.id:0004d}'
         return id
     
+    def no_companies(self):
+        total = 0
+        for item in self.companies.all():
+            if item.organisation.name == self.name:
+                total += 1
+        return total
+    
+    def total_customers(self):
+        total = 0
+        for item in self.customers.all():
+            if item.organisation.name == self.name:
+                total += 1
+        return total
+    
      #Assets
     def total_acquisition_price(self):
         total = 0.0
@@ -123,7 +137,7 @@ class Organisation(models.Model):
                 tax += item.total_tax_amount()
         return tax
 
-    def grand_total(self):
+    def sales_grand_total(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
@@ -167,7 +181,7 @@ class Organisation(models.Model):
                     total += item.total_interest()
         return total
     
-    def total_amount_paid(self):
+    def total_debt_paid(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
@@ -253,11 +267,23 @@ class Organisation(models.Model):
                 total += item.total_tax_amount()
         return total
     
-    def grand_total(self):
+    def purchases_grand_total(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
                 total += item.grand_total()
+        return total
+    
+    def total_expenses():
+        total = 0.0
+        for item in self.companies.all():
+            if item.organisation.name == self.name:
+                total += item.total_expenses()
+        return total
+    
+    def total_income(self):
+        total = 0.0
+        total += self.total_debt_paid() + self.sales_grand_total() 
         return total
   
 class Company(models.Model):
@@ -841,7 +867,26 @@ class Projects(models.Model):
             if item.project.name == self.name:
                 total += item.grand_total()
         return total
-
+    
+    # Expenses
+    def total_expenses(self):
+        total = 0.0
+        for item in self.expenses.all():
+            if item.project.name == self.name:
+                total += item.total_expenses()
+        return total
+    
+    def expenses_grand_total(self):
+        total = 0.0
+        total += self.total_expenses() 
+    
+    # Income
+    def total_income(self):
+        total = 0.0
+        for item in self.incomes.all():
+            if item.project.name == self.name:
+                total += item.total_income()
+        return total
 class Asset(models.Model):
     asset_type = (
         ('Current Asset', 'Current Asset'),

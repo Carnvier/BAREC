@@ -10,6 +10,7 @@ from .forms import OrganisationRegistrationForm
 from django.urls import reverse_lazy
 
 
+
 # Company registration
 class OrganizationRegistrationForm(CreateView):
     template_name = 'organisation/create/register-organisation.html'
@@ -72,9 +73,8 @@ class RegisteredOrganisationUpdateStatusView(UpdateView):
                 return HttpResponseBadRequest('Username is taken')
         return super().form_valid(form)
 
-
-# Dashboard Views
-class CompanyDashboardView(DetailView):
+# Organisation Dashboard Views
+class OrganisationDashboardView(DetailView):
     template_name = 'organisation/read/dashboard.html'
     model = Organisation
     context_object_name = 'org'
@@ -82,7 +82,7 @@ class CompanyDashboardView(DetailView):
 class CreateCompanyView(CreateView):
     template_name = 'organisation/create/create-company.html'
     model = Company
-    fields = ('company_name','CEO_name', 'starting_capital', 'email', 'phone_number', )
+    fields = ('name','CEO_name', 'starting_capital', 'email', 'phone_number', )
     context_object_name = 'company'
     
     def form_valid(self, form):
