@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 
 # Create your models here.
@@ -274,7 +274,7 @@ class Organisation(models.Model):
                 total += item.grand_total()
         return total
     
-    def total_expenses():
+    def total_expenses(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
@@ -284,6 +284,25 @@ class Organisation(models.Model):
     def total_income(self):
         total = 0.0
         total += self.total_debt_paid() + self.sales_grand_total() 
+        return total
+    
+    def profit(self):
+        total = 0.0
+        total -= self.total_expenses() + self.total_income()
+        return total
+
+    def net_worth(self):
+        total = 0.0
+        for item in self.companies.all():
+            if item.organisation.name == self.name:
+                total += item.net_worth()
+        return total
+
+    def cash_in_hand(self):
+        total = 0.0
+        for item in self.companies.all():
+            if item.organisation.name == self.name:
+                total += item.cash_in_hand()
         return total
   
 class Company(models.Model):
@@ -297,9 +316,12 @@ class Company(models.Model):
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return reverse('company-overview', args=[str(self.organisation.id)])
+
     def no_employees(self):
         total = 0
-        for item in self.staffs.all():
+        for item in self.staff.all():
             if item.company.name == self.name:
                 total += 1
         return total
@@ -481,6 +503,24 @@ class Company(models.Model):
         for item in self.branches.all():
             if item.company.name == self.name:
                 total += item.grand_total()
+        return total
+    
+    def total_expenses(self):
+        total = 0.0
+        return total
+    
+    def net_worth(self):
+        total = 0.0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += item.net_worth()
+        return total
+    
+    def cash_in_hand(self):
+        total = 0.0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += item.cash_in_hand()
         return total
 
 class Branch(models.Model):
