@@ -103,7 +103,17 @@ class BranchOverviewView(DetailView):
 class CreateBranchView(CreateView):
     template_name = 'organisation/create/create-branch.html'
     model = Branch
-    fields = ('company', 'branch_name', 'location', 'branch_phone_number', 'branch_supervisor',)
+    fields = ('company', 'name', 'location', 'phone_number', 'branch_supervisor',)
+
+    def form_valid(self, form):
+        form.instance.organisation  = self.request.user.organisation
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy("company-overview", kwargs={'pk': self.object.company.id})
+
+    
+
 
 class UpdateBranchView(UpdateView):
     template_name = 'organisation/branch/update/update.html'

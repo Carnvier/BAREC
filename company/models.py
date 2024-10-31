@@ -368,7 +368,7 @@ class Company(models.Model):
                 tax += item.total_tax_amount()
         return tax
 
-    def grand_total(self):
+    def sales_grand_total(self):
         total = 0.0
         for item in self.branches.all():
             if item.company.name == self.name:
@@ -432,6 +432,10 @@ class Company(models.Model):
         for item in self.branches.all():
             if item.company.name == self.name:
                     total += item.total_salary_paid()
+        return total
+
+    def total_salary_unpaid(self):
+        total = self.total_salary_earned() -self.total_salary_paid()
         return total
 
     # Purchases
@@ -522,8 +526,30 @@ class Company(models.Model):
             if item.company.name == self.name:
                 total += item.cash_in_hand()
         return total
+    
+    def no_branches(self):
+        total = 0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += 1
+        return total
+
+    def no_projects(self):
+        total = 0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += item.no_projects()
+        return total
+    
+    def total_profit(self):
+        total = 0.0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += item.total_profit()
+        return total
 
 class Branch(models.Model):
+    organisation = models.ForeignKey('company.Organisation', related_name='branches', on_delete= models.CASCADE, null= True, blank= True)
     company = models.ForeignKey('company.Company', related_name= 'branches', null=True, blank=True, on_delete= models.CASCADE)
     name = models.CharField(max_length = 255, default= '', unique=True)
     location = models.CharField(max_length = 255, default= '')
@@ -712,6 +738,26 @@ class Branch(models.Model):
                 total += item.grand_total()
         return total
 
+    def no_projects(self):
+        total = 0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += 1
+        return total
+    
+    def total_profit(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.total_profit()
+        return total
+
+    def net_worth(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.net_worth()
+        return total
 
 
 class Projects(models.Model):

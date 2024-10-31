@@ -14,7 +14,7 @@
 <p >The company insights are shown below:</p>
 </div>
 <div class="grid-display">
-<p>Email: {{company.company_email}}</p>
+<p>Email: {{company.email}}</p>
 <p>Branches: {{company.no_branches}}</p>
 <p>Staff: {{company.no_employees}}</p>
 <p>Projects: {{company.no_projects}}</p>
@@ -24,14 +24,14 @@
 </div>
 <div class="content-block {%if company.total_profit >= 0 %}bg-green-metalic {%else%} bg-red-metalic{%endif%}">
   <div class="text-center">
-    <h3>Perfomance</h3>    
+    <h3>Performance</h3>    
     <p>The current cashflow within the company:</p>
   </div>
     <div class="grid-display">
-    <p>Assets: {{company.assets_value}}</p>
-    <p>Stock Value: {{company.stock_value}}</p>
-    <p>Sales: {{company.total_sales}}</p>
-    <p>Staff Salaries: {{company.staff_salary}}</p>
+    <p>Assets: {{company.total_assets}}</p>
+    <p>Stock Value: {{company.total_stock}}</p>
+    <p>Sales: {{company.sales_grand_total}}</p>
+    <p>Staff Salaries: {{company.total_salary_unpaid}}</p>
     <p>Expenses: {{company.total_expenses}}</p>
     <p>Profit: {{company.total_profit}}</p>
 </div>  
@@ -71,8 +71,8 @@
           <tbody class="tb-odr-body">
             {% for branch in company.branches.all %}
             <tr>
-                <td>{{branch.id}}</td>
-                <td>{{branch.branch_name}}</td>
+                <td>{{branch.branch_id}}</td>
+                <td>{{branch.name}}</td>
                 <td>{{branch.branch_supervisor}}</td>
                 <td>{{branch.location}}</td>
                 <td>{{branch.branch_expenses}}</td>
@@ -85,16 +85,4 @@
           </tbody>
         </table>
       </div>
-<!-- {#%else%}
-<h1>Notice!!!</h1>
-<p>You don't belong to any organisation. Please contact your administrator to sort out this issue.</p>
-<h2>Contact us:</h2>
-<p>Having system related issues, please contact us:
-    <ul>
-        <li>Phone Number: +230 5724 2344</li>
-        <li>Email: barec@gmail.com</li>
-        <li>Location: 1027 Goromonzi Mashonaland East Zimbabwe</li>
-    </ul>
-</p> -->
-<!-- {#%endif%} -->
 {%endblock%}
