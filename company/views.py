@@ -130,7 +130,10 @@ class ProjectsIndexView(ListView):
 class CreateProjectView(CreateView):
     template_name = 'organisation/create/create-project.html'
     model = Projects
-    fields = ('branch', 'project_name', 'project_supervisor', 'cash_in_hand',)
+    fields = ('branch', 'name', 'supervisor')
+    
+    def get_success_url(self):
+        return reverse_lazy("project-index", kwargs={'pk': self.object.branch.id})
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.organisation = self.request.user.organisation

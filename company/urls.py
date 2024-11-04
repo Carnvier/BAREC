@@ -18,6 +18,7 @@ urlpatterns = [
     path('dashboard/<int:pk>/overview/branch/', BranchOverviewView.as_view(), name = 'branch-overview'),
     path('dashboard/<int:pk>/create-branch/', CreateBranchView.as_view(), name = 'create-branch'),
     path('dashboard/<str:pk>/branch/<str:branch>/update', UpdateBranchView.as_view(), name = 'update-branch'),
+
     # Projects Urls
     path('projects/<str:pk>/', ProjectsIndexView.as_view(), name = 'project-index'),
     path('projects/<str:pk>/create/', CreateProjectView.as_view(), name = 'create-project'),
@@ -28,7 +29,7 @@ urlpatterns = [
     path('projects/<int:pk>/staff-overview/', StaffBriefView.as_view (), name = 'project-staff-overview' ),
     path('dashboard/overview/branch/projects/<int:pk>/asset-overview/', AssetBriefView.as_view(), name = 'project-asset-overview' ),
     path('dashboard/overview/branch/projects/<int:pk>/asset-overview/create/', CreateAssetView.as_view(), name = 'create-asset'), 
-    path('dashboard/overview/branch/projects/<int:pk>/Creditor-overview/', CreditorBriefView.as_view(), name = 'project-Creditor-overview' ),
+    path('dashboard/overview/branch/projects/<int:pk>/Creditor-overview/', CreditorBriefView.as_view(), name = 'project-liability-overview' ),
     path('dashboard/overview/branch/projects/<int:pk>/Creditor-overview/create/', CreateCreditorView.as_view(), name = 'create-liability'), 
     path('dashboard/overview/branch/projects/<int:pk>/sales-overview/', SalesBriefView.as_view(), name = 'project-sales-overview' ),
 

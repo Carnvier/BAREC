@@ -298,13 +298,6 @@ class Organisation(models.Model):
                 total += item.net_worth()
         return total
 
-    def cash_in_hand(self):
-        total = 0.0
-        for item in self.companies.all():
-            if item.organisation.name == self.name:
-                total += item.cash_in_hand()
-        return total
-  
 class Company(models.Model):
     organisation = models.ForeignKey('company.Organisation', related_name='companies', on_delete= models.CASCADE, null= True, blank= True)
     name = models.CharField(max_length=255, default= '', unique = True)
@@ -520,13 +513,6 @@ class Company(models.Model):
                 total += item.net_worth()
         return total
     
-    def cash_in_hand(self):
-        total = 0.0
-        for item in self.branches.all():
-            if item.company.name == self.name:
-                total += item.cash_in_hand()
-        return total
-    
     def no_branches(self):
         total = 0
         for item in self.branches.all():
@@ -545,7 +531,7 @@ class Company(models.Model):
         total = 0.0
         for item in self.branches.all():
             if item.company.name == self.name:
-                total += item.total_profit()
+                total += item.branch_profit()
         return total
 
 class Branch(models.Model):
@@ -666,6 +652,13 @@ class Branch(models.Model):
             if item.branch.name == self.name:
                     total += item.total_salary_paid()
         return total
+    
+    def total_branch_staff(self):
+        total = 0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                    total += item.total_project_staff()
+        return total
 
     # Purchases
     def stock_purchases(self):
@@ -744,8 +737,22 @@ class Branch(models.Model):
             if item.branch.name == self.name:
                 total += 1
         return total
+
+    def branch_expenses(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.project_expenses()
+        return total
     
-    def total_profit(self):
+    def branch_income(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.project_income()
+        return total
+    
+    def branch_profit(self):
         total = 0.0
         for item in self.projects.all():
             if item.branch.name == self.name:
@@ -882,6 +889,13 @@ class Projects(models.Model):
             if item.project.name == self.name:
                 total += item.total_salary_paid()
         return total
+    
+    def total_project_staff(self):
+        total = 0
+        for item in self.staffs.all():
+            if item.project.name == self.name:
+                total += 1
+        return total
 
     # Purchases
     def stock_purchases(self):
@@ -955,24 +969,35 @@ class Projects(models.Model):
         return total
     
     # Expenses
-    def total_expenses(self):
+    def project_expenses(self):
         total = 0.0
         for item in self.expenses.all():
             if item.project.name == self.name:
                 total += item.total_expenses()
         return total
     
-    def expenses_grand_total(self):
-        total = 0.0
-        total += self.total_expenses() 
-    
     # Income
-    def total_income(self):
+    def project_income(self):
         total = 0.0
         for item in self.incomes.all():
             if item.project.name == self.name:
                 total += item.total_income()
         return total
+    
+    def total_profit(self):
+        total = 0.0
+        total += self.project_income() 
+        if  self.project_expenses() != None:
+            total - self.project_expenses( )
+        return total
+
+    def net_worth(self):
+        total = 0.0
+        total += (self.project_income() + self.total_assets() + self.total_stock())
+        if self.project_expenses() != None:
+            total -= self.project_expenses()
+        return total
+    
 class Asset(models.Model):
     asset_type = (
         ('Current Asset', 'Current Asset'),
