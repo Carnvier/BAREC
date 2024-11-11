@@ -18,7 +18,7 @@
     <div class="content-block bg-blue-metalic">
         <h2>Sales</h2>
         <p>No of Sales: {{projects.no_sales}}</p>
-        <p>Sales Income: {{projects.project_sales_income}}</p>
+        <p>Sales Income: {{projects.sales_grand_total}}</p>
     </div>
     </a>
 <a href="{% url 'project-asset-overview' projects.id %}" class="link-block">
@@ -31,8 +31,8 @@
 <a href="{%url 'project-liability-overview' projects.id%}" class="link-block">
 <div class="content-block bg-blue-metalic">
     <h2>Liabilities</h2>
-    <p>Short-Term Liabilities: {{projects.short_liabilities}}</p>
-    <p>Long-Term Liabilities: {{projects.long_liabilities}}</p>
+    <p>Short-Term Liabilities: {{projects.short_term_credit}}</p>
+    <p>Long-Term Liabilities: {{projects.long_term_credit}}</p>
 </div>
 </a>
 </section>

@@ -151,8 +151,12 @@ class ProjectsBriefView(DetailView):
 class UpdateProjectView(UpdateView):
     template_name = 'organisation/update/update-project.html'
     model = Projects
-    fields = ('branch', 'project_name', 'project_supervisor', 'cash_in_hand',)
+    fields = ('branch', 'name', 'supervisor')
     success_url = reverse_lazy('project-index')
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-brief", kwargs={'pk': self.object.branch.id})
+    
 
 class DeleteProjectView(DeleteView):
     model = Projects

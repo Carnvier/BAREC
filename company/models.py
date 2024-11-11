@@ -804,6 +804,23 @@ class Projects(models.Model):
                 total += item.total_asset_value
         return total
     
+    def fixed_assets(self):
+        total = 0.0
+        for item in self.assets.all():
+            if item.project.name == self.name:
+                if item.asset_type == "Fixed Asset":
+                    total += item.total_asset_value
+        return total
+    
+    def current_assets(self):
+        total = 0.0
+        for item in self.assets.all():
+            if item.project.name == self.name:
+                if item.asset_type == "Current Asset":
+                    total += item.total_asset_value
+        return total
+    
+    
     #Stock
     def total_stock(self):
         total = 0.0
@@ -819,8 +836,15 @@ class Projects(models.Model):
             if item.project.name == self.name:
                 tax += item.tax_amount()
         return tax
+    
+    def no_sales(self):
+        count = 0
+        for item in self.sales.all():
+            if item.project.name == self.name:
+                count += 1
+        return count
 
-    def grand_total(self):
+    def sales_grand_total(self):
         total = 0.0
         for item in self.sales.all():
             if item.project.name == self.name:
@@ -834,6 +858,24 @@ class Projects(models.Model):
             if item.project.name == self.name:
                 if item.credit_paid_status == False:
                     total += item.credit_amount - item.credit_amount_paid + self.credit_interest()
+        return total
+    
+    def long_term_credit(self):
+        total = 0.0
+        for item in self.creditors.all():
+            if item.project.name == self.name:
+                if item.credit_paid_status == False:
+                    if item.credit_type == "Long-term":
+                        total += item.credit_amount - item.credit_amount_paid + self.credit_interest()
+        return total
+    
+    def short_term_credit(self):
+        total = 0.0
+        for item in self.creditors.all():
+            if item.project.name == self.name:
+                if item.credit_paid_status == False:
+                    if item.credit_type == "Short-term":
+                        total += item.credit_amount - item.credit_amount_paid + self.credit_interest()
         return total
     
     def total_interest(self):
