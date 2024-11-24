@@ -1,39 +1,11 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
-<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
-<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
-<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
-{%endblock%}
+{%include 'layouts/transactions-sidebar.html'%}{%endblock%}
 {%block content%}
 <div class="text-center">
     <h1 class="nk-block-title">Customer Overview</h1>
     <p class="nk-block-des">See all of the customers in the company.</p>
 </div>
-<!-- <table>
-    <thead>
-        <th>Customer ID</th>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Address</th>
-        <th>Phone Number</th>
-        <th>Email</th>
-    </thead>
-    <tbody>
-        {%for customer in customer%}
-        <tr>
-            <td>{{customer.customer_id}}</td>
-            <td>{{customer.name}}</td>
-            <td>{{customer.type_of_customer}}</td>
-            <td>{{customer.address}}</td>
-            <td>{{customer.phone_number}}</td>
-            <td>{{customer.email}}</td>
-            <td><a href="{%url 'update-customer' customer.id%}">Update</a></td>
-            <td><a href="{%url 'delete-customer' customer.id%}">Delete</a></td>
-        </tr>
-        {%endfor%}
-    </tbody>
-</table> -->
 <a href="{%url 'create-customer' user.organisation.id %}" class="link-block mt-4"><button class="btn-primary button-container">New Customer</button></a>
 <div class="card card-bordered card-preview mt-1">
     <table class="table table-orders">

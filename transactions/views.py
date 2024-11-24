@@ -15,7 +15,10 @@ class SalesOverviewView(TemplateView):
 class SalesFormView(CreateView):
     template_name = 'transactions/create/create-sale.html'
     model = Sales
-    fields = ( "customer", "sale_details", "branch", "project", )
+    fields = ( "customer", "sale_details", "project", )
+
+    def get_success_url(self):
+        return reverse_lazy("sales-items-detail", kwargs={'pk': self.object.project.id})
 
 
 class CreateSalesItemView(View):
@@ -85,19 +88,23 @@ class StockOverviewView(ListView):
     def is_ajax(self, request):
         return request.headers.get('x-requested-with') == 'XMLHttpRequest'
     
-    def get(self, request, *args, **kwargs):
-        if self.is_ajax(request):
-            query = request.GET.get('q')
-            results = Stock.objects.filter(product_name__icontains=query)
-            results_list = list(results.values('product_name'))
-            return JsonResponse({'results': results_list})
-        return super().get(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     if self.is_ajax(request):
+    #         query = request.GET.get('q')
+    #         results = Stock.objects.filter(product_name__icontains=query)
+    #         results_list = list(results.values('product_name'))
+    #         return JsonResponse({'results': results_list})
+    #     return super().get(request, *args, **kwargs)
 
 class CreateStockView(CreateView):
     template_name = 'transactions/create/create-stock.html'
     model = Stock
-    fields = ('asset','company','branch','branch', 'project', 'product_name',  'quantity', 'product_price', 'product_description',)
+    fields = ('asset', 'project', 'product_name',  'quantity', 'product_price', 'product_description',)
     success_url = reverse_lazy('stock-overview')
+
+    def form_valid(self, form):
+        form.instance.organisation = self.request.user.organisation
+        return super().form_valid(form)
 
 class StockDetailedView(DetailView):
     template_name = 'transactions/stock/detail.html'
@@ -122,7 +129,7 @@ class CreateCustomerView(CreateView):
     success_url = reverse_lazy('customer-overview')
 
     def form_valid(self, form):
-        form.instance.organisation = self.request.user.organisation
+        form.instance.organisation = self.request.user.organisation.name
         return super().form_valid(form)
 
 class CustomerDetailedView(DetailView):

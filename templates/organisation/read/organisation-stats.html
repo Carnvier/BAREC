@@ -2,21 +2,21 @@
 {%block side-navigation%}
 {%include 'layouts/organisation-sidebar.html'%}{%endblock%}
 {%block content %}
-<section class="text-center">
-<a href="" class="link-block inline-content">
+<section class="text-center flex-container">
+<!-- <a href="" class="link-block inline-content">
     <div class="card-layout-container content-block">
         <h2>TRIAL BALANCE</h2>
     </div>
-</a>
-<a href="{% url 'organisation-income-statement' user.organisation.id %}" class="link-block inline-content">
-<div class="card-layout-container content-block">
+</a> -->
+<a href="{% url 'organisation-income-statement' user.organisation.id %}" class="link-block bg-blue-metalic">
+<div class="content-block">
 <h2>INCOME STATEMENT</h2>
 </div>
 </a>
-<a href="" class="link-block inline-content">
+<!-- <a href="" class="link-block inline-content">
     <div class="card-layout-container content-block">
         <h2>BALANCE SHEET</h2>
     </div>
-</a>
+</a> -->
 </section>
 {%endblock%}

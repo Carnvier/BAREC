@@ -11,35 +11,35 @@
         <div>
             <div class="table-responsive">
                 <table class="table table-striped">
-                    <tbody>
+                    <tbody  >
                         <tr><td><strong>Income</strong></td><td></td><td></td></tr>
                         <tr><td>Sales</td><td></td><td>{{organisation.total_sales}}</td></tr>
                         <tr><td><strong><em>Less:</em></strong></td><td></td><td></td></tr>
                         <tr><td>Sales Returns</td><td></td><td>{{organisation.sales_returns}}</td></tr>
-                        <tr><td><strong>Net Sales</strong></td><td></td><td>{{organisation.net_sales}}</td></tr>
+                        <tr><td><strong>Net Sales</strong></td><td></td><td><strong>{{organisation.net_sales}}</strong></td></tr>
                         <tr><td><strong>Cost of goods Sold</strong></td></tr>
-                        <tr><td>Operating Stock</td></tr>
+                        <tr><td>Operating Stock</td><td>{{organisation.opening_stock}}</td><td></td></tr>
                         <tr><td><strong><em>Add:</em></strong></td></tr>
-                        <tr><td>Purchases</td><td>{{organisation.total_purchases}}</td><td></td></tr>
-                        <tr><td>Wages</td></tr>
-                        <tr><td>Carriage Inwards</td></tr>
-                        <tr><td>Direct Expenses</td></tr>
-                        <tr><td><strong><em>Less:</em></strong></td></tr>
-                        <tr><td>Closing Stock</td></tr>
-                        <tr><td><strong>Net Cost of Goods Sold(COGS)</strong></td></tr>
-                        <tr><td><strong>Gross Profit (Net Sales - Cost of Goods Sold)</strong></td></tr>
-                        <tr><td>Operating Expenses</td></tr>
+                        <tr><td>Purchases</td><td>{{organisation.purchases_grand_total}}</td><td></td></tr>
+                        <tr><td>Wages</td><td>{{organisation.total_salary_paid}}</td><td></td></tr>
+                        <tr><td>Carriage Inwards</td><td>{{organisation.carriage_inwards}}</td><td></td></tr>
+                        <tr><td>Direct Expenses</td><td>{{organisation.overheads}}</td><td></td></tr>
+                        <tr><td><strong><em>Less:</em></strong></td><td></td><td></td></tr>
+                        <tr><td>Closing Stock</td><td>{{organisation.closing_stock}}</td><td></td></tr>
+                        <tr><td><strong>Net Cost of Goods Sold(COGS)</strong></td><td></td><td><strong>{{organisation.cogs}}</strong></td></tr>
+                        <tr><td><strong>Gross Profit (Net Sales - Cost of Goods Sold)</strong></td></strong><td></td><td><strong>{{organisation.gp}}</strong></td></tr>
+                        <tr><td>Operating Expenses</td><td>{{organisation.operating_expenses}}</td><td></td></tr>
                         <tr><td><strong><em>Add:</em></strong></td></tr>
-                        <tr><td>Administrative Expenses</td></tr>
-                        <tr><td>Finance Expenses</td></tr>
-                        <tr><td>Selling Expenses</td></tr>
-                        <tr><td><strong>Total Operating Expenses</strong></td></tr>
-                        <tr><td><strong>Operating Profit(Gross Profit -Operating Expenses)</strong></td></tr>
-                        <tr><td><em>Add: Non-operating Income</em></td></tr>
-                        <tr><td><em>Less: Non-operating Expenses</em></td></tr>
-                        <tr><td><strong>Net Profit Before Tax</strong></td></tr>
-                        <tr><td><em>Less: Tax(Charged on Net Profit Before Tax)</em></td></tr>
-                        <tr><td><strong>Net Profit After Tax</strong></td></tr>
+                        <tr><td>Administrative Expenses</td><td>{{organisation.administrative_expenses}}</td><td></td></tr>
+                        <tr><td>Finance Expenses</td><td>{{organisation.finance_expenses}}</td><td></td></tr>
+                        <tr><td>Selling Expenses</td><td>{{organisation.selling_expenses}}</td><td></td></tr>
+                        <tr><td><strong>Total Operating Expenses</strong></td><td></td><td><strong>{{organisation.total_operating_expenses}}</strong></td></tr>
+                        <tr><td><strong>Operating Profit(Gross Profit -Operating Expenses)</strong></td><td></td><td><strong>{{organisation.operating_profit}}</strong></td></tr>
+                        <tr><td><em>Add: Non-operating Income</em></td><td>{{organisation.non_operating_income}}</td><td></td></tr>
+                        <tr><td><em>Less: Non-operating Expenses</em></td><td>{{organisation.non_operating_expenses}}</td><td></td></tr>
+                        <tr><td><strong>Net Profit Before Tax</strong></td><td></td><td><strong>{{organisation.net_profit_bt}}</strong></td></tr>
+                        <tr><td><em>Less: Tax(Charged on Net Profit Before Tax)</em></td><td></td><td>{{organisation.np_tax}}</td></tr>
+                        <tr><td><strong>Net Profit After Tax</strong></td><td></td><td><strong>{{organisation.net_profit_at}}</strong></td></tr>
                     </tbody>
                 </table>
                 <div class="nk-notes ff-italic fs-12px text-soft text-center mt-2"> This Statement was created on a computer and is valid without the signature and seal. </div>

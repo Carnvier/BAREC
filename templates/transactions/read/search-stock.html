@@ -1,10 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
-<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
-<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
-<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
-{%endblock%}
+{%include 'layouts/transactions-sidebar.html'%}{%endblock%}
 {%block content%}
 <form action="." method="GET">
     <input type="text" name="q" placeholder="Search...">
@@ -44,7 +40,7 @@
 
         {%for result in results%}
         <tr>
-        <td>{{result.product_id}}</td>
+        <td>{{result.id}}</td>
         <td>{{result.date}}</td>
         <td>{{result.product_name}}</td>
         <td>{{result.quantity}}</td>
@@ -93,7 +89,7 @@
       <tbody class="tb-odr-body">
         {%for stock in stock%}
         <tr>
-        <td>{{stock.product_id}}</td>
+        <td>{{stock.id}}</td>
         <td>{{stock.date}}</td>
         <td>{{stock.product_name}}</td>
         <td>{{stock.quantity}}</td>

@@ -1,7 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-
-{%endblock%}
+{%include 'layouts/transactions-sidebar.html'%}{%endblock%}
 {%block content%}
 <h1 class="text-center">Sale History</h1>
 <a href="{%url 'sales-form'%}"><button class="btn-primary button-container mt-4">New Sale</button></a>

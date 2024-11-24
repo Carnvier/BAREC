@@ -4,9 +4,9 @@
 {%block content %}
 <h1 class="nk-block-head text-center">{{projects.name}}</h1>
 <p class="nk-block-des text-center">Welcome to the detailed view of the {{projects.name}}</p>
-<section class="grid-display text-center">
-<a href="{%url 'project-detailed-brief' projects.id %}" class="link-block">
-<div class="content-block bg-blue-metalic">
+<section class="flex-container text-center">
+<a href="{%url 'project-detailed-brief' projects.id %}" class="link-block ">
+<div class="content-block bg-blue-metalic h-100">
     <h2>Project Brief</h2>
     <p>Project Supervisor: {{projects.supervisor}}</p>
     <p>Branch Name: {{projects.branch.name}}</p>
@@ -15,21 +15,21 @@
 </div>
 </a>
 <a href="{%url 'project-sales-overview' projects.id%}" class="link-block">
-    <div class="content-block bg-blue-metalic">
+    <div class="content-block bg-blue-metalic h-100">
         <h2>Sales</h2>
         <p>No of Sales: {{projects.no_sales}}</p>
         <p>Sales Income: {{projects.sales_grand_total}}</p>
     </div>
     </a>
 <a href="{% url 'project-asset-overview' projects.id %}" class="link-block">
-<div class="content-block bg-blue-metalic">
+<div class="content-block bg-blue-metalic h-100">
     <h2>Assets</h2>
     <p>Fixed Assets:{{projects.fixed_assets}}</p>
     <p>Non-Fixed Assets: {{projects.current_assets}}</p>
 </div>
 </a>
-<a href="{%url 'project-liability-overview' projects.id%}" class="link-block">
-<div class="content-block bg-blue-metalic">
+<a href="{%url 'project-liability-overview' projects.id%}" class="link-block ">
+<div class="content-block bg-blue-metalic h-100">
     <h2>Liabilities</h2>
     <p>Short-Term Liabilities: {{projects.short_term_credit}}</p>
     <p>Long-Term Liabilities: {{projects.long_term_credit}}</p>

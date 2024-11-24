@@ -1,10 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
-<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
-<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
-<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
-{%endblock%}
+{%include 'layouts/transactions-sidebar.html'%}{%endblock%}
 {%block content%}
 <h2 class="text-center">Sales Invoice</h2>
 <button onclick="downloadInvoice()" class="btn-primary button-container mb-3 mt-4">Print</button>

@@ -10,7 +10,7 @@ class Stock(models.Model):
     asset = models.ForeignKey('company.Asset', on_delete= models.CASCADE, related_name= 'stocks', null= True, blank= True)
     product_name = models.CharField(max_length = 50, default='')
     product_description = models.TextField()
-    quantity = models.IntegerField(default=0.0)
+    quantity = models.FloatField(default=0.0)
     product_price = models.FloatField( default = 0.0)
     project = models.ForeignKey('company.Projects', null = True, blank = True, on_delete = models.CASCADE, related_name='stocks')
 
@@ -18,8 +18,7 @@ class Stock(models.Model):
         return str(self.product_name) 
     
     def product_id(self):
-        id =  self.organisation.name[0] + self.product_name[0] + f'{self.id:0004d}'
-        return id
+        return self.id
     
     def total_product_value(self):
         total = 0.00
@@ -57,6 +56,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=255, default= '')
     phone_number = models.CharField(max_length=255, default='')
     email = models.EmailField(max_length=255, default='', blank= True, null=True) 
+    date_joined = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -79,7 +79,7 @@ class Sales(models.Model):
         return str(self.sale_id())
     
     def sale_id(self):
-        sale_id = self.project.project_name[0] + self.branch.branch_name[0] + f'{self.id:0004d}'
+        sale_id = self.project.name[0] + self.project.branch.name[0] + f'{self.id:0004d}'
         return sale_id
     
     def sub_total(self):

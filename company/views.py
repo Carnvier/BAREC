@@ -152,7 +152,6 @@ class UpdateProjectView(UpdateView):
     template_name = 'organisation/update/update-project.html'
     model = Projects
     fields = ('branch', 'name', 'supervisor')
-    success_url = reverse_lazy('project-index')
 
     def get_success_url(self):
         return reverse_lazy("project-detailed-brief", kwargs={'pk': self.object.branch.id})
@@ -168,7 +167,7 @@ class StaffBriefView(DetailView):
     model = Projects
 
 class AssetBriefView(DetailView):
-    template_name = 'organisation/read/asset-brief.html'
+    template_name = 'organisation/read/assets-brief.html'
     model = Projects
     
 class CreateAssetView(CreateView):
@@ -176,14 +175,20 @@ class CreateAssetView(CreateView):
     model = Asset
     fields = '__all__'
 
+    def get_success_url(self):
+        return reverse_lazy("project-asset-overview", kwargs={'pk': self.object.project.id})
+    
 class CreditorBriefView(DetailView):
-    template_name = 'organisation/read/Creditor-brief.html'
+    template_name = 'organisation/read/liabilities-brief.html'
     model = Projects
 
 class CreateCreditorView(CreateView):
     template_name = 'organisation/create/create-liability.html'
     model = Creditor
     fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy("project-liability-overview", kwargs={'pk': self.object.project.id})
 
 class SalesBriefView(DetailView):
     template_name = 'organisation/read/sales-brief.html'
@@ -206,7 +211,7 @@ class PurchasesBriefView(ListView):
 class CreatePurchasesView(CreateView):
     template_name = 'organisation/create/create-purchase.html'
     model = Purchases
-    fields = ('source', 'branch','project','tax_percentage', 'details',)  
+    fields = ('source', 'project','details','tax_percentage', )  
 
     def form_valid(self, form):
         form.instance.purchaser = self.request.user
@@ -240,17 +245,29 @@ class StaffDetailedBriefView(DetailView):
 class CreateStaffView(CreateView):
     template_name = 'organisation/create/create-staff.html'
     model = Staff
-    fields = ('staff_name', 'company', 'monthly_salary', 'staff_branch', 'staff_project', 'department', 'occupation',)
+    fields = ('staff_name', 'company', 'project', 'active', 'department', 'occupation', 'monthly_salary ')
+
+    def form_valid(self, form):
+        form.instance.organisation = self.request.user.organisation
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-view", kwargs={'pk': self.object.project.id}) 
 
 class UpdateStaffView(UpdateView):
     template_name = 'organisation/update/update-staff.html'
     model = Staff
-    fields = ('company', 'monthly_salary', 'staff_branch', 'staff_project', 'department', 'occupation',)
+    fields = ('company',  'project', 'department', 'active', 'occupation', 'monthly_salary')
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-brief", kwargs={'pk': self.object.project.id})
 
 class DeleteStaffView(DeleteView):
     template_name = 'organisation/delete/delete-staff.html'
     model = Staff
-    success_url  =reverse_lazy('create-staff')
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-brief", kwargs={'pk': self.object.project.id})
 
 #Stats
 class OrganisationStatsView(DetailView):
