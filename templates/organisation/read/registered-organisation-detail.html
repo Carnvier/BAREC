@@ -1,0 +1,48 @@
+{%extends 'layouts/home-base.html'%}
+{%block content%}
+{%if reg.status == 'Pending'%}
+<a href="{%url 'registered-organisation-update-status' reg.id%}" class="mt-4"><button class="button-container btn-primary">Update</button></a>
+{%elif reg.status == 'Approved'%}
+<h2 class='text-center'><em>***APPROVED***</em></h2>
+{%elif reg.status == 'Declined'%}
+<h2 class='text-center'><em>***DECLINED***</em></h2>
+{%endif%}
+<section class="grid-display mt-3">
+    <div class="content-block">
+        <h3 class="text-center">Organisation Details</h3>
+        <div class="mt-3">
+        <p>Registration ID: {{reg.registration_id}}</p>
+        <p>Registration Date: {{reg.registration_date}}</p>
+        <p>Organisation Name: {{reg.organisation_name}}</p>
+        <p>Established: {{reg.est}}</p>
+        <p>Email: {{reg.organisation_email}}</p>
+        <p>Phone Number: {{reg.organisation_phone_number}}</p>
+        <p>Headquarters: {{reg.headquarters}}</p>
+        <p>Registration Status: {{reg.status}}</p>
+    </div>
+    </div>
+    <div class="content-block">
+        <h3 class="text-center">Founder Details</h3>
+        <div class="mt-3">
+        <p>Founder FirstName: {{reg.first_name}}</p>
+        <p>Founder LastName: {{reg.last_name}}</p>
+        <p>Preffered Username: {{reg.preffered_username}}</p>
+        <p>Date of Birth: {{reg.founder_DOB}}</p>
+        <p>ID_Number: {{reg.ID_Number}}</p>
+        <p>Address: {{reg.personal_address}}</p>
+        <p>Email: {{reg.founder_email}}</p>
+        <p>Phone Number: {{reg.founder_phone_number}}</p>
+    </div>
+    </div>
+
+<div class="text-center content-block">
+    <h3>Organisation Description</h3>
+    <p>{{reg.organisation_description}}</p>
+</div>
+<div class="text-center content-block">
+    <h3>Motive</h3>
+    <p>{{reg.motive}}</p>
+</div>
+</section>
+    
+{%endblock%}

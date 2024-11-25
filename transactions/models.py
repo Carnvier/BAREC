@@ -8,9 +8,9 @@ class Stock(models.Model):
     organisation = models.ForeignKey('company.Organisation', on_delete= models.CASCADE, related_name= 'stocks', null= True, blank= True)
     date = models.DateField(default= now)
     asset = models.ForeignKey('company.Asset', on_delete= models.CASCADE, related_name= 'stocks', null= True, blank= True)
-    product_name = models.CharField(max_length = 50, default='')
+    product_name = models.CharField(max_length = 50, default='', unique=True)
     product_description = models.TextField()
-    quantity = models.IntegerField(default=0.0)
+    quantity = models.FloatField(default=0.0)
     product_price = models.FloatField( default = 0.0)
     project = models.ForeignKey('company.Projects', null = True, blank = True, on_delete = models.CASCADE, related_name='stocks')
 
@@ -18,8 +18,7 @@ class Stock(models.Model):
         return str(self.product_name) 
     
     def product_id(self):
-        id =  self.organisation.name[0] + self.product_name[0] + f'{self.id:0004d}'
-        return id
+        return self.id
     
     def total_product_value(self):
         total = 0.00
@@ -57,6 +56,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=255, default= '')
     phone_number = models.CharField(max_length=255, default='')
     email = models.EmailField(max_length=255, default='', blank= True, null=True) 
+    date_joined = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -79,7 +79,7 @@ class Sales(models.Model):
         return str(self.sale_id())
     
     def sale_id(self):
-        sale_id = self.project.project_name[0] + self.branch.branch_name[0] + f'{self.id:0004d}'
+        sale_id = self.project.name[0] + self.project.branch.name[0] + f'{self.id:0004d}'
         return sale_id
     
     def sub_total(self):
@@ -99,7 +99,7 @@ class Sales(models.Model):
     
     def grand_total(self):
         total = 0.0
-        total += self.sub_total() + self.tax() + self.processing_fee
+        total += self.sub_total() + self.tax_amount() + self.processing_fee
         return total
     
 class SaleItem(models.Model):
@@ -112,10 +112,8 @@ class SaleItem(models.Model):
     returned_quantity= models.IntegerField( default= 0)
 
     def __str__(self):
-        return self.product.product_name
+        return self.product.product_name 
     
-    def get_absolute_url(self):
-        return reverse_lazy('sales-items-detail', args=str(self.product.id))
     
     def total_amount(self):
         total = 0.0

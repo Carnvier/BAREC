@@ -1,18 +1,17 @@
 {%extends 'layouts/base.html'%}
 {%block side-navigation%}
-{%include 'layouts/company-sidebar.html'%}
-{%endblock%}
+{%include 'layouts/organisation-sidebar.html'%}{%endblock%}
 {%block content %}
 <h2 class="nk-block-head text-center">Project Details</h2>
 <div class="content-block grid-display mt-4">
     <p>Date Started: {{projects.date_started}}</p>
     <p>Project ID: {{projects.project_id}}</p>
-    <p>Project: {{projects.project_name}}</p>
-    <P>Project Supervisor: {{projects.project_supervisor}}</P>
-    <p>Branch Name: {{projects.branch.branch_name}}</p>
-    <p>Address: {{projects.project_location}}</p>
-    <p>Staff: {{projects.project_staff}}</p>
-    <p>Salary: {{projects.project_staff_salary}}</p>
+    <p>Project: {{projects.name}}</p>
+    <P>Project Supervisor: {{projects.supervisor}}</P>
+    <p>Branch Name: {{projects.branch.name}}</p>
+    <p>Address: {{projects.branch.location}}</p>
+    <p>Staff: {{projects.total_project_staff}}</p>
+    <p>Salary: {{projects.total_salary_earned}}</p>
 </div>
 <div class="mt-4">
 <a href="{%url 'update-project' projects.id%}"><button class="button-container btn-success">Update Project</button></a>
@@ -40,7 +39,7 @@
                 <span class="tb-odr-total">Occupation</span>
               </th>
               <th class="tb-odr-amount">
-                <span class="tb-odr-total">Monthly Salary</span>
+                <span class="tb-odr-total">Salary</span>
               </th>
               <th></th>
             </tr>
@@ -48,12 +47,12 @@
       <tbody class="tb-odr-body">
         {%for project in projects.staffs.all%}
             <tr>
-            <td>{{project.id}}</td>
+            <td>{{project.staff_id}}</td>
             <td>{{project.staff_name}}</td>
-            <td>{{project.address}}</td>
+            <td>{{project.staff_name.address}}</td>
             <td>{{project.department}}</td>
             <td>{{project.occupation}}</td>
-            <td>{{project.monthly_salary}}</td>
+            <td>{{project.total_salary_earned}}</td>
             <td><a href="{%url 'staff-detail' project.id%}"  class="btn btn-sm btn-primary">View</td>
             </tr>
         {%endfor%}

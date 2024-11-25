@@ -1,9 +1,8 @@
 {%extends 'layouts/base.html'%}
 {%block side-navigation%}
-{%include 'layouts/company-sidebar.html'%}
-{%endblock%}
+{%include 'layouts/organisation-sidebar.html'%}{%endblock%}
 {%block content %}
-<h2 class="text-center mb-4">Welcome to {{branch.branch_name}}</h2>
+<h2 class="text-center mb-4">Welcome to {{branch.name}}</h2>
 <section class="grid-display mt-4">
   <div class="content-block bg-blue-metalic">
     <h3 class="text-center">Details</h3>
@@ -12,15 +11,15 @@
         <p>Branch ID: {{branch.branch_id}}</p>
         <p>Location: {{branch.location}}</p>
         <p>No Projects: {{branch.no_projects}}</p>
-        <p>Phone Number: {{branch.branch_phone_number}}</p>
+        <p>Phone Number: {{branch.phone_number}}</p>
         <p>No Staff: {{branch.total_branch_staff}}</p>
     </div>
   </div>
   <div class="content-block {%if branch.branch_profit >= 0 %}bg-green-metalic {%else%} bg-red-metalic{%endif%}">
     <h3 class="text-center">Performance</h3>
     <div class='grid-display'>
-      <p>Asset Value: {{branch.asset_value}}</p>
-      <p>Staff Salary: {{branch.total_salary}}</p>
+      <p>Asset Value: {{branch.total_assets}}
+      <p>Staff Salary: {{branch.total_salary_earned}}</p>
       <p>Expenses: {{branch.branch_expenses}}</p>
       <p>Income: {{branch.branch_income}}</p> 
       <p>Profit: {{branch.branch_profit}}</p>
@@ -48,9 +47,6 @@
           <span class="tb-odr-total">Branch Name</span>
         </th>
         <th class="tb-odr-amount">
-          <span class="tb-odr-total">Project Location</span>
-        </th>
-        <th class="tb-odr-amount">
           <span class="tb-odr-total">Staff</span>
         </th>
         <th class="tb-odr-amount">
@@ -67,11 +63,10 @@
       <tr>
           <td>{{project.date_started}}</td>
           <td>{{project.project_id}}</td>
-          <td>{{project.project_name}}</td>
+          <td>{{project.name}}</td>
           <td>{{project.branch}}</td>
-          <td>{{project.project_location}}</td>
-          <td>{{project.project_staff}}</td>
-          <td>{{project.project_supervisor}}</td>
+          <td>{{project.total_project_staff}}</td>
+          <td>{{project.supervisor}}</td>
           <td>{{project.net_worth}}</td>
           <td><a href="{%url 'project-detailed-view' project.id %}"  class="btn btn-sm btn-primary">View</td> 
       </tr>

@@ -1,24 +1,33 @@
 from django.db import models
 from django.utils.timezone import now
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 
 # Create your models here.
 class OrganisationRegistration(models.Model):
+    reg_status = (
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Declined', 'Declined'),
+    )
     first_name = models.CharField(max_length=255, default= '')
     last_name = models.CharField(max_length=255, default= '')
     ID_Number = models.CharField(max_length = 20, null = True, blank = True)
     personal_address = models.CharField(max_length = 255, default='')
     preffered_username = models.CharField(max_length=255,  default= '')
-    phone_number = models.CharField(max_length=255, default= '')
-    email = models.EmailField(max_length=255, default= '')
+    founder_DOB = models.DateField(default= now)
+    founder_phone_number = models.CharField(max_length=255, default= '')
+    founder_email = models.EmailField(max_length=255, default= '')
     organisation_name = models.CharField(max_length=255,  default= '')
     est = models.DateField(default = now)
-    headquaters = models.CharField(max_length= 255, default= '')
     organisation_email = models.EmailField(max_length= 255, blank= True, null=True, default='')
     organisation_phone_number = models.CharField(max_length= 255, blank= True, default='')
-    company_description = models.TextField(default= '')
+    organisation_description = models.TextField(default= '')
     motive = models.TextField(max_length= 255, default = '')
+    headquarters = models.CharField(max_length= 255, default= '')
+
+    status = models.CharField(max_length= 255, default = 'Pending', choices = reg_status)
+    registration_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.organisation_name
@@ -26,11 +35,15 @@ class OrganisationRegistration(models.Model):
     def registration_id(self):
         id  = self.organisation_name[0] + self.first_name[0] + self.last_name[0] + f'{self.id:0004d}'
         return id
+
+    def founder_name(self):
+        name = self.first_name + ' ' + self.last_name
+        return name
     
 class Organisation(models.Model):
     name = models.CharField(max_length= 255, default= '')
     est = models.DateField(default='')
-    headquaters = models.CharField(max_length= 255, default= '')
+    headquarters = models.CharField(max_length= 255, default= '')
     founder = models.ForeignKey('users.CustomUser',related_name= 'organisations', on_delete= models.CASCADE, null= True, blank= True)
     organisation_email = models.EmailField(max_length= 255, blank= True, null=True, default='')
     organisation_phone_number = models.CharField(max_length= 255, blank= True, default='')
@@ -72,6 +85,20 @@ class Organisation(models.Model):
         id = self.name[0] + self.founder[0] + f'{self.id:0004d}'
         return id
     
+    def no_companies(self):
+        total = 0
+        for item in self.companies.all():
+            if item.organisation.name == self.name:
+                total += 1
+        return total
+    
+    def total_customers(self):
+        total = 0
+        for item in self.customers.all():
+            if item.organisation.name == self.name:
+                total += 1
+        return total
+    
      #Assets
     def total_acquisition_price(self):
         total = 0.0
@@ -95,7 +122,10 @@ class Organisation(models.Model):
         return total
     
     #Stock
-    def total_stock(self):
+    def opening_stock(self):
+        return 0.0
+
+    def closing_stock(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
@@ -110,7 +140,7 @@ class Organisation(models.Model):
                 tax += item.total_tax_amount()
         return tax
 
-    def grand_total(self):
+    def sales_grand_total(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
@@ -154,7 +184,7 @@ class Organisation(models.Model):
                     total += item.total_interest()
         return total
     
-    def total_amount_paid(self):
+    def total_debt_paid(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
@@ -240,13 +270,98 @@ class Organisation(models.Model):
                 total += item.total_tax_amount()
         return total
     
-    def grand_total(self):
+    def purchases_grand_total(self):
         total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
                 total += item.grand_total()
         return total
-  
+    
+    def carriage_inwards(self):
+        return 0.0
+    
+    def overheads(self):
+        return 0.0
+    def cogs(self):
+        total = self.opening_stock() + self.purchases_grand_total() + self.carriage_inwards() + self.overheads() - self.closing_stock()
+        return float(total)
+
+    def gp(self):
+        total = 0.0
+        total =  self.cogs() + self.net_sales() 
+        return total
+
+    def operating_expenses(self):
+        total = 0.0
+        return total
+    
+    def administrative_expenses(self):
+        total = 0.0
+        return total
+    
+    def finance_expenses(self):
+        return 0.0
+
+    def selling_expenses(self):
+        return 0.0
+    
+    def total_operating_expenses(self):
+        total = 0.0
+        total += self.operating_expenses() + self.administrative_expenses() + self.finance_expenses() + self.selling_expenses()
+        return total
+    
+    def operating_profit(self):
+        total = self.gp() - self.total_operating_expenses() 
+        return total
+    
+    def total_income(self):
+        total = 0.0
+        total += self.total_debt_paid() + self.sales_grand_total() 
+        return total
+    
+    def non_operating_income(self):
+        total = 0
+        return total
+
+    def non_operating_expenses(self):
+        total = 0
+        return total
+    
+    def net_profit_bt(self):
+        total = 0.0
+        total += self.operating_profit() + self.non_operating_income() - self.non_operating_expenses()
+        return total
+    
+    def np_tax(self):
+        total = ((self.tax/100) * self.net_profit_bt())
+        if total < 0:
+            total = 0
+        return total
+
+    def total_expenses(self):
+        total = 0.0
+        for item in self.companies.all():
+            if item.organisation.name == self.name:
+                total += item.total_expenses()
+        return total
+
+    
+    def net_profit_at(self):
+        total = float(self.net_profit_bt() - self.np_tax())
+        return total
+    
+    def profit(self):
+        total = 0.0
+        total -= self.total_expenses() + self.total_income()
+        return total
+
+    def net_worth(self):
+        total = 0.0
+        for item in self.companies.all():
+            if item.organisation.name == self.name:
+                total += item.net_worth()
+        return total
+
 class Company(models.Model):
     organisation = models.ForeignKey('company.Organisation', related_name='companies', on_delete= models.CASCADE, null= True, blank= True)
     name = models.CharField(max_length=255, default= '', unique = True)
@@ -258,9 +373,12 @@ class Company(models.Model):
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return reverse('company-overview', args=[str(self.organisation.id)])
+
     def no_employees(self):
         total = 0
-        for item in self.staffs.all():
+        for item in self.staff.all():
             if item.company.name == self.name:
                 total += 1
         return total
@@ -307,7 +425,7 @@ class Company(models.Model):
                 tax += item.total_tax_amount()
         return tax
 
-    def grand_total(self):
+    def sales_grand_total(self):
         total = 0.0
         for item in self.branches.all():
             if item.company.name == self.name:
@@ -371,6 +489,10 @@ class Company(models.Model):
         for item in self.branches.all():
             if item.company.name == self.name:
                     total += item.total_salary_paid()
+        return total
+
+    def total_salary_unpaid(self):
+        total = self.total_salary_earned() -self.total_salary_paid()
         return total
 
     # Purchases
@@ -443,8 +565,41 @@ class Company(models.Model):
             if item.company.name == self.name:
                 total += item.grand_total()
         return total
+    
+    def total_expenses(self):
+        total = 0.0
+        return total
+    
+    def net_worth(self):
+        total = 0.0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += item.net_worth()
+        return total
+    
+    def no_branches(self):
+        total = 0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += 1
+        return total
+
+    def no_projects(self):
+        total = 0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += item.no_projects()
+        return total
+    
+    def total_profit(self):
+        total = 0.0
+        for item in self.branches.all():
+            if item.company.name == self.name:
+                total += item.branch_profit()
+        return total
 
 class Branch(models.Model):
+    organisation = models.ForeignKey('company.Organisation', related_name='branches', on_delete= models.CASCADE, null= True, blank= True)
     company = models.ForeignKey('company.Company', related_name= 'branches', null=True, blank=True, on_delete= models.CASCADE)
     name = models.CharField(max_length = 255, default= '', unique=True)
     location = models.CharField(max_length = 255, default= '')
@@ -561,6 +716,13 @@ class Branch(models.Model):
             if item.branch.name == self.name:
                     total += item.total_salary_paid()
         return total
+    
+    def total_branch_staff(self):
+        total = 0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                    total += item.total_project_staff()
+        return total
 
     # Purchases
     def stock_purchases(self):
@@ -633,6 +795,40 @@ class Branch(models.Model):
                 total += item.grand_total()
         return total
 
+    def no_projects(self):
+        total = 0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += 1
+        return total
+
+    def branch_expenses(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.project_expenses()
+        return total
+    
+    def branch_income(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.project_income()
+        return total
+    
+    def branch_profit(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.total_profit()
+        return total
+
+    def net_worth(self):
+        total = 0.0
+        for item in self.projects.all():
+            if item.branch.name == self.name:
+                total += item.net_worth()
+        return total
 
 
 class Projects(models.Model):
@@ -641,7 +837,6 @@ class Projects(models.Model):
     date_started = models.DateField(default = '2024-08-10' )
     name = models.CharField(max_length = 255, unique = True, default= '')
     supervisor = models.ForeignKey('users.CustomUser', related_name= 'projects', null = True, blank= True, on_delete= models.CASCADE)
-    no_staff = models.IntegerField(default = 0)
 
     def __str__(self):
         return self.name
@@ -669,8 +864,25 @@ class Projects(models.Model):
         total = 0.0
         for item in self.assets.all():
             if item.project.name == self.name:
-                total += item.total_asset_value
+                total += item.total_asset_value()
         return total
+    
+    def fixed_assets(self):
+        total = 0.0
+        for item in self.assets.all():
+            if item.project.name == self.name:
+                if item.type_of_asset == "Fixed Asset":
+                    total += item.total_asset_value()
+        return total
+    
+    def current_assets(self):
+        total = 0.0
+        for item in self.assets.all():
+            if item.project.name == self.name:
+                if item.type_of_asset == "Current Asset":
+                    total += item.total_asset_value()
+        return total
+    
     
     #Stock
     def total_stock(self):
@@ -687,8 +899,15 @@ class Projects(models.Model):
             if item.project.name == self.name:
                 tax += item.tax_amount()
         return tax
+    
+    def no_sales(self):
+        count = 0
+        for item in self.sales.all():
+            if item.project.name == self.name:
+                count += 1
+        return count
 
-    def grand_total(self):
+    def sales_grand_total(self):
         total = 0.0
         for item in self.sales.all():
             if item.project.name == self.name:
@@ -702,6 +921,24 @@ class Projects(models.Model):
             if item.project.name == self.name:
                 if item.credit_paid_status == False:
                     total += item.credit_amount - item.credit_amount_paid + self.credit_interest()
+        return total
+    
+    def long_term_credit(self):
+        total = 0.0
+        for item in self.liabilities.all():
+            if item.project.name == self.name:
+                if item.liability_paid_status == False:
+                    if item.type_of_liability == "Long-term":
+                        total += item.liability_amount - item.credit_amount_paid + item.credit_interest()
+        return total
+    
+    def short_term_credit(self):
+        total = 0.0
+        for item in self.liabilities.all():
+            if item.project.name == self.name:
+                if item.liability_paid_status == False:
+                    if item.type_of_liability == "Short-term":
+                        total += item.liability_amount - item.credit_amount_paid + item.credit_interest()
         return total
     
     def total_interest(self):
@@ -755,7 +992,14 @@ class Projects(models.Model):
         total = 0.0
         for item in self.staffs.all():
             if item.project.name == self.name:
-                total += item.total_salary_paid()
+                total += item.total_paid_salary()
+        return total
+    
+    def total_project_staff(self):
+        total = 0
+        for item in self.staffs.all():
+            if item.project.name == self.name:
+                total += 1
         return total
 
     # Purchases
@@ -828,7 +1072,37 @@ class Projects(models.Model):
             if item.project.name == self.name:
                 total += item.grand_total()
         return total
+    
+    # Expenses
+    def project_expenses(self):
+        total = 0.0
+        for item in self.expenses.all():
+            if item.project.name == self.name:
+                total += item.total_expenses()
+        return total
+    
+    # Income
+    def project_income(self):
+        total = 0.0
+        for item in self.incomes.all():
+            if item.project.name == self.name:
+                total += item.total_income()
+        return total
+    
+    def total_profit(self):
+        total = 0.0
+        total += self.project_income() 
+        if  self.project_expenses() != None:
+            total - self.project_expenses( )
+        return total
 
+    def net_worth(self):
+        total = 0.00
+        total += (self.project_income() + self.total_assets() + self.total_stock())
+        if self.project_expenses() != None:
+            total -= self.project_expenses()
+        return total
+    
 class Asset(models.Model):
     asset_type = (
         ('Current Asset', 'Current Asset'),
@@ -849,14 +1123,13 @@ class Asset(models.Model):
     )
     organisation = models.ForeignKey('company.Organisation', related_name='assets', on_delete= models.CASCADE, null= True, blank= True)
     date_brought_in = models.DateField(default = now)
-    projects = models.ForeignKey('company.Projects', on_delete= models.CASCADE, null= True, blank= True, related_name = 'assets')
+    project = models.ForeignKey('company.Projects', on_delete= models.CASCADE, null= True, blank= True, related_name = 'assets')
     source = models.CharField(max_length=50, default='')
     asset_name = models.CharField(max_length = 255, default= '')
     type_of_asset = models.CharField(max_length = 255, choices= asset_type, default = 'Current Asset')
     quantity = models.IntegerField(default= 0)
     acquistion_price = models.IntegerField(default = 0)
     asset_value = models.IntegerField(default = 0)
-    asset_source = models.CharField(max_length = 255, default= '')
     depreciation_period = models.CharField(max_length=50, choices= depreciation_periods, default= 'Yearly' )
     depreciation_rate = models.IntegerField(default = 0)
     asset_status = models.CharField(max_length=50, choices=asset_statuses, default = 'Active')
@@ -899,18 +1172,18 @@ class Creditor(models.Model):
         ('Corporate', 'Corporate'),
         ('Other', 'Other'),
     )
-    organisation = models.ForeignKey('company.Organisation', related_name='creditors', on_delete= models.CASCADE, null= True, blank= True)
-    project = models.ForeignKey('company.Projects', on_delete= models.CASCADE, null= True, blank= True, related_name='creditors')
+    organisation = models.ForeignKey('company.Organisation', related_name='liabilities', on_delete= models.CASCADE, null= True, blank= True)
+    project = models.ForeignKey('company.Projects', on_delete= models.CASCADE, null= True, blank= True, related_name='liabilities')
     sources = models.CharField(max_length = 50, default = 'Other', choices=credit_source)
-    credit_acquisition_date = models.DateField(default = '2024-08-10')
+    liability_acquisition_date = models.DateField(default = '2024-08-10')
     creditor =  models.CharField(max_length = 50, default= '')
     phone_number = models.CharField(max_length = 15, default= '')
     email = models.EmailField(max_length = 50, null = True, blank = True)
     address = models.CharField(max_length = 255,default='')
-    credit_type = models.CharField(max_length = 255, choices=credit_types, default = 'Short-term')
+    type_of_liability = models.CharField(max_length = 255, choices=credit_types, default = 'Short-term')
     details = models.CharField(max_length = 50, default= '')
-    credit_amount = models.IntegerField(default = 0)
-    credit_paid_status = models.BooleanField(default = False)
+    liability_amount = models.IntegerField(default = 0)
+    liability_paid_status = models.BooleanField(default = False)
     interest_rate = models.IntegerField(default = 0)
     credit_amount_paid = models.FloatField(default = 0.0)
 
@@ -919,8 +1192,10 @@ class Creditor(models.Model):
     
     def credit_interest(self):
         total = 0.0
-        total += (self.credit_amount * (self.interest_rate/100))
+        total += (self.liability_amount * (self.interest_rate/100))
         return total
+
+
 
 
 class Debtor(models.Model):
@@ -979,13 +1254,14 @@ class Staff(models.Model):
     active = models.BooleanField(default=False)
     department = models.CharField(max_length = 255, choices = departments, null = False, blank = False, default='IT')
     occupation = models.CharField(max_length = 30,  null = False, blank = False, default='')
+    monthly_salary =  models.FloatField(default=0.00)
     # curriculum_vitae = models.FileField()
 
     def __str__(self):
         return self.staff_name
     
     def staff_id(self):
-        id = self.organisation.name[0] + self.staff_name + f'{self.id:0004d}'
+        id = self.organisation.name[0] + self.staff_name.first_name[0] + f'{self.id:0004d}'
         return id
     
     def total_salary_earned(self):
@@ -1025,7 +1301,7 @@ class Purchases(models.Model):
     source = models.CharField(max_length=255, default='')
     paid = models.BooleanField(default=False)
     details = models.TextField(max_length=255, default = '')
-    tax_percentage = models.IntegerField(default= 0.00)
+    tax_percentage = models.FloatField(default= 0.00)
     
 
     def __str__(self):
@@ -1109,7 +1385,7 @@ class Purchases(models.Model):
         total = self.sub_total()
         return self.taxed_amount(total)
     
-class Purchased_Item(models.Model):
+class PurchasedItem(models.Model):
     purchase_types = (
         ('Stock', 'Stock'),
         ('Overheads', 'Overheads'),
@@ -1136,37 +1412,7 @@ class Purchased_Item(models.Model):
     
     def product_ref(self):
         id = self.organisation.name[0] + self.product_name[0] + f'{self.id:0004d}'
-        return id
-    
-        
-class Loan(models.Model):
-    organisation = models.ForeignKey('company.Organisation', related_name = 'loans', on_delete= models.CASCADE, null=True, blank=True, default='')
-    borrower = models.ForeignKey('transactions.Customer', related_name = 'loans', on_delete= models.CASCADE, null=True, blank=True, default = '')
-    date = models.DateTimeField(auto_now_add=True)
-    receiver = models.CharField(max_length=50)
-    amount = models.FloatField(default= 0.00)
-    details = models.TextField(default='')
-    interest_rate = models.FloatField(default=0.00)
-    paid = models.BooleanField(default=False)
-    amount_paid = models.FloatField(default=0.00)
-
-    def __str__(self):
-        return str(self.id)
-    
-    def loan_id(self):
-        loan_id = self.organisation.name[0] + self.borrower.name[0] + f'{self.id:0004d}'
-        return loan_id
-    
-    def interest(self):
-        total = 0.00
-        total += (self.amount * (self.interest_rate/100))
-        return total
-    
-    def grand_total(self):
-        total = 0.00
-        total += self.amount + self.interest()
-        return total
-    
+        return id    
 
 class Expense(models.Model):
     type_of_expense = (

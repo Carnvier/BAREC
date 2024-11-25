@@ -1,17 +1,20 @@
 from django.forms import BaseModelForm
-from django.http import HttpRequest, HttpResponse
+from django.db import transaction
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 import json
 from django.views.generic import TemplateView, DetailView,CreateView, ListView, UpdateView, DeleteView
-from .models import OrganisationRegistration, Organisation, Company, Branch, Projects, Asset, Creditor, Debtor, Staff, Salary, Purchases, Purchased_Item, Expense, Income
+from .models import OrganisationRegistration, Organisation, Company, Branch, Projects, Asset, Creditor, Debtor, Staff, Salary, Purchases, PurchasedItem, Expense, Income
+from users.models import CustomUser
+from .forms import OrganisationRegistrationForm
 from django.urls import reverse_lazy
+
 
 
 # Company registration
 class OrganizationRegistrationForm(CreateView):
-    template_name = 'company/organisation/create.html'
-    model = OrganisationRegistration
-    fields = '__all__'
+    template_name = 'organisation/create/register-organisation.html'
+    form_class = OrganisationRegistrationForm
     success_url  = reverse_lazy('organisation-creation-success')
 
 class OrganizationRegistrationConfirm(TemplateView):
@@ -19,9 +22,59 @@ class OrganizationRegistrationConfirm(TemplateView):
     model = OrganisationRegistration
     context_object_name = 'reg'
 
+class OrganisationRegisterView(ListView):
+    template_name = 'organisation/read/organisation-register.html' 
+    model = OrganisationRegistration
+    context_object_name = 'reg'
 
-# Dashboard Views
-class CompanyDashboardView(DetailView):
+class RegisteredOrganisationDetailedView(DetailView):
+    template_name = 'organisation/read/registered-organisation-detail.html'
+    model = OrganisationRegistration
+    context_object_name = 'reg'
+
+class RegisteredOrganisationUpdateStatusView(UpdateView):
+    template_name = 'organisation/update/status-registered-organisation.html'
+    model = OrganisationRegistration
+    fields = ('status',)
+    success_url = reverse_lazy('organisation-register')
+    context_object_name = 'reg'
+
+    def form_valid(self, form):
+        if form.instance.status == 'Approved':
+            registration = form.instance
+            count = 0
+            for i in CustomUser.objects.all():
+                if registration.preffered_username == i.username:
+                    count += 1
+            if count == 0:
+                with transaction.atomic():
+                    CustomUser.objects.create(first_name=registration.first_name, last_name = registration.last_name, email=registration.founder_email, address=registration.personal_address, username=registration.preffered_username, D_O_B = registration.founder_DOB, phone_number=registration.founder_phone_number, ID_Number = registration.ID_Number)
+
+                    try:
+                        founder = CustomUser.objects.get(first_name=registration.first_name)
+                    except CustomUser.DoesNotExist:
+                        return self.form_invalid(form)
+        
+                    organisation = Organisation.objects.create(name = registration.organisation_name,
+                    est = registration.est,
+                    headquarters = registration.headquarters,
+                    founder =  founder,
+                    organisation_email = registration.organisation_email,
+                    organisation_phone_number = registration.organisation_phone_number,
+                    organisation_description = registration.organisation_description,
+                    motive = registration.motive,)
+
+                    try:
+                        founder.organisation = organisation
+                        founder.save()
+                    except CustomUser.DoesNotExist:
+                        return self.form_invalid(form)
+            else:
+                return HttpResponseBadRequest('Username is taken')
+        return super().form_valid(form)
+
+# Organisation Dashboard Views
+class OrganisationDashboardView(DetailView):
     template_name = 'organisation/read/dashboard.html'
     model = Organisation
     context_object_name = 'org'
@@ -29,7 +82,7 @@ class CompanyDashboardView(DetailView):
 class CreateCompanyView(CreateView):
     template_name = 'organisation/create/create-company.html'
     model = Company
-    fields = ('company_name','CEO_name', 'starting_capital', 'email', 'phone_number', )
+    fields = ('name','CEO_name', 'starting_capital', 'email', 'phone_number', )
     context_object_name = 'company'
     
     def form_valid(self, form):
@@ -50,7 +103,17 @@ class BranchOverviewView(DetailView):
 class CreateBranchView(CreateView):
     template_name = 'organisation/create/create-branch.html'
     model = Branch
-    fields = ('company', 'branch_name', 'location', 'branch_phone_number', 'branch_supervisor',)
+    fields = ('company', 'name', 'location', 'phone_number', 'branch_supervisor',)
+
+    def form_valid(self, form):
+        form.instance.organisation  = self.request.user.organisation
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy("company-overview", kwargs={'pk': self.object.company.id})
+
+    
+
 
 class UpdateBranchView(UpdateView):
     template_name = 'organisation/branch/update/update.html'
@@ -67,7 +130,10 @@ class ProjectsIndexView(ListView):
 class CreateProjectView(CreateView):
     template_name = 'organisation/create/create-project.html'
     model = Projects
-    fields = ('branch', 'project_name', 'project_supervisor', 'cash_in_hand',)
+    fields = ('branch', 'name', 'supervisor')
+    
+    def get_success_url(self):
+        return reverse_lazy("project-index", kwargs={'pk': self.object.branch.id})
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.organisation = self.request.user.organisation
@@ -85,8 +151,11 @@ class ProjectsBriefView(DetailView):
 class UpdateProjectView(UpdateView):
     template_name = 'organisation/update/update-project.html'
     model = Projects
-    fields = ('branch', 'project_name', 'project_supervisor', 'cash_in_hand',)
-    success_url = reverse_lazy('project-index')
+    fields = ('branch', 'name', 'supervisor')
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-brief", kwargs={'pk': self.object.branch.id})
+    
 
 class DeleteProjectView(DeleteView):
     model = Projects
@@ -98,7 +167,7 @@ class StaffBriefView(DetailView):
     model = Projects
 
 class AssetBriefView(DetailView):
-    template_name = 'organisation/read/asset-brief.html'
+    template_name = 'organisation/read/assets-brief.html'
     model = Projects
     
 class CreateAssetView(CreateView):
@@ -106,14 +175,20 @@ class CreateAssetView(CreateView):
     model = Asset
     fields = '__all__'
 
+    def get_success_url(self):
+        return reverse_lazy("project-asset-overview", kwargs={'pk': self.object.project.id})
+    
 class CreditorBriefView(DetailView):
-    template_name = 'organisation/read/Creditor-brief.html'
+    template_name = 'organisation/read/liabilities-brief.html'
     model = Projects
 
 class CreateCreditorView(CreateView):
     template_name = 'organisation/create/create-liability.html'
     model = Creditor
     fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy("project-liability-overview", kwargs={'pk': self.object.project.id})
 
 class SalesBriefView(DetailView):
     template_name = 'organisation/read/sales-brief.html'
@@ -136,7 +211,7 @@ class PurchasesBriefView(ListView):
 class CreatePurchasesView(CreateView):
     template_name = 'organisation/create/create-purchase.html'
     model = Purchases
-    fields = ('source', 'branch','project','tax_percentage', 'details',)  
+    fields = ('source', 'project','details','tax_percentage', )  
 
     def form_valid(self, form):
         form.instance.purchaser = self.request.user
@@ -150,7 +225,7 @@ class PurchasedItemsDetailView(DetailView):
 
 class CreatePurchasedItemsView(CreateView):
     template_name = 'organisation/create/create-purchased-items.html'
-    model = Purchased_Item
+    model = PurchasedItem
     fields = ('purchase','product_name', 'quantity', 'unit_price', )
     context_object_name = 'item'
 
@@ -170,17 +245,29 @@ class StaffDetailedBriefView(DetailView):
 class CreateStaffView(CreateView):
     template_name = 'organisation/create/create-staff.html'
     model = Staff
-    fields = ('staff_name', 'company', 'monthly_salary', 'staff_branch', 'staff_project', 'department', 'occupation',)
+    fields = ('staff_name', 'company', 'project', 'active', 'department', 'occupation', 'monthly_salary ')
+
+    def form_valid(self, form):
+        form.instance.organisation = self.request.user.organisation
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-view", kwargs={'pk': self.object.project.id}) 
 
 class UpdateStaffView(UpdateView):
     template_name = 'organisation/update/update-staff.html'
     model = Staff
-    fields = ('company', 'monthly_salary', 'staff_branch', 'staff_project', 'department', 'occupation',)
+    fields = ('company',  'project', 'department', 'active', 'occupation', 'monthly_salary')
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-brief", kwargs={'pk': self.object.project.id})
 
 class DeleteStaffView(DeleteView):
     template_name = 'organisation/delete/delete-staff.html'
     model = Staff
-    success_url  =reverse_lazy('create-staff')
+
+    def get_success_url(self):
+        return reverse_lazy("project-detailed-brief", kwargs={'pk': self.object.project.id})
 
 #Stats
 class OrganisationStatsView(DetailView):

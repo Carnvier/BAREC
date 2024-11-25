@@ -16,24 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&family=Livvic:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1 class="webapp_name">BAREC</h1>
-        <nav>
-            <ul>
-                <a href="{%url 'home'%}"><li>HOME</li></a>
-                {%if user.is_authenticated%}
-                <a href="{%url 'company-dashboard' user.organisation.id%}"><li>COMPANY</li></a>
-                <a href="{%url 'sales-overview'%}"><li>SALES</li></a>
-                <a href="{%url 'messages-overview'%}"><li>INBOX</li></a>
-                <a href="{%url 'contact-company'%}"><li>CONTACT US</li></a>
-                <a href="{%url 'logout'%}"><li>LOGOUT</li></a>
-                <a href="{%url 'profile-overview'%}"><li>PROFILE</li></a>
-                {%else%}
-                <a href="{%url 'contact-company'%}"><li>CONTACT US</li></a>
-                {%endif%}
-            </ul>
-        </nav>
-    </header>
+    {%include 'layouts/main-nav.html'%}
     <main>
         {% if user.is_authenticated%}
         <h2>You Are Logged in as {{user.first_name}} {{user.last_name}}!</h2>

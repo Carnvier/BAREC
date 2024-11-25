@@ -12,22 +12,8 @@
     <link rel="stylesheet" href="{% static 'css/eevic.css'%}">
 </head>
 <body>
-    <header>
-        <h1 class='webapp_name'>BAREC</h1>
-        {%if user.is_authenticated%}
-        <nav>
-            <ul>
-                <a href="{%url 'home'%}"><li>HOME</li></a>
-                <a href="{%url 'company-dashboard' user.organisation.id%}"><li>COMPANY</li></a>
-                <a href="{%url 'sales-overview'%}"><li>SALES</li></a>
-                <a href="{%url 'messages-overview'%}"><li>MESSAGE BOARD</li></a>
-                <a href="{%url 'contact-company'%}"><li>CONTACT US</li></a>
-                <a href="{%url 'logout'%}"><li>LOGOUT</li></a>
-                <a href="{%url 'profile-overview'%}"><li>PROFILE</li></a>
-            </ul>
-        </nav>
-        {% endif %}
-    </header>
+    {%include 'layouts/main-nav.html'%}
+
     
     {%block side-navigation %}
     {%endblock%}

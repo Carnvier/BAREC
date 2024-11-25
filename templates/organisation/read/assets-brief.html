@@ -1,6 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block side-navigation%}
-{%include 'layouts/company-sidebar.html'%}
+{%include 'layouts/organisation-sidebar.html'%}
 {%endblock%}
 {%block content %}
 <h1 class="nk-block-title text-center">Assets Brief</h1>
@@ -45,11 +45,11 @@
                     <td>{{project.asset_id}}</td>
                     <td>{{project.date_brought_in}}</td>
                     <td>{{project.asset_name}}</td>
-                    <td>{{project.asset_source}}</td>
+                    <td>{{project.source}}</td>
                     <td>{{project.quantity}}</td>
                     <td>{{project.asset_value}}</td>
                     <td>{{project.depreciation_rate}}</td>
-                    <td>{{project.asset_networth}}</td>
+                    <td>{{project.total_asset_value}}</td>
                     <td><a href=""  class="btn btn-sm btn-primary">View</td>
                 </tr>
                 {%endif%}
@@ -99,11 +99,11 @@
                     <td>{{project.asset_id}}</td>
                     <td>{{project.date_brought_in}}</td>
                     <td>{{project.asset_name}}</td>
-                    <td>{{project.asset_source}}</td>
+                    <td>{{project.source}}</td>
                     <td>{{project.quantity}}</td>
                     <td>{{project.asset_value}}</td>
                     <td>{{project.depreciation_rate}}</td>
-                    <td>{{project.asset_networth}}</td>
+                    <td>{{project.total_asset_value}}</td>
                     <td><a href=""  class="btn btn-sm btn-primary">View</td>
                 </tr>
                 {%endif%}

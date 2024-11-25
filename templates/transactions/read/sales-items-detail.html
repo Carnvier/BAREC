@@ -1,10 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
-<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
-<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
-<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
-{%endblock%}
+{%include 'layouts/transactions-sidebar.html'%}{%endblock%}
 {%block content%}
 <h2 class="text-center">Sale ID: {{sales.sale_id}}</h2>
 <a href="{%url 'create-sales-item' user.organisation.id %}" class="link-block mt-4"><button class="btn-primary button-container">New Item</button></a>
@@ -13,39 +9,31 @@
         <thead class="tb-odr-head">
             <tr class="tb-odr-item">
                 <th class="tb-odr-info">
-                    <span class="tb-odr-id">Customer ID</span>
+                    <span class="tb-odr-id">ID</span>
                   </th>
               <th class="tb-odr-info">
-                <span class="tb-odr-id">Date Joined</span>    
+                <span class="tb-odr-id">Product</span>    
               </th>
               <th class="tb-odr-amount">
-                <span class="tb-odr-total">Name</span>
+                <span class="tb-odr-total">Quantity</span>
               </th>
               <th class="tb-odr-amount">
-                <span class="tb-odr-total">Type</span>
+                <span class="tb-odr-total">Discount</span>
               </th>
               <th class="tb-odr-amount">
-                <span class="tb-odr-total">Address</span>
-              </th>
-              <th class="tb-odr-amount">
-                <span class="tb-odr-total">Phone Number</span>
-              </th>
-              <th class="tb-odr-amount">
-                <span class="tb-odr-total">Email</span>
+                <span class="tb-odr-total">Total</span>
               </th>
               <th></th>
             </tr>
           </thead>  
       <tbody class="tb-odr-body">
-        {%for customer in customer%}
+        {%for item in sales.sales_item.all%}
             <tr>
-            <td>{{customer.id}}</td>
-            <td>{{customer.date_joined}}</td>
-            <td>{{customer.name}}</td>
-            <td>{{customer.type_of_customer}}</td>
-            <td>{{customer.address}}</td>
-            <td>{{customer.phone_number}}</td>
-            <td>{{customer.email}}</td>
+            <td>{{item.id}}</td>
+            <td>{{item.product}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.discount}}</td>
+            <td>{{item.total_amount}}</td>
                 <td><a href=""  class="btn btn-sm btn-primary">View</td>
             </tr>
         {%endfor%}

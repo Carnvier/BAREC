@@ -1,10 +1,10 @@
 from django.urls import path
 from .views import SignUpView, LoginView, ProfileOverviewPageView
-from . import views
+from .views import custom_logout
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name = 'login' ),
-    path('logout/', views.custom_logout, name = 'logout' ),
+    path('logout/', custom_logout, name = 'logout' ),
     path('signup/', SignUpView.as_view(), name = 'signup' ),
 
     # profile url

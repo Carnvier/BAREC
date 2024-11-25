@@ -1,10 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block title%}COMPANY DASHBOARD {%endblock%} {%block side-navigation%}
-<a href="{%url 'sales-overview'%}"><li>Sales</li></a>
-<a href="{%url 'stock-overview'%}"><li>Stock</li></a>
-<a href="{%url 'customer-overview'%}"><li>Customers</li></a>
-<a href="{%url 'expenses-overview'%}"><li>Expenses</li></a>
-{%endblock%}
+{%include 'layouts/transactions-sidebar.html'%}{%endblock%}
 {%block content%}
 <a href="{%url 'update-sales-form' sales.id%}"><button>Update {{sales.sale_id}}</button></a>
 <h1>Sale ID: {{sales.sale_id}}</h1>

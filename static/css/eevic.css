@@ -14,6 +14,7 @@
 
 }
 
+
 header{
     width: 100%;
     background: radial-gradient(#00C2FF 0%, #007499 100%);
@@ -69,6 +70,7 @@ main{
 .main-container{
     margin-left: 135px;
 }
+
 
 .input-form{
     display: grid;
@@ -173,11 +175,15 @@ footer{
 .content-block{
     border: 1.5px solid grey;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 1px;
     font-style: italic;
     font-family: sans-serif;
-    
 }
+
+.h-100{
+    height: 100%;
+}
+
 
 .message-container{
     font-weight: 500;
@@ -190,6 +196,7 @@ footer{
 
 .inline-content{
     display: inline-block;
+    
 }
 
 .bg-red-metalic{
@@ -213,6 +220,7 @@ footer{
 
 .link-block{
     text-decoration: none;
+    width: calc(50% - 10px)
 }
 
 a.link-block{
@@ -220,8 +228,27 @@ a.link-block{
 }
 
 a.link-block:hover{
-    margin: 5px;
     cursor: pointer;
     font-weight: bolder; 
     color: rgb(53, 49, 49)
+}
+
+.bg-orange-metallic{
+    background: linear-gradient(30deg, rgb(255, 111, 0), rgb(232, 87, 35), rgb(255, 111, 0));
+    color: white
+}
+
+.bg-orange-metallic:hover{
+    color: white;
+    opacity: 0.95;
+}
+
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    justify-items: space-between;
+    flex-wrap: wrap;
+    gap: 20px
+
 }

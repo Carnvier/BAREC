@@ -1,7 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block side-navigation%}
-{%include 'layouts/company-sidebar.html'%}
-{%endblock%}
+{%include 'layouts/organisation-sidebar.html'%}{%endblock%}
 {%block content %}
 <h2 class="nk-block-title text-center mb-4">Staff Name: {{staff.staff_name}}</h2>
 <div class="mt-4">
@@ -12,7 +11,7 @@
 <div class="content-block">
     <h3 class="text-center">Personal Details</h3>
     <div class="mt-3">
-    <p>Staff ID: {{staff.staff_id_no}}</p>
+    <p>Staff ID: {{staff.staff_id}}</p>
     <p>Date of Birth: {{staff.staff_name.D_O_B}}</p>
     <p>ID Number: {{staff.staff_name.ID_Number}}</p>
     <p>Email: {{staff.staff_name.email}}</p>
@@ -23,11 +22,11 @@
 <div class="content-block">
     <h3 class="text-center">Employee Details</h3>
     <div class="mt-3">
-    <p>Company Name: {{staff.company.company_name}}</p>
-    <p>Staff Branch: {{staff.staff_branch}}</p>
+    <p>Company Name: {{staff.company.name}}</p>
+    <p>Staff Branch: {{staff.project.branch}}</p>
     <p>Department: {{staff.department}}</p>
     <p>Occupation: {{staff.occupation}}</p>
-    <p>Project: {{staff.staff_project}}</p>
+    <p>Project: {{staff.project}}</p>
     <p>Monthly Salary: {{staff.monthly_salary}}</p>
 </div>
 </div>

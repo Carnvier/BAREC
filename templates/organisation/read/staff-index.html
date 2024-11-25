@@ -1,7 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block side-navigation%}
-{%include 'layouts/company-sidebar.html'%}
-{%endblock%}
+{%include 'layouts/organisation-sidebar.html'%}{%endblock%}
 {%block content %}
 <h1 class="text-center mb-4">Staff Overview</h1>
 <a href="{%url 'create-staff'%}" class="mt-4"><button class="btn-primary button-container">New Staff</button></a>
@@ -43,7 +42,7 @@
           <tbody class="tb-odr-body">
             {%for staff in staff%}
             <tr>
-            <td>{{staff.staff_id_no}}</td>
+            <td>{{staff.staff_id}}</td>
             <td>{{staff.staff_name}}</td>
             <td>{{staff.staff_name.D_O_B}}</td>
             <td>{{staff.staff_name.ID_Number}}</td>

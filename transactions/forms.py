@@ -5,10 +5,9 @@ from django.core.exceptions import ValidationError
 class SaleItemForm(forms.ModelForm):
     class Meta:
         model = SaleItem
-        fields = ['sale', 'product', 'quantity', 'discount']
+        fields = [ 'product', 'quantity', 'discount']
 
     def clean_quantity(self):
-        sales  = self.cleaned_data.get('sale')
         discount = self.cleaned_data.get('discount')
         quantity = self.cleaned_data.get('quantity')
         product = self.cleaned_data.get('product')

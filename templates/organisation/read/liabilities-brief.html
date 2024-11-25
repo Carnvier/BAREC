@@ -1,7 +1,6 @@
 {%extends 'layouts/base.html'%}
 {%block side-navigation%}
-{%include 'layouts/company-sidebar.html'%}
-{%endblock%}
+{%include 'layouts/organisation-sidebar.html'%}{%endblock%}
 {%block content %}
 <h1 class="nk-block-title text-center">Liabilties Brief</h1>
 <p class="nk-block-des text-center">View and manage your project's long and short-term liabilities here!</p>
@@ -18,7 +17,7 @@
                     <span class="tb-odr-id">Date Acquired</span>
                   </th>
                   <th class="tb-odr-amount">
-                    <span class="tb-odr-total">Name</span>
+                    <span class="tb-odr-total">Creditor</span>
                   </th>
                   <th class="tb-odr-amount">
                     <span class="tb-odr-total">Details</span>
@@ -39,13 +38,13 @@
             {%for project in projects.liabilities.all %}
                 {%if project.type_of_liability == 'Long-term' %}
                 <tr>
-                    <td>{{project.liability_id}}</td>
+                    <td>{{project.id}}</td>
                     <td>{{project.liability_acquisition_date}}</td>
-                    <td>{{project.supplier}}</td>
+                    <td>{{project.creditor}}</td>
                     <td>{{project.details}}</td>
                     <td>{{project.liability_amount}}</td>
                     <td>{{project.interest_rate}}</td>
-                    <td>{{project.total_liability_amount}}</td>
+                    <td>{{project.liability_amount}}</td>
                     <td><a href=""  class="btn btn-sm btn-primary">View</td>
                 </tr>
                 {%endif%}
@@ -68,7 +67,7 @@
                 <span class="tb-odr-id">Date Acquired</span>
               </th>
               <th class="tb-odr-amount">
-                <span class="tb-odr-total">Name</span>
+                <span class="tb-odr-total">Creditor</span>
               </th>
               <th class="tb-odr-amount">
                 <span class="tb-odr-total">Details</span>
@@ -89,13 +88,13 @@
         {%for project in projects.liabilities.all %}
             {%if project.type_of_liability == 'Short-term' %}
             <tr>
-                <td>{{project.liability_id}}</td>
+                <td>{{project.id}}</td>
                 <td>{{project.liability_acquisition_date}}</td>
-                <td>{{project.supplier}}</td>
+                <td>{{project.creditor}}</td>
                 <td>{{project.details}}</td>
                 <td>{{project.liability_amount}}</td>
                 <td>{{project.interest_rate}}</td>
-                <td>{{project.total_liability_amount}}</td>
+                <td>{{project.liability_amount}}</td>
                 <td><a href=""  class="btn btn-sm btn-primary">View</td>
             </tr>
             {%endif%}
