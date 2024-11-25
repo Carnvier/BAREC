@@ -17,12 +17,9 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login')
 
 def custom_logout(request):
-    if request.method == 'POST':
-        logout(request) 
-        request.session.flush()  
-        return redirect(reverse_lazy('login'))  
-    else:
-        return HttpResponseNotAllowed(['POST'])  
+    logout(request)  # Log the user out
+    request.session.flush()  # Clear the session data
+    return redirect(reverse_lazy('login'))  # Redirect to the login page
 
 class ProfileOverviewPageView(TemplateView):
     template_name = 'profile/index.html'

@@ -9,10 +9,11 @@
             <a href="{%url 'organisation-dashboard' user.organisation.id%}"><li>ORGANISATION</li></a>
             <a href="{%url 'sales-overview'%}"><li>TRANSACTIONS</li></a>
             <a href="{%url 'messages-overview'%}"><li>INBOX</li></a>
-            <a href="{%url 'contact-company'%}"><li>CONTACT US</li></a>
+            <!-- <a href="{%url 'contact-company'%}"><li>CONTACT US</li></a> -->
             {%endif%}
-            <a href="{%url 'logout'%}"><li>LOGOUT</li></a>
-            <a href="{%url 'profile-overview'%}"><li>PROFILE</li></a>
+            <a><li id="logout-button" >LOGOUT</li></a>
+
+            <!-- <a href="{%url 'profile-overview'%}"><li>PROFILE</li></a> -->
             
             {%else%}
             <a href="{%url 'login'%}"><li>LOGIN</li></a>
@@ -20,3 +21,26 @@
         </ul>
     </nav>
 </header>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#logout-button').click(function() {
+        if (confirm('Are you sure you want to logout?')) {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "logout" %}',  // Use the name of your logout URL
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'  // Include CSRF token for security
+                },
+                success: function(response) {
+                    window.location.href = '{% url "login" %}';  // Redirect to the login page on success
+                },
+                error: function(xhr) {
+                    console.error('Logout failed:', xhr);
+                    alert('Logout failed. Please try again.');
+                }
+            });
+        }
+    });
+</script>

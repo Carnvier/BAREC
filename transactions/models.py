@@ -8,7 +8,7 @@ class Stock(models.Model):
     organisation = models.ForeignKey('company.Organisation', on_delete= models.CASCADE, related_name= 'stocks', null= True, blank= True)
     date = models.DateField(default= now)
     asset = models.ForeignKey('company.Asset', on_delete= models.CASCADE, related_name= 'stocks', null= True, blank= True)
-    product_name = models.CharField(max_length = 50, default='')
+    product_name = models.CharField(max_length = 50, default='', unique=True)
     product_description = models.TextField()
     quantity = models.FloatField(default=0.0)
     product_price = models.FloatField( default = 0.0)
@@ -99,7 +99,7 @@ class Sales(models.Model):
     
     def grand_total(self):
         total = 0.0
-        total += self.sub_total() + self.tax() + self.processing_fee
+        total += self.sub_total() + self.tax_amount() + self.processing_fee
         return total
     
 class SaleItem(models.Model):
@@ -112,10 +112,8 @@ class SaleItem(models.Model):
     returned_quantity= models.IntegerField( default= 0)
 
     def __str__(self):
-        return self.product.product_name
+        return self.product.product_name 
     
-    def get_absolute_url(self):
-        return reverse_lazy('sales-items-detail', args=str(self.product.id))
     
     def total_amount(self):
         total = 0.0

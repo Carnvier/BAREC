@@ -288,7 +288,7 @@ class Organisation(models.Model):
 
     def gp(self):
         total = 0.0
-        total += float(self.net_sales()-self.cogs()) 
+        total =  self.cogs() + self.net_sales() 
         return total
 
     def operating_expenses(self):
@@ -339,6 +339,7 @@ class Organisation(models.Model):
         return total
 
     def total_expenses(self):
+        total = 0.0
         for item in self.companies.all():
             if item.organisation.name == self.name:
                 total += item.total_expenses()

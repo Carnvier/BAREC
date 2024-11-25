@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import SaleItemForm
 from django.views import View
 from django.http import HttpResponse, JsonResponse
@@ -18,8 +18,26 @@ class SalesFormView(CreateView):
     fields = ( "customer", "sale_details", "project", )
 
     def get_success_url(self):
-        return reverse_lazy("sales-items-detail", kwargs={'pk': self.object.project.id})
+        return reverse_lazy("sales-items-detail", kwargs={'pk': self.object.id})
 
+
+class SalesItemsDetailView(DetailView):
+    template_name = 'transactions/read/sales-items-detail.html'
+    model = Sales
+    context_object_name = 'sales'
+
+    def get(self, request, *args, **kwargs):
+        # Call the parent class's get method to retrieve the object
+        self.object = self.get_object()
+        
+        # Store the sales id in the session
+        request.session['id'] = self.object.id# Assuming 'id' is the primary key
+        
+        # Prepare context data
+        context = self.get_context_data(object=self.object)
+        
+        # Render the template with the context
+        return self.render_to_response(context)
 
 class CreateSalesItemView(View):
     template_name = 'transactions/create/create-sale-item.html'
@@ -29,23 +47,36 @@ class CreateSalesItemView(View):
         product = get_object_or_404(Stock, pk=pk)
         form = self.form_class(initial={'product_id': product.id})
         return render(request, self.template_name, {'form': form, 'product': product})
-    
+
     def post(self, request, pk):
         product = get_object_or_404(Stock, pk=pk)
         form = self.form_class(request.POST)
+        
         if form.is_valid():
-            sale = form.save(commit=False)
+            sale = form.save(commit=False)  # Create SaleItem instance but don't save to DB yet
+            
+            # Get the sale_id from the session
+            sale_id = request.session.get('id')  # Ensure this is the correct key
+            
+            # Retrieve the Sales instance
+            sales_instance = get_object_or_404(Sales, id=sale_id)
+            
+            # Assign the Sales instance to the SaleItem
+            sale.sale = sales_instance
+            
+            # Update product quantity
             product.quantity -= sale.quantity
             product.save()
+            
+            # Save the SaleItem
             sale.save()
-            return render(request, 'transactions/read/sales-items-detail.html', {'product': product, 'quantity': sale.quantity})
+            
+            # Redirect to the sales items detail view
+            return redirect('sales-items-detail', pk=sales_instance.id)  # Redirect using the sales instance id
+            
+        # If the form is not valid, re-render the form with errors
         return render(request, self.template_name, {'form': form, 'product': product})
-
-class SalesItemsDetailView(DetailView):
-    template_name = 'transactions/read/sales-items-detail.html'
-    model = Sales
-    context_object_name = 'sales'
-
+    
 class SalesInvoiceView(DetailView):
     template_name = 'transactions/read/sales-invoice.html'
     model = Sales    
